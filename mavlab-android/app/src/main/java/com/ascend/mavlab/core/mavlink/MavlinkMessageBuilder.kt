@@ -139,9 +139,9 @@ class MavlinkMessageBuilder(
             MAV_PROTOCOL_CAPABILITY_MAVLINK2
         val payload = littleEndian(60)
             .putLong(capabilities)
-            .putInt(encodeVersion(0, 10, 0, FirmwareVersionTypeDev))
-            .putInt(encodeVersion(0, 10, 0, FirmwareVersionTypeDev))
-            .putInt(encodeVersion(0, 10, 0, FirmwareVersionTypeDev))
+            .putInt(encodeVersion(4, 6, 3, FirmwareVersionTypeDev))
+            .putInt(encodeVersion(4, 6, 3, FirmwareVersionTypeDev))
+            .putInt(encodeVersion(4, 6, 3, FirmwareVersionTypeDev))
             .putInt(1)
             .put(ByteArray(8))
             .put(ByteArray(8))
