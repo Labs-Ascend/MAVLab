@@ -119,8 +119,15 @@ fun LabsScreen(modifier: Modifier = Modifier) {
                 }
             }
 
-            Button(onClick = AppRuntime::resetFailures) {
-                Text("Reset all failures")
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Button(onClick = AppRuntime::resetFailures) {
+                    Text("Reset all failures")
+                }
+                Button(onClick = AppRuntime::resetBattery) {
+                    Text("Reset battery")
+                }
             }
 
             FailureControls(failures)
@@ -135,7 +142,13 @@ fun LabsScreen(modifier: Modifier = Modifier) {
 private fun ScenarioChip(scenario: FailureScenario, isActive: Boolean) {
     FilterChip(
         selected = isActive,
-        onClick = { AppRuntime.applyFailureScenario(scenario) },
+        onClick = {
+            if (isActive) {
+                AppRuntime.clearFailureScenario(scenario)
+            } else {
+                AppRuntime.applyFailureScenario(scenario)
+            }
+        },
         label = {
             Text(
                 text = if (isActive) "● ${scenario.title}" else scenario.title,

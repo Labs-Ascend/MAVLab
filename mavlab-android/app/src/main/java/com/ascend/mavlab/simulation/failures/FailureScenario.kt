@@ -21,6 +21,7 @@ data class FailureScenario(
     val logEventName: String,
     val learningGoal: String,
     val apply: (FailureInjector) -> Unit,
+    val clear: (FailureInjector) -> Unit,
 )
 
 val FailureScenarios = listOf(
@@ -39,6 +40,7 @@ val FailureScenarios = listOf(
         logEventName = "failure_gps_loss",
         learningGoal = "Observe how autonomous flight depends on healthy positioning.",
         apply = { it.setGpsEnabled(false) },
+        clear = { it.setGpsEnabled(true) },
     ),
     FailureScenario(
         id = "gps_drift",
@@ -55,6 +57,7 @@ val FailureScenarios = listOf(
         logEventName = "failure_gps_drift",
         learningGoal = "See why noisy position data causes wandering in hold modes.",
         apply = { it.setGpsNoiseMultiplier(5f) },
+        clear = { it.setGpsNoiseMultiplier(1f) },
     ),
     FailureScenario(
         id = "windy_day",
@@ -75,6 +78,11 @@ val FailureScenarios = listOf(
             it.setWindDirectionDeg(90f)
             it.setWindGustsMs(2f)
         },
+        clear = {
+            it.setWindSpeedMs(0f)
+            it.setWindDirectionDeg(0f)
+            it.setWindGustsMs(0f)
+        },
     ),
     FailureScenario(
         id = "motor_failure",
@@ -91,6 +99,7 @@ val FailureScenarios = listOf(
         logEventName = "failure_motor_weakness",
         learningGoal = "Understand why quadcopters have limited motor redundancy.",
         apply = { it.setMotorFailed(index = 2, failed = true) },
+        clear = { it.setMotorFailed(index = 2, failed = false) },
     ),
     FailureScenario(
         id = "battery_low",
@@ -107,6 +116,7 @@ val FailureScenarios = listOf(
         logEventName = "failure_low_battery",
         learningGoal = "Observe low-battery failsafe behavior.",
         apply = { it.setBatteryDrainMultiplier(8f) },
+        clear = { it.setBatteryDrainMultiplier(1f) },
     ),
     FailureScenario(
         id = "battery_critical",
@@ -123,6 +133,7 @@ val FailureScenarios = listOf(
         logEventName = "failure_critical_battery",
         learningGoal = "Practice treating battery critical as an immediate landing decision.",
         apply = { it.setBatteryDrainMultiplier(15f) },
+        clear = { it.setBatteryDrainMultiplier(1f) },
     ),
     FailureScenario(
         id = "compass_interference",
@@ -139,6 +150,7 @@ val FailureScenarios = listOf(
         logEventName = "failure_compass_interference",
         learningGoal = "See how bad heading data degrades navigation.",
         apply = { it.setCompassOffsetDeg(45f) },
+        clear = { it.setCompassOffsetDeg(0f) },
     ),
     FailureScenario(
         id = "heavy_payload",
@@ -155,6 +167,7 @@ val FailureScenarios = listOf(
         logEventName = "failure_payload_overweight",
         learningGoal = "Relate payload mass to thrust margin.",
         apply = { it.setPayloadMassKg(1f) },
+        clear = { it.setPayloadMassKg(0f) },
     ),
     FailureScenario(
         id = "lost_link",
@@ -171,6 +184,7 @@ val FailureScenarios = listOf(
         logEventName = "failure_lost_link",
         learningGoal = "Understand why autonomous failsafe planning matters before launch.",
         apply = { it.setLostLinkActive(true) },
+        clear = { it.setLostLinkActive(false) },
     ),
     FailureScenario(
         id = "barometer_issue",
@@ -187,6 +201,7 @@ val FailureScenarios = listOf(
         logEventName = "failure_barometer_issue",
         learningGoal = "Connect pressure-sensor errors to altitude safety margins.",
         apply = { it.setBarometerOffsetMeters(3f) },
+        clear = { it.setBarometerOffsetMeters(0f) },
     ),
     FailureScenario(
         id = "unsafe_mission_reserve",
@@ -205,6 +220,10 @@ val FailureScenarios = listOf(
         apply = {
             it.setUnsafeMissionReserveActive(true)
             it.setBatteryDrainMultiplier(4f)
+        },
+        clear = {
+            it.setUnsafeMissionReserveActive(false)
+            it.setBatteryDrainMultiplier(1f)
         },
     ),
 )

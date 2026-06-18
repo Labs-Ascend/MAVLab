@@ -200,9 +200,19 @@ object AppRuntime {
         recordFailureEvent(scenario.logEventName, "${scenario.title}: ${scenario.affectedState}")
     }
 
+    fun clearFailureScenario(scenario: FailureScenario) {
+        simLoop.failureInjector.clearScenario(scenario)
+        recordFailureEvent("${scenario.logEventName}_cleared", "${scenario.title} cleared")
+    }
+
     fun resetFailures() {
         recordFailureEvent("failure_reset", "all failures cleared")
         simLoop.failureInjector.resetAll()
+    }
+
+    fun resetBattery() {
+        simLoop.resetBattery()
+        recordFailureEvent("battery_reset", "battery recharged to 100%")
     }
 
     fun setGpsEnabled(enabled: Boolean) {

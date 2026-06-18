@@ -191,6 +191,9 @@ private fun FailureOpsCatalog(failures: FailureState) {
                 Button(onClick = AppRuntime::resetFailures) {
                     Text("Reset failures")
                 }
+                Button(onClick = AppRuntime::resetBattery) {
+                    Text("Reset battery")
+                }
             }
 
             AnimatedVisibility(
@@ -260,8 +263,14 @@ private fun FailureScenarioOpsCard(scenario: FailureScenario, isActive: Boolean)
                         },
                     )
                 }
-                Button(onClick = { AppRuntime.applyFailureScenario(scenario) }) {
-                    Text("Inject")
+                if (isActive) {
+                    OutlinedButton(onClick = { AppRuntime.clearFailureScenario(scenario) }) {
+                        Text("Clear")
+                    }
+                } else {
+                    Button(onClick = { AppRuntime.applyFailureScenario(scenario) }) {
+                        Text("Inject")
+                    }
                 }
             }
             Text(scenario.description, style = MaterialTheme.typography.bodyMedium)

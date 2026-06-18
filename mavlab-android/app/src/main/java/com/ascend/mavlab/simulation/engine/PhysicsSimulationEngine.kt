@@ -84,6 +84,19 @@ class PhysicsSimulationEngine(
         job = null
     }
 
+    fun resetBattery() {
+        batteryUsedWh = 0f
+        val current = mutableState.value
+        mutableState.value = current.copy(
+            batteryRemainingPercent = 100,
+            batteryVoltageMv = (params.batteryVoltageFull * 1000f)
+                .roundToInt()
+                .coerceIn(0, UShort.MAX_VALUE.toInt())
+                .toUInt()
+                .toUShort()
+        )
+    }
+
     fun setArmed(
         armed: Boolean,
         authority: ControlAuthority = ControlAuthority.CONTROLLER,

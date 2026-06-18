@@ -69,6 +69,25 @@ class FailureScenarioTest {
         assertEquals(0, injector.state.value.activeCount)
     }
 
+    @Test
+    fun clearScenarioRestoresState() {
+        val injector = FailureInjector()
+
+        val gpsLoss = scenario("gps_loss")
+        gpsLoss.apply(injector)
+        assertFalse(injector.state.value.gpsEnabled)
+
+        injector.clearScenario(gpsLoss)
+        assertTrue(injector.state.value.gpsEnabled)
+
+        val windy = scenario("windy_day")
+        windy.apply(injector)
+        assertEquals(8f, injector.state.value.windSpeedMs)
+
+        injector.clearScenario(windy)
+        assertEquals(0f, injector.state.value.windSpeedMs)
+    }
+
     private fun scenario(id: String): FailureScenario {
         return FailureScenarios.first { it.id == id }
     }

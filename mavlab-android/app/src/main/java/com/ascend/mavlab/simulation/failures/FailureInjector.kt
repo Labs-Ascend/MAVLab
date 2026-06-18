@@ -70,6 +70,10 @@ class FailureInjector {
         scenario.apply(this)
     }
 
+    fun clearScenario(scenario: FailureScenario) {
+        scenario.clear(this)
+    }
+
     fun resetAll() {
         mutableState.value = FailureState()
     }
