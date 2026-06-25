@@ -644,6 +644,31 @@ object AppRuntime {
         val repository = PhoneSensorRepository(sensorManager)
         mutablePhoneSensorSource.value = repository.activeSource()
         phoneSensorJob = scope.launch {
+            // Auto-calibrate: average the first few samples to establish a
+            // stable zero-reference before feeding data into the simulation.
+            // This fixes phones whose rotation-vector sensor reports a non-zero
+            // resting offset that would otherwise push past the deadzone and
+            // cause erratic gyro/altitude readings until the user manually
+            // presses Calibrate.
+            if (!phoneSensorCalibration.isCalibrated()) {
+                val warmup = mutableListOf<OrientationData>()
+                repository.orientationFlow().collect { raw ->
+                    warmup.add(raw)
+                    mutablePhoneSensorRawOrientation.value = raw
+                    mutablePhoneSensorSource.value = raw.source
+                    if (warmup.size >= AutoCalibrationSampleCount) {
+                        val avg = OrientationData(
+                            roll = warmup.map { it.roll }.average().toFloat(),
+                            pitch = warmup.map { it.pitch }.average().toFloat(),
+                            yaw = warmup.map { it.yaw }.average().toFloat(),
+                            timestampNanos = raw.timestampNanos,
+                            source = raw.source,
+                        )
+                        phoneSensorCalibration.calibrate(avg)
+                        return@collect
+                    }
+                }
+            }
             repository.orientationFlow().collect { raw ->
                 mutablePhoneSensorRawOrientation.value = raw
                 mutablePhoneSensorSource.value = raw.source
@@ -737,6 +762,7 @@ object AppRuntime {
     private const val PhoneSensorMaxYawAngleRad = 0.7853982f
     private const val PhoneSensorDeadzoneRad = 0.05235988f
     private const val PhoneSensorExpo = 1.45f
+    private const val AutoCalibrationSampleCount = 5
     private const val SimLocationPrefsName = "mavlab_sim_location"
     private const val SimLocationKeyId = "id"
     private const val SimLocationKeyLatitude = "latitude"
