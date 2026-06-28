@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MAVLab by Ascend Labs — Project Documentation</title>
+<style>
+  :root{
+    --bg:#0f1117; --panel:#161a23; --panel2:#1c212c; --border:#262c39;
+    --text:#e6e9ef; --muted:#9aa4b2; --accent:#ff8a1c; --accent2:#6db7d8;
+    --green:#4ec98a; --red:#ff4d3d; --code:#11151d;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,system-ui,sans-serif;
+    --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6;font-size:16px}
+  body{background:#0f1115}
+  .imgfallback{display:block;background:var(--code);border:1px dashed var(--border);
+    color:var(--muted);font-family:var(--mono);font-size:12.5px;padding:18px;border-radius:10px}
+  main{max-width:1180px;margin:28px auto 0;padding:0 36px 70px;
+    background:#1a1d23;border:1px solid var(--border);border-radius:18px}
+
+  /* navbar */
+  .navbar{display:flex;align-items:center;justify-content:space-between;
+    padding:22px 0 20px;border-bottom:1px solid var(--border);margin-bottom:36px}
+  .brand{display:flex;align-items:center;gap:11px;font-size:15px;font-weight:650;letter-spacing:.2px}
+  .brand svg{display:block;color:var(--accent)}
+  .brand .dot{color:var(--muted);font-weight:400;margin:0 2px}
+  .pdf-badge{width:38px;height:38px;border-radius:50%;border:1px solid var(--border);
+    background:var(--panel2);color:var(--accent2);display:flex;align-items:center;justify-content:center;
+    font-size:10px;font-weight:700;letter-spacing:.5px;font-family:var(--mono)}
+
+  /* hero */
+  .hero{display:grid;grid-template-columns:1.05fr 1fr;gap:36px;align-items:start;margin-bottom:38px}
+  .hero .eyebrow{font-size:11.5px;text-transform:uppercase;letter-spacing:1.6px;color:var(--muted);
+    font-weight:600;margin-bottom:14px}
+  .hero h1{margin:0 0 18px;font-size:42px;line-height:1.12;font-weight:750;letter-spacing:-.6px;color:#fff}
+  .hero .lead{margin:0 0 22px;color:var(--muted);font-size:15px;line-height:1.65}
+  .tagrow{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:11px}
+  .tag{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;padding:6px 13px;border-radius:999px;
+    border:1px solid var(--border);background:var(--panel2);color:var(--text)}
+  .tag.green{border-color:rgba(78,201,138,.4);background:rgba(78,201,138,.1);color:var(--green)}
+  .tag.green::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green)}
+
+  /* cockpit card */
+  .cockpit{background:#11141b;border:1px solid var(--border);border-radius:16px;overflow:hidden}
+  .cockpit .chead{padding:16px 20px;border-bottom:1px solid var(--border);background:#161a23}
+  .cockpit .chead h3{margin:0;font-size:16px;font-weight:650}
+  .cockpit .chead .s1{margin:7px 0 0;font-size:12.5px;color:var(--muted);line-height:1.5}
+  .cockpit .chead .s2{margin:8px 0 0;font-size:11.5px;color:var(--muted);font-weight:600}
+  .cockpit .chead .spec{margin:10px 0 0;font-size:11px;font-family:var(--mono);color:var(--accent2);line-height:1.5}
+  .cockpit .panel{padding:18px 20px;display:grid;grid-template-columns:auto 1fr;gap:18px}
+  .alt{display:flex;flex-direction:column;align-items:center;gap:6px}
+  .alt .track{flex:1;width:14px;min-height:150px;background:var(--panel2);border-radius:7px;
+    position:relative;overflow:hidden}
+  .alt .track i{position:absolute;bottom:0;left:0;right:0;height:64%;
+    background:linear-gradient(var(--accent),#c96a12)}
+  .alt span{font-size:9.5px;font-family:var(--mono);color:var(--muted)}
+  .readouts{display:flex;flex-direction:column;gap:14px;min-width:0}
+  .row1{display:flex;gap:16px;align-items:center}
+  .attitude{width:84px;height:84px;flex:none;border-radius:50%;border:2px solid var(--border);
+    position:relative;overflow:hidden;background:linear-gradient(#1e2738 50%,#3a2a1c 50%)}
+  .attitude .horizon{position:absolute;left:-10%;right:-10%;top:50%;height:2px;background:var(--accent2);
+    transform:rotate(-12deg)}
+  .attitude .cross{position:absolute;left:50%;top:50%;width:26px;height:2px;background:#fff;
+    transform:translate(-50%,-50%)}
+  .attitude .cross::before{content:"";position:absolute;left:50%;top:50%;width:2px;height:14px;
+    background:#fff;transform:translate(-50%,-50%)}
+  .gauges{flex:1;display:flex;flex-direction:column;gap:9px;justify-content:center;min-width:0}
+  .g{display:flex;align-items:center;gap:8px;font-size:10px;font-family:var(--mono);color:var(--muted)}
+  .g span{width:34px}
+  .g .bar{flex:1;height:6px;background:var(--panel2);border-radius:3px;overflow:hidden}
+  .g .bar i{display:block;height:100%;background:var(--accent2)}
+  .mission{width:100%;border-collapse:collapse;margin:0;font-size:10.5px}
+  .mission th,.mission td{border:1px solid var(--border);padding:4px 8px;text-align:left;font-family:var(--mono)}
+  .mission th{background:#161a23;color:var(--muted);font-weight:600}
+  .mission td{color:var(--text)}
+  .statusrow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .hpill{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;font-family:var(--mono);
+    padding:5px 12px;border-radius:999px;color:var(--green);
+    background:rgba(78,201,138,.12);border:1px solid rgba(78,201,138,.4)}
+  .hpill::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--green)}
+  .mode{font-size:10.5px;font-family:var(--mono);color:var(--muted)}
+  @media(max-width:820px){.hero{grid-template-columns:1fr}.hero h1{font-size:34px}main{padding:0 20px 60px}}
+  nav.toc{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+    padding:18px 22px;margin-bottom:28px}
+  nav.toc h3{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+  nav.toc ul{list-style:none;margin:0;padding:0;columns:2;column-gap:28px}
+  nav.toc li{margin:4px 0;break-inside:avoid}
+  nav.toc a{color:var(--accent2);text-decoration:none;font-size:14px}
+  nav.toc a:hover{text-decoration:underline}
+  details{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+    margin:0 0 14px;overflow:hidden}
+  details[open]{background:var(--panel)}
+  summary{cursor:pointer;list-style:none;padding:16px 20px;font-size:18px;font-weight:600;
+    display:flex;align-items:center;gap:10px;user-select:none}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"▸";color:var(--accent);font-size:14px;transition:transform .15s}
+  details[open]>summary::before{transform:rotate(90deg)}
+  summary:hover{background:var(--panel2)}
+  .body{padding:4px 24px 22px;border-top:1px solid var(--border)}
+  .body h4{margin:22px 0 8px;font-size:15.5px;color:var(--accent2)}
+  .body h5{margin:16px 0 6px;font-size:14px;color:var(--text)}
+  .body p,.body li{color:var(--text)}
+  .body ul,.body ol{padding-left:22px}
+  .body li{margin:4px 0}
+  code{font-family:var(--mono);background:var(--code);border:1px solid var(--border);
+    border-radius:5px;padding:1px 6px;font-size:13px;color:#e8d9b8}
+  pre{background:var(--code);border:1px solid var(--border);border-radius:10px;
+    padding:14px 16px;overflow:auto;font-family:var(--mono);font-size:13px;line-height:1.5;color:#cfd6e0}
+  pre code{background:none;border:none;padding:0;color:inherit}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px}
+  th,td{border:1px solid var(--border);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:var(--panel2);color:var(--text);font-weight:600}
+  td{color:var(--muted)}
+  .pass{color:var(--green);font-weight:600}
+  .todo{color:var(--accent)}
+  .pill{display:inline-block;font-size:11px;font-family:var(--mono);padding:2px 8px;border-radius:999px;
+    border:1px solid var(--border);background:var(--panel2);color:var(--muted)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:12px 0}
+  .card{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+  .card strong{color:var(--accent2)}
+  .note{border-left:3px solid var(--accent);background:var(--panel2);padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0}
+  .quote{border-left:3px solid var(--accent2);padding:6px 16px;color:var(--muted);font-style:italic;margin:12px 0}
+  a.inline{color:var(--accent2)}
+  hr{border:none;border-top:1px solid var(--border);margin:24px 0}
+  footer{color:var(--muted);font-size:12.5px;text-align:center;padding:30px 24px 50px;border-top:1px solid var(--border)}
+  .kv{font-family:var(--mono);font-size:13px}
+  .tag-active{color:var(--red);font-weight:600}
+</style>
+</head>
+<body>
+
+<main>
+
+  <nav class="navbar">
+    <div class="brand">
+      <img src="assets/Mav logo.png" alt="MAVLab logo" style="height:24px;width:auto;display:block;border-radius:4px;">
+      MAVLab <span class="dot">·</span> Ascend Labs
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-left">
+      <div class="eyebrow">MAVLab by Ascend Labs</div>
+      <h1>Drone simulation, made approachable.</h1>
+      <p class="lead">MAVLab is an Android-first drone systems simulation and digital-twin platform for
+      learners who want to understand drones without first fighting ROS, Gazebo, ArduPilot/PX4 SITL,
+      Docker, MAVProxy, Linux networking, and multi-window simulator setup.</p>
+      <div class="tagrow">
+        <span class="tag">Android-first</span>
+        <span class="tag green">Offline</span>
+        <span class="tag">Digital Twin</span>
+        <span class="tag">MAVLink v2</span>
+        <span class="tag">QGroundControl</span>
+        <span class="tag">v1.5</span>
+      </div>
+      <div class="tagrow">
+        <span class="tag">Kotlin + Jetpack Compose</span>
+        <span class="tag">SceneView 3D</span>
+        <span class="tag">PID autopilot</span>
+        <span class="tag">Flight logging</span>
+      </div>
+    </div>
+
+    <img src="assets/Screenshot_20260620_184419.jpg" alt="Flight Cockpit" style="max-width:220px;width:100%;height:auto;border-radius:10px;display:block;margin:0 auto;" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<div style=\'color:#9aa3b2;font-size:13px;padding:12px;\'>Flight cockpit screenshot: assets/Screenshot_20260620_184419.jpg</div>')">
+  </section>
+
+  <nav class="toc">
+    <h3>Contents</h3>
+    <ul>
+      <li><a href="#overview">1. Overview &amp; Purpose</a></li>
+      <li><a href="#features">2. Features (v1.5)</a></li>
+      <li><a href="#build">3. Build &amp; Quick Start</a></li>
+      <li><a href="#qgc">4. QGroundControl Integration</a></li>
+      <li><a href="#sysid">5. MAVLink &amp; System IDs</a></li>
+      <li><a href="#arch">6. Architecture</a></li>
+      <li><a href="#surfaces">7. Product Surfaces</a></li>
+      <li><a href="#logging">8. Flight Logging &amp; Reports</a></li>
+      <li><a href="#audio">9. Audio / Sound System</a></li>
+      <li><a href="#setup">10. Setup Guide</a></li>
+      <li><a href="#teacher">11. Teacher Guide</a></li>
+      <li><a href="#qa">12. Test Matrix &amp; QA</a></li>
+      <li><a href="#demo">13. Demo Script</a></li>
+      <li><a href="#release">14. Release Notes &amp; Checklist</a></li>
+      <li><a href="#contributing">15. Contributing</a></li>
+      <li><a href="#assets">16. Asset Inventory</a></li>
+    </ul>
+  </nav>
+
+  <!-- 1. OVERVIEW -->
+  <details id="overview" open>
+    <summary>1. Overview &amp; Purpose</summary>
+    <div class="body">
+      <p>MAVLab exists to make drone simulation approachable. A learner who wants to understand drones is
+      usually pushed straight into a hard professional stack — ROS/ROS 2, Gazebo/Webots/JSBSim,
+      ArduPilot SITL / PX4 SITL, Docker, Python bridges, MAVProxy, UDP routing, and QGroundControl /
+      Mission Planner configuration — long before they have understood the drone itself.</p>
+
+      <div class="note">
+        <strong>Product statement.</strong> MAVLab is a user-friendly phone-based drone simulation and
+        digital-twin platform that helps students, operators, and builders learn drone systems without first
+        mastering ROS, Gazebo, ArduPilot/PX4 SITL, Docker, MAVProxy, Linux networking, or simulator
+        infrastructure. The active implementation lives in <code>mavlab-android/</code>.
+      </div>
+
+      <h4>Learning-order thesis</h4>
+      <p>MAVLab does not compete with professional tools. It changes the learning order:</p>
+<pre><code>MAVLab first
+  -&gt; understand sensors, attitude, telemetry, flight modes, missions,
+     failures, GCS workflows, and simulation state
+  -&gt; then graduate into ArduPilot SITL, PX4 SITL, Gazebo, ROS 2,
+     Webots, JSBSim, hardware-in-the-loop, and real aircraft</code></pre>
+
+      <h4>What MAVLab abstracts away at the beginning</h4>
+      <ul>
+        <li>Installing ROS/Gazebo/SITL stacks and building ArduPilot/PX4 locally.</li>
+        <li>Running multiple terminals and bridges; debugging UDP endpoints before understanding MAVLink.</li>
+        <li>Needing a physical Pixhawk, frame, batteries, RC transmitter, GPS module, telemetry radio, or a safe test field for the first learning loop.</li>
+      </ul>
+
+      <h4>What MAVLab should still teach</h4>
+      <ul>
+        <li>Arm/disarm and flight modes; roll, pitch, yaw, altitude, velocity, GPS, and heading.</li>
+        <li>Sensor quality and failures; MAVLink telemetry and command flow.</li>
+        <li>QGroundControl connection and mission workflows; manual vs GCS mission control authority.</li>
+        <li>Autonomous mission upload/execution; wind, battery, payload, motor, GPS, compass, barometer, and link-loss failures.</li>
+        <li>3D state visualization through the SIM tab; logs, reports, replay, and debrief.</li>
+      </ul>
+
+      <div class="quote">MAVLab is not a replacement for ROS, Gazebo, ArduPilot, PX4, QGroundControl, or
+      Mission Planner. MAVLab is the friendly simulation and learning layer before them.</div>
+    </div>
+  </details>
+
+  <!-- 2. FEATURES -->
+  <details id="features">
+    <summary>2. Features (v1.5)</summary>
+    <div class="body">
+      <div class="grid">
+        <div class="card"><strong>High-fidelity physics &amp; autopilot</strong><br>Fixed-rate quadcopter physics model with realistic PID attitude/altitude control.</div>
+        <div class="card"><strong>Cockpit diagnostics</strong><br>Live telemetry panels and rolling real-time graphs for altitude, roll, pitch, and yaw.</div>
+        <div class="card"><strong>Multi-mode control</strong><br>Interactive dual joysticks or phone accelerometer tilt control.</div>
+        <div class="card"><strong>3D digital twin (SIM)</strong><br>Live 3D rendering of position, attitude, and propeller speeds using a bundled GLB model.</div>
+        <div class="card"><strong>Waypoint missions</strong><br>Autonomous mission upload, track plotting, active-waypoint navigation, and Guided offsets.</div>
+        <div class="card"><strong>MAVLink UDP server</strong><br>Interoperable with QGroundControl: heartbeats, position/attitude streams, parameters, mission sync.</div>
+        <div class="card"><strong>Failure labs</strong><br>GPS loss/drift, compass loss, barometer offset, wind/gusts, motor failure, battery drain, payload mass, and link loss.</div>
+        <div class="card"><strong>Flight logging</strong><br>Session-based CSV telemetry and JSONL event timelines.</div>
+        <div class="card"><strong>Markdown reports</strong><br>Human-readable <code>report.md</code> debriefs: max altitude, battery use, failure timeline, safety notes.</div>
+        <div class="card"><strong>Sharesheet export</strong><br>Share/export flight files via standard Android Sharesheet intents.</div>
+        <div class="card"><strong>First-launch onboarding</strong><br>Educational walkthrough of features and digital-twin concepts; replayable from Ops.</div>
+      </div>
+
+      <h4>Failure Labs scenarios</h4>
+      <ul>
+        <li>GPS Loss, GPS Drift, Compass Loss, and Barometer offset failures.</li>
+        <li>Wind speed, direction, and gust simulation.</li>
+        <li>Individual motor failure.</li>
+        <li>Unsafe battery drain and heavy payload masses.</li>
+        <li>Signal / link loss scenarios.</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- 3. BUILD -->
+  <details id="build">
+    <summary>3. Build &amp; Quick Start</summary>
+    <div class="body">
+      <h4>Project facts</h4>
+      <div class="grid">
+        <div class="card"><strong>Application ID</strong><br><span class="kv">com.ascend.mavlab</span></div>
+        <div class="card"><strong>Version</strong><br><span class="kv">1.5.0 (code 15)</span></div>
+        <div class="card"><strong>SDK</strong><br><span class="kv">minSdk 26 (Android 8.0) · compile/target 35</span></div>
+        <div class="card"><strong>Toolchain</strong><br><span class="kv">Kotlin · JDK 17 · Jetpack Compose · SceneView</span></div>
+        <div class="card"><strong>APK output</strong><br><span class="kv">MAVlab.apk · &lt; 50 MB</span></div>
+        <div class="card"><strong>Targets</strong><br><span class="kv">Offline-first · Android 8.0+</span></div>
+      </div>
+
+      <h4>Build, test &amp; assemble the debug package</h4>
+<pre><code>cd mavlab-android
+GRADLE_USER_HOME="$PWD/.gradle" ./gradlew lintDebug testDebugUnitTest assembleDebug</code></pre>
+
+      <h4>Install to a connected device</h4>
+<pre><code>adb install -r app/build/outputs/apk/debug/app-debug.apk</code></pre>
+
+      <p>CI verifies lint, unit tests, and the debug build. Keep the debug APK under 50 MB.</p>
+    </div>
+  </details>
+
+  <!-- 4. QGC -->
+  <details id="qgc">
+    <summary>4. QGroundControl Integration</summary>
+    <div class="body">
+      <h4>Connecting QGC</h4>
+      <ol>
+        <li><strong>Split-screen (on-device):</strong> open MAVLab and QGC side-by-side. QGC discovers the vehicle on <code>127.0.0.1:14550</code>.</li>
+        <li><strong>Local Wi-Fi (cross-device):</strong> put the phone and computer on the same Wi-Fi. MAVLab's UDP broadcast auto-links the vehicle to desktop QGC.</li>
+        <li>Ensure the GCS System ID is <code>255</code> (default) and MAVLab is <code>1</code> to prevent system conflicts.</li>
+      </ol>
+
+      <h4>Test environments</h4>
+      <h5>Environment A — split-screen Android</h5>
+      <ol>
+        <li>Enable developer options and split-screen/multi-window for all apps.</li>
+        <li>Open MAVLab in the top half, QGroundControl in the bottom half.</li>
+        <li>QGC listens on localhost port <code>14550</code> and discovers the MAVLab broadcast.</li>
+      </ol>
+      <h5>Environment B — cross-device local Wi-Fi</h5>
+      <ol>
+        <li>Connect the Android device and a desktop running QGC to the same Wi-Fi router/hotspot.</li>
+        <li>Ensure no firewall blocks UDP port <code>14550</code>.</li>
+        <li>Launch both; the UDP broadcast auto-registers the drone on desktop QGC.</li>
+      </ol>
+
+      <h4>Acceptance checklist</h4>
+      <table>
+        <tr><th>Item</th><th>Action</th><th>Verification</th></tr>
+        <tr><td>Discovery</td><td>Open both apps</td><td>QGC discovers MAVLab within 5 s; audio "Armed"/"Disarmed"; heartbeats turn green.</td></tr>
+        <tr><td>Arm/Disarm</td><td>Click Arm/Disarm in QGC</td><td>State updates immediately; SIM propellers start/stop.</td></tr>
+        <tr><td>Command ACK</td><td>Takeoff / Land in QGC</td><td>QGC receives ACK; drone moves vertically.</td></tr>
+        <tr><td>Mission upload</td><td>Create waypoints, tap Upload</td><td>All items accepted; <code>MISSION RESTORED</code> printed; waypoints shown in Mission tab.</td></tr>
+        <tr><td>AUTO flight</td><td>Start AUTO mission</td><td>Drone navigates waypoints; MAVLab transmits current WP indices; QGC active line moves.</td></tr>
+        <tr><td>Link reconnect</td><td>Wi-Fi off 10 s, then on</td><td>QGC reports link loss, reconnects, resumes telemetry.</td></tr>
+        <tr><td>Stability</td><td>Run 10 minutes</td><td>Telemetry stable; memory constant; no ANRs or crashes.</td></tr>
+      </table>
+
+      <h4>Mission upload protocol flow</h4>
+<pre><code>QGC MISSION_COUNT          -&gt; MAVLab validates count, clears upload state
+MAVLab MISSION_REQUEST_INT -&gt; QGC MISSION_ITEM_INT (per sequence)
+... repeat until all items received ...
+MAVLab loads mission into MissionEngine / PhysicsSimulationEngine
+MAVLab MISSION_ACK(ACCEPTED) -&gt; Mission screen shows uploaded mission</code></pre>
+      <p>Supported mission messages: <code>MISSION_COUNT</code>, <code>MISSION_ITEM_INT</code>, legacy
+      <code>MISSION_ITEM</code>, <code>MISSION_REQUEST_LIST</code>, <code>MISSION_REQUEST_INT</code>,
+      legacy <code>MISSION_REQUEST</code>, <code>MISSION_CLEAR_ALL</code>, <code>MISSION_SET_CURRENT</code>,
+      <code>MISSION_ACK</code>, <code>MISSION_CURRENT</code>, and <code>MISSION_ITEM_REACHED</code>.
+      Outbound telemetry also includes <code>HEARTBEAT</code>, <code>ATTITUDE</code>,
+      <code>GLOBAL_POSITION_INT</code>, <code>GPS_RAW_INT</code>, <code>VFR_HUD</code>,
+      <code>SYS_STATUS</code>, <code>BATTERY_STATUS</code>, <code>COMMAND_ACK</code>, and
+      <code>PARAM_VALUE</code>. Inbound command handling covers <code>SET_MODE</code>,
+      <code>PARAM_REQUEST_LIST</code>, <code>PARAM_SET</code>, <code>COMMAND_LONG</code>
+      (arm/disarm, takeoff, land), and <code>SET_MESSAGE_INTERVAL</code>.</p>
+    </div>
+  </details>
+
+  <!-- 5. SYSID -->
+  <details id="sysid">
+    <summary>5. MAVLink &amp; System IDs</summary>
+    <div class="body">
+      <p>MAVLab mimics ArduPilot by default and must <strong>not</strong> auto-renumber its vehicle system
+      ID during a live link. A MAVLink system ID is part of vehicle identity; silently changing it while a
+      GCS is connected leaves QGC with stale vehicle state (heartbeat visible, but mission upload behaves
+      as if nothing is connected).</p>
+
+      <h4>Recommended defaults</h4>
+      <table>
+        <tr><th>Role</th><th>System ID</th><th>Component ID</th><th>Notes</th></tr>
+        <tr><td>MAVLab vehicle (autopilot)</td><td><code>1</code></td><td><code>1</code></td><td>Stable for the whole session; not derived from Android ID.</td></tr>
+        <tr><td>QGroundControl (GCS)</td><td><code>255</code></td><td><code>190</code></td><td>QGC default GCS system ID.</td></tr>
+        <tr><td>Second MAVLab simulator</td><td><code>2</code>, <code>3</code>…</td><td>—</td><td>For multiple simulated vehicles on one network.</td></tr>
+        <tr><td>Second GCS / companion</td><td><code>254</code> / <code>190</code></td><td>—</td><td>Companion must not pretend to be the vehicle.</td></tr>
+      </table>
+
+      <h4>Port mapping</h4>
+      <table>
+        <tr><th>Endpoint</th><th>Port</th></tr>
+        <tr><td>MAVLab local bind (receive from GCS)</td><td><code>14551</code> (same-device) / <code>14556</code> legacy</td></tr>
+        <tr><td>QGC UDP listen (telemetry target)</td><td><code>14550</code></td></tr>
+      </table>
+      <p>On the first GCS heartbeat MAVLab records the sender IP/port and switches from broadcast to targeted
+      unicast to reduce congestion. <code>0.0.0.0</code> is a bind address only — never a send target.</p>
+
+      <h4>Guardrails &amp; invariants</h4>
+      <ul>
+        <li><strong>Self-heartbeat guard:</strong> inbound packets whose sender System ID equals the local vehicle System ID are ignored (prevents parsing looped-back broadcasts as GCS commands).</li>
+        <li><strong>Heartbeat rate:</strong> <code>HEARTBEAT</code> (#0) broadcast at 1 Hz.</li>
+        <li><strong>Connection warmup:</strong> <code>gcsConnected = true</code> only after ≥ 3 s of continuous GCS heartbeats.</li>
+        <li><strong>Connection timeout:</strong> &gt; 15 s without GCS heartbeats marks the link disconnected.</li>
+        <li><strong>Failsafe reversion:</strong> losing the GCS link during AUTO reverts authority from <code>GCS_MISSION</code> to safety defaults (hold/RTL) to prevent flyaways.</li>
+      </ul>
+
+      <h4>Conflict handling — diagnose, do not self-change</h4>
+      <p>If a colliding heartbeat arrives, MAVLab keeps its vehicle ID stable and surfaces a diagnostic
+      warning instead of renumbering:</p>
+<pre><code>MAVLink identity conflict
+MAVLab vehicle SYSID is 1.
+QGC heartbeat is also using SYSID 1.
+Set QGC MAVLink System ID to 255 and reconnect.
+Do not change MAVLab vehicle SYSID unless running multiple simulated vehicles.</code></pre>
+      <p>Inbound commands/mission messages are target-filtered: act only when
+      <code>target_system == vehicleSystemId</code> or <code>target_system == 0</code> (broadcast where
+      semantics allow). PARAM downloads advertise a stable identity
+      (<code>SYSID_THISMAV=1</code>, <code>MAV_SYSID=1</code>, <code>SYSID_MYGCS=255</code>,
+      <code>MAV_GCS_SYSID=255</code>). Mission upload is blocked with a clear reason
+      (<code>MAV_MISSION_DENIED</code>) while an identity conflict exists.</p>
+
+      <h4>Recommended QGC setup for the user</h4>
+<pre><code>1. Open QGroundControl settings -&gt; MAVLink.
+2. Set QGC MAVLink System ID to 255.
+3. Keep MAVLab Vehicle System ID at 1.
+4. Same-phone: QGC UDP 14550, MAVLab bind 14551.
+5. Restart/reconnect the UDP link after changing the System ID.</code></pre>
+    </div>
+  </details>
+
+  <!-- 6. ARCHITECTURE -->
+  <details id="arch">
+    <summary>6. Architecture</summary>
+    <div class="body">
+      <h4>Runtime</h4>
+      <ul>
+        <li><code>SimulationService</code> starts the shared simulation runtime (foreground service boundary).</li>
+        <li><code>AppRuntime</code> exposes state, failures, missions, MAVLink status, and control commands to Compose screens.</li>
+        <li><code>PhysicsSimulationEngine</code> runs the fixed-rate physics loop and owns autopilot, failures, mission progress, and battery state.</li>
+      </ul>
+
+      <h4>Single source of truth — state flow</h4>
+<pre><code>Controller input or QGC command
+  -&gt; PhysicsSimulationEngine / MissionEngine / Autopilot / FailureInjector
+  -&gt; DroneState  (Kotlin StateFlow)
+  -&gt; Cockpit + Controller + Mission + SIM + Ops + FlightRecorder</code></pre>
+      <p>State changes write directly to <code>StateFlow</code> structures inside the engine;
+      <code>AppRuntime</code> exposes them as read-only streams; Compose screens observe them as read-only
+      state, ensuring atomic, unidirectional data flow. The SIM is <em>never</em> animated directly from UI
+      controls.</p>
+
+      <h4>Control authority model</h4>
+      <p>A priority-based single-writer authority model arbitrates between local input and remote GCS commands.</p>
+      <table>
+        <tr><th>Authority</th><th>Meaning</th><th>Cockpit UI</th></tr>
+        <tr><td><code>IDLE</code></td><td>No active authority; drone disarmed or waiting.</td><td>Control: Idle</td></tr>
+        <tr><td><code>CONTROLLER</code></td><td>Built-in phone/manual controls drive the drone.</td><td>Control: Controller</td></tr>
+        <tr><td><code>GCS_DIRECT</code></td><td>QGC commands mode/arm/takeoff/land, no mission active.</td><td>Control: GCS Direct</td></tr>
+        <tr><td><code>GCS_MISSION</code></td><td>Uploaded QGC mission / AUTO drives the drone.</td><td>Control: GCS Mission</td></tr>
+      </table>
+      <p><strong>Manual override:</strong> local inputs (disarm, manual land, guided offsets, joysticks)
+      instantly preempt an active <code>GCS_MISSION</code> and shift back to <code>CONTROLLER</code>.
+      Autopilot state writes must verify the active authority before writing to the state flow.</p>
+
+      <h4>Core modules</h4>
+      <div class="grid">
+        <div class="card"><strong>core/mavlink</strong><br>MAVLink endpoint, socket config, message builder/packets, mission upload session.</div>
+        <div class="card"><strong>core/sensors</strong><br>Phone sensor abstraction.</div>
+        <div class="card"><strong>core/settings</strong><br>Default settings structures.</div>
+        <div class="card"><strong>simulation/engine</strong><br>Engine + <code>DroneState</code> shape (attitude, motors, authority, MAVLink labels).</div>
+        <div class="card"><strong>simulation/physics</strong><br>6-DOF physics step.</div>
+        <div class="card"><strong>simulation/autopilot</strong><br>Flight controller + <code>MissionEngine</code>.</div>
+        <div class="card"><strong>simulation/recording</strong><br><code>FlightRecorder</code> / <code>FlightSession</code> / <code>FlightEvent</code>.</div>
+        <div class="card"><strong>feature/*</strong> &amp; <strong>service</strong><br>Compose surfaces and the foreground service.</div>
+      </div>
+
+      <h4>Phase order</h4>
+      <p>Phase 0 skeleton &amp; guardrails → Phase 1 QGC/MAVLink proof → Phase 2 physics → Phase 3 controller
+      &amp; telemetry → Phase 4 3D visualization → Phase 5 failures &amp; missions → Phase 6 polish &amp;
+      release.</p>
+    </div>
+  </details>
+
+  <!-- 7. SURFACES -->
+  <details id="surfaces">
+    <summary>7. Product Surfaces</summary>
+    <div class="body">
+      <p>MAVLab is organized into five primary tabs. Every tab answers one clean question. (<code>Systems</code>
+      is deferred from MVP navigation; its failure/health capability is surfaced as a lightweight subset
+      inside Controller.)</p>
+      <table>
+        <tr><th>Tab</th><th>Question it answers</th><th>Primary mode</th></tr>
+        <tr><td>Cockpit</td><td>What is the drone doing now, and who is controlling it?</td><td>Observe / command essentials</td></tr>
+        <tr><td>Controller</td><td>How do I manually control or perturb the drone from the phone?</td><td>Manual/local control</td></tr>
+        <tr><td>Mission</td><td>What mission did QGC/demo load, and how is it progressing?</td><td>GCS/autonomous operation</td></tr>
+        <tr><td>SIM</td><td>How is the drone reacting visually to the current simulation state?</td><td>Visual digital twin</td></tr>
+        <tr><td>Ops</td><td>Is MAVLink/QGC/app infrastructure healthy?</td><td>Diagnostics / configuration</td></tr>
+      </table>
+
+      <h4>Cockpit</h4>
+      <p>Live flight instrument and authority/status surface: control authority, flight mode, armed state,
+      altitude AGL, ground/vertical speed, heading, battery percent/voltage, GPS fix &amp; satellites,
+      roll/pitch/yaw, throttle, attitude/altitude charts, MAVLink/GCS indicator, mission summary, last
+      inbound message and last ACK, plus essential arm/takeoff/land buttons. It stays glanceable and does
+      not own tuning, failure sliders, or 3D internals.</p>
+
+      <h4>Controller</h4>
+      <p>Local manual-control surface with an input-source selector (<em>Phone sensors</em> vs
+      <em>Custom input</em>), calibration, tilt visualizer, throttle/roll/pitch/yaw controls, and an
+      <em>Advanced test inputs</em> section (motor failure, GPS loss, wind preset, reset). Every Controller
+      input routes through the simulation engine — never animating the model directly. It also hosts the
+      Drone Sound Lab (see §9).</p>
+
+      <h4>Mission</h4>
+      <p>Inspect, start, clear, and monitor uploaded or demo missions: source, waypoint list, active
+      waypoint, progress count, AUTO start, clear, load demo, re-upload replacement, and mission-protocol
+      status (upload in progress/accepted/rejected, last sequence). GCS missions drive the same simulation
+      state as manual flight.</p>
+
+      <h4>SIM</h4>
+      <p>The visual digital twin. Loads <code>drone.glb</code>, maps east/north/altitude to position and
+      pitch/yaw/roll to rotation, animates propellers from motor state, and overlays a HUD (authority, mode,
+      arm state, altitude, speed, battery, GPS, motor RPM bars, active waypoint, failure warnings). Default
+      is a <strong>chase/inspection view</strong>: the drone stays readable near center while the
+      world/path/camera communicate movement. Bench and world/map views are future modes.</p>
+
+      <h5>Altitude instrument (SIM HUD spec)</h5>
+      <p>A bottom-center circular aviation-style indicator drawn in Compose <code>Canvas</code>: dark bezel
+      and tick ring, blue-sky/brown-ground artificial horizon with white horizon line, a fixed orange drone
+      reference marker, an altitude scale, and readouts for <code>ALT AGL</code>, altitude (1 dp), and
+      vertical speed (signed, 2 dp). It binds to <code>DroneState</code> only — never to 3D model
+      transforms — and reacts to roll/pitch with a low-altitude warning band.</p>
+
+      <h4>Ops</h4>
+      <p>Technical operations &amp; diagnostics: MAVLink UDP status, bind port, QGC destination, system/component
+      IDs, last inbound message, last ACK, identity health, flight-log history/sharing, QGC troubleshooting,
+      replay onboarding, and the release QA checklist.</p>
+
+      <h4>3D model node contract</h4>
+      <p>The app is model-agnostic as long as the GLB follows a stable node-name and pivot contract
+      (e.g. <code>Prop_FL/FR/RL/RR</code>, <code>Motor_FL/FR/RL/RR</code>, optional
+      <code>PropBlur_*</code>, <code>Battery</code>, <code>GPSModule</code>, <code>PayloadMount</code>,
+      <code>CameraGimbal</code>). Missing optional nodes degrade gracefully and are reported in diagnostics
+      rather than crashing. Performance targets: GLB &lt; 5 MB where possible, &lt; ~50k triangles.</p>
+    </div>
+  </details>
+
+  <!-- 8. LOGGING -->
+  <details id="logging">
+    <summary>8. Flight Logging &amp; Reports</summary>
+    <div class="body">
+      <p>Arming creates a new session; disarming closes it, computes flight-envelope stats, and writes the
+      report. Sessions are stored in app-private storage (no storage permission needed, works offline):</p>
+<pre><code>filesDir/mavlab/flights/{session_id}/
+  manifest.json   # session start/end, duration, app/schema version, max alt/speed, battery used, event counts
+  telemetry.csv   # ~5 Hz time-series telemetry
+  events.jsonl    # one JSON object per line: timeline events
+  mission.json    # snapshot of the uploaded/demo mission
+  report.md       # human-readable markdown flight summary + safety review</code></pre>
+
+      <h4>Telemetry CSV (v1.5 schema highlights)</h4>
+      <p>Includes <code>session_id</code>, control authority, armed state, flight mode, lat/lon, north/east
+      position, altitude AGL, ground/vertical speed, <code>headingDegrees</code>, roll/pitch/yaw, throttle,
+      battery percent/voltage, <code>gpsFixType</code>, satellite count, motor RPM (when available),
+      <code>activeWaypoint</code>, and <code>failureFlags</code>.</p>
+
+      <h4>Events (JSONL)</h4>
+      <p>Sparse, human-readable: recording start/stop, arm/disarm, takeoff/land, mode changes, authority
+      changes, mission upload lifecycle, waypoint reached, mission completion, failure injection/restoration,
+      GCS connection, and battery/failsafe warnings.</p>
+
+      <h4>Markdown report</h4>
+      <p>Each session auto-generates <code>report.md</code> summarizing dates/durations and control
+      authorities, mission parameters and waypoint success ratios, calculated flight envelopes (e.g. max
+      altitude), chronological event timelines, and safety observations (e.g. <em>"GPS was lost during
+      flight — practice altitude-hold recovery..."</em>). Reviewable in-app via the report viewer dialog.</p>
+
+      <h4>Sharing</h4>
+      <p>Android <code>FileProvider</code> packages session files and exposes them through standard
+      Sharesheet intents — share the complete flight folder (CSV, manifest, events, mission, report) to
+      email, drive, or chat.</p>
+
+      <div class="note"><strong>MVP boundaries.</strong> No heavy cloud logging; no 100+ Hz UI-readable logs
+      by default; structured telemetry/events over screenshots; logging never depends on QGC — built-in
+      Controller sessions log too. Future: ZIP export, document-picker save, replay/debrief, dataset
+      generation.</div>
+    </div>
+  </details>
+
+  <!-- 9. AUDIO -->
+  <details id="audio">
+    <summary>9. Audio / Sound System</summary>
+    <div class="body">
+      <p>MAVLab sound should evolve from a demo feature into a digital-twin training signal: make the drone
+      feel alive, make RPM/throttle understandable by ear, make failures/payload audible, make the sound
+      physically explainable, and eventually connect sound, telemetry, and AI debrief.</p>
+
+      <h4>Architecture (kept replaceable)</h4>
+<pre><code>DroneState + FailureState
+  -&gt; DroneSoundModel
+  -&gt; DroneSoundController
+  -&gt; Android audio backend
+  -&gt; Controller / SIM / Ops surfaces</code></pre>
+      <div class="note"><strong>Guardrail.</strong> Audio controls must never bypass the simulator unless
+      explicitly in <em>Sound test mode</em>. Default path:
+      <code>Controller/QGC input → PhysicsSimulationEngine → DroneState.motors → DroneSoundModel → DroneSoundController</code>.
+      <code>AppRuntime</code> owns lifecycle, not a Compose screen.</div>
+
+      <h4>Current target: V2 — Controller-tunable per-motor adaptive sound</h4>
+      <p>Four <code>SoundPool</code> motor streams, each following its motor's RPM; per-motor mix and
+      roughness sliders; sound test mode (audio-only while disarmed); low/critical battery cues. Controls
+      live in <em>Controller → Drone Sound Lab</em>: sound enabled, master volume, per-motor mix, roughness,
+      alerts, test mode, test RPM, reset. Optional assets: <code>drone_motor_loop.wav</code>,
+      <code>drone_motor_rough_loop.wav</code>, <code>drone_warning_beep.wav</code>,
+      <code>drone_motor_sputter.wav</code>.</p>
+
+      <h4>Version roadmap</h4>
+      <table>
+        <tr><th>Version</th><th>Main technique</th><th>Main value</th><th>Priority</th></tr>
+        <tr><td>V1</td><td>One SoundPool loop</td><td>Basic life/feedback</td><td>Skip/reference</td></tr>
+        <tr><td>V2</td><td>Four SoundPool motor streams</td><td>Per-motor adaptive training sound</td><td class="todo">Build now</td></tr>
+        <tr><td>V3</td><td>Hybrid SoundPool + AudioTrack</td><td>Procedural RPM/BPF realism</td><td>Next after V2</td></tr>
+        <tr><td>V4</td><td>Spatial/environment model</td><td>Distance/flyby realism</td><td>Later</td></tr>
+        <tr><td>V5</td><td>Profiles + drills</td><td>Operator training product</td><td>Later</td></tr>
+        <tr><td>V6</td><td>Oboe + AI debrief</td><td>Production digital-twin audio</td><td>Long-term</td></tr>
+      </table>
+
+      <h4>V3 acoustic model (blade-pass frequency)</h4>
+<pre><code>BPF = blade_count * RPM / 60
+2-blade prop @ 6000 RPM -&gt; BPF = 200 Hz
+harmonics: 200, 400, 600, 800 Hz ...</code></pre>
+      <p>V3 keeps V2 loops but adds procedural layers (blade-pass harmonics, filtered prop-wash noise,
+      motor/ESC whine, maneuver roughness, descent turbulence), with <code>AudioTrack</code> streaming for
+      the procedural layer alongside <code>SoundPool</code> cues. Later versions add spatial audio (distance
+      attenuation, panning, Doppler), drone acoustic profiles and training drills, and finally a native Oboe
+      engine feeding AI debrief features.</p>
+    </div>
+  </details>
+
+  <!-- 10. SETUP -->
+  <details id="setup">
+    <summary>10. Setup Guide</summary>
+    <div class="body">
+      <p>MAVLab's core learning loop runs from one Android-first app. You do not need ROS, Gazebo, ArduPilot
+      SITL, PX4 SITL, Docker, Python bridges, cloud servers, or Linux networking knowledge to start.</p>
+      <h4>Install</h4>
+      <ol>
+        <li>Install MAVLab on an Android 8.0+ phone.</li>
+        <li>Install QGroundControl if you want ground-station integration.</li>
+        <li>Open MAVLab and complete onboarding.</li>
+        <li>Use the guided surfaces: Cockpit, Controller, Mission, SIM, and Ops.</li>
+      </ol>
+      <h4>QGroundControl</h4>
+      <p>For same-device use, run MAVLab and QGC in split-screen — MAVLab broadcasts MAVLink telemetry over
+      UDP and QGC should discover it automatically. For desktop QGC, put phone and desktop on the same Wi-Fi;
+      MAVLab broadcasts to common LAN destinations and UDP port <code>14550</code>.</p>
+      <h4>Build from source</h4>
+<pre><code>cd mavlab-android
+GRADLE_USER_HOME="$PWD/.gradle" ./gradlew lintDebug testDebugUnitTest assembleDebug
+adb install -r app/build/outputs/apk/debug/app-debug.apk</code></pre>
+      <h4>Troubleshooting</h4>
+      <ul>
+        <li>If QGC does not connect, restart QGC and MAVLab, then confirm both are on the same network.</li>
+        <li>If the phone controller is unavailable, use the manual fallback sliders in the Controller tab.</li>
+        <li>If the 3D model does not render smoothly, keep using Cockpit/Mission — the simulator keeps running.</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- 11. TEACHER -->
+  <details id="teacher">
+    <summary>11. Teacher Guide</summary>
+    <div class="body">
+      <p>MAVLab is designed for classroom drone-systems lessons without physical aircraft and without making
+      students begin with the hardest simulation stack. Learners understand drone behaviour first, then later
+      graduate into ROS, Gazebo, ArduPilot/PX4 SITL, Webots, JSBSim, hardware-in-the-loop, and real aircraft.</p>
+      <h4>Teaching philosophy</h4>
+      <ol>
+        <li>Show the concept in MAVLab.</li>
+        <li>Let students operate it from a phone.</li>
+        <li>Connect the concept to QGroundControl/MAVLink.</li>
+        <li>Only then explain how it appears in ArduPilot SITL, PX4 SITL, ROS, Gazebo, or real aircraft.</li>
+      </ol>
+      <h4>Recommended lesson order</h4>
+      <p>1. Your First Flight · 2. Understanding MAVLink · 3. Phone as Controller · 4. Flight Modes Explained
+      · 5. PID Control · 6. Sensors · 7. Failsafes.</p>
+      <h4>Classroom format</h4>
+      <ul>
+        <li>Students run MAVLab on their phones; QGC in split-screen or on an instructor desktop.</li>
+        <li>Open each session with the problem MAVLab solves: the concepts can be learned first in one friendly app.</li>
+        <li>Use Failure Lab only after students understand normal flight.</li>
+      </ul>
+      <h4>Assessment ideas</h4>
+      <ul>
+        <li>Explain the difference between Stabilize, Alt Hold, Guided, Loiter, Auto, and RTL.</li>
+        <li>Identify which telemetry messages QGC uses for attitude, position, GPS, and battery.</li>
+        <li>Demonstrate GPS loss and explain why Auto/Loiter degrade.</li>
+        <li>Load a demo mission and describe waypoint progression.</li>
+        <li>Compare behavior with and without wind.</li>
+      </ul>
+      <div class="note"><strong>Safety framing.</strong> MAVLab is a simulator, but its lessons reinforce
+      real-world safety: never arm near people, validate GPS before autonomous flight, and understand
+      failsafes before relying on them.</div>
+    </div>
+  </details>
+
+  <!-- 12. QA -->
+  <details id="qa">
+    <summary>12. Test Matrix &amp; QA</summary>
+    <div class="body">
+      <h4>v1.5 functional test matrix</h4>
+      <table>
+        <tr><th>ID</th><th>Scenario</th><th>Expected result</th><th>Status</th></tr>
+        <tr><td>ONB-001</td><td>First launch</td><td>Onboarding explains Cockpit, Controller, SIM, Mission, Labs, and Ops.</td><td class="pass">Passed</td></tr>
+        <tr><td>ONB-003</td><td>Onboarding replay (Ops)</td><td>Overlay re-opens, navigable/dismissible.</td><td class="pass">Passed</td></tr>
+        <tr><td>DASH-001</td><td>Idle telemetry</td><td>Disconnected/disarmed; 0.0 m AGL; battery ~85%; flat charts.</td><td class="pass">Passed</td></tr>
+        <tr><td>DASH-002</td><td>Active telemetry</td><td>Panels update at 5 Hz; charts plot real-time curves.</td><td class="pass">Passed</td></tr>
+        <tr><td>CTRL-001</td><td>Phone sensor toggle</td><td>Tilting shifts roll/pitch indicators; yaw trim slider works.</td><td class="pass">Passed</td></tr>
+        <tr><td>CTRL-002</td><td>Manual fallback</td><td>Joystick sliders control roll/pitch/yaw/throttle.</td><td class="pass">Passed</td></tr>
+        <tr><td>SIM-001</td><td>Drone animation</td><td>GLB model pitches/rolls and spins props in sync with telemetry.</td><td class="pass">Passed</td></tr>
+        <tr><td>SIM-002</td><td>Overlay panel</td><td>Altitude, vertical speed, battery match simulation values.</td><td class="pass">Passed</td></tr>
+        <tr><td>MIS-001</td><td>Demo mission load</td><td>4-waypoint path loads; pins and trajectory shown.</td><td class="pass">Passed</td></tr>
+        <tr><td>MIS-002</td><td>QGC discovery</td><td>QGC detects MAVLab at <code>127.0.0.1:14550</code> or local IP; green heartbeats.</td><td class="pass">Passed</td></tr>
+        <tr><td>MIS-003</td><td>GCS mission upload</td><td>Mission acknowledged; items sync to Mission tab.</td><td class="pass">Passed</td></tr>
+        <tr><td>MIS-004</td><td>AUTO execution</td><td>Drone flies waypoints; current/reached updates sync to QGC.</td><td class="pass">Passed</td></tr>
+        <tr><td>FAIL-002</td><td>In-flight GPS Loss</td><td>GPS indicator red; Ops badge "1 scenario"; chip shows <span class="tag-active">● ACTIVE</span>.</td><td class="pass">Passed</td></tr>
+        <tr><td>FAIL-003</td><td>Failure reset</td><td>All failures clear; badges hide; GPS healthy.</td><td class="pass">Passed</td></tr>
+        <tr><td>LOG-001</td><td>Log generation</td><td>Session folder under <code>mavlab/flights/</code> with all files.</td><td class="pass">Passed</td></tr>
+        <tr><td>LOG-002</td><td>View report</td><td>Dialog shows markdown report (dates, duration, max alt, battery, timeline, safety).</td><td class="pass">Passed</td></tr>
+        <tr><td>LOG-003</td><td>Share session</td><td>Sharesheet contains all 5 flight files.</td><td class="pass">Passed</td></tr>
+      </table>
+
+      <h4>Device coverage</h4>
+      <p>Android 8 / 11 / 13 / 15 (devices or emulators), a low-end phone for sensor-fallback testing, and a
+      Pixel-class phone for the performance baseline.</p>
+
+      <h4>Protocol &amp; lifecycle tests</h4>
+      <ul>
+        <li>Same-phone split-screen QGC; desktop QGC on the same Wi-Fi; Wi-Fi off/on; explicit QGC IP; subnet broadcast.</li>
+        <li>App background/restore; screen rotation; screen off/on; QGC restart while MAVLab runs; MAVLab restart while QGC runs; two MAVLab devices on one network.</li>
+        <li>3D performance: Twin/SIM does not stutter on a low-cost phone; props don't cause excessive recomposition; SceneView samples latest state rather than collecting 100 Hz UI updates.</li>
+      </ul>
+
+      <h4>Release QA</h4>
+      <p>Clean install + onboarding, demo mission + AUTO, inject GPS loss + verify Alt-Hold failsafe, confirm
+      QGC telemetry, run one hour with no crash/ANR, and confirm the debug APK is under 50 MB.</p>
+    </div>
+  </details>
+
+  <!-- 13. DEMO -->
+  <details id="demo">
+    <summary>13. Demo Script (7–10 min)</summary>
+    <div class="body">
+      <h4>1 · Setup &amp; onboarding (1 min)</h4>
+      <p>Launch MAVLab. Open with the problem statement (beginners get pushed into ROS/Gazebo/SITL/Docker/
+      MAVProxy/networking; MAVLab is the friendly first layer). Walk the tabs — Cockpit, Controller, SIM,
+      Mission, Ops — then tap <strong>Get Started</strong>.</p>
+      <h4>2 · Pre-flight &amp; local manual control (2 min)</h4>
+      <p>Controller → <strong>Arm Vehicle</strong> → throttle up or <strong>Takeoff</strong> (alt hold at
+      10 m). Switch to SIM to watch takeoff/hover. Back in Controller, enable <strong>Phone Sensor
+      Control</strong> and tilt the phone; show the SIM mimicking tilt; toggle sensors off to return to
+      joysticks.</p>
+      <h4>3 · QGC connection &amp; AUTO mission (3 min)</h4>
+      <p>Connect QGC (split-screen or desktop on the same Wi-Fi). Plan a short 3-waypoint mission in QGC and
+      <strong>Upload</strong>; verify it appears in MAVLab's Mission tab. Trigger AUTO; watch the SIM fly,
+      noting active-waypoint rings and the Mission index updating.</p>
+      <h4>4 · In-flight failures &amp; recovery (2 min)</h4>
+      <p>Ops → Failure scenario catalog → <strong>GPS Loss (Jamming)</strong>. Point out the
+      <span class="tag-active">● ACTIVE</span> badge; in Cockpit the GPS lock drops from 3D Fix to No Fix
+      (red); observe QGC's GPS warning; execute a safe <strong>Land</strong> to recover.</p>
+      <h4>5 · Post-flight review &amp; export (2 min)</h4>
+      <p><strong>Disarm</strong>. In Ops, open the completed session → <strong>View Report</strong>; point out
+      the timeline (armed → GPS failure → land) and the safety warning. Tap <strong>Share</strong> to show the
+      Sharesheet ready to export the CSV and markdown files.</p>
+    </div>
+  </details>
+
+  <!-- 14. RELEASE -->
+  <details id="release">
+    <summary>14. Release Notes &amp; Checklist</summary>
+    <div class="body">
+      <h4>What's new in v1.5</h4>
+      <h5>Flight logging &amp; reporting</h5>
+      <ul>
+        <li>Rich telemetry CSV with <code>session_id</code>, <code>gpsFixType</code>, <code>headingDegrees</code>, <code>activeWaypoint</code>, <code>failureFlags</code>.</li>
+        <li>Auto-generated <code>report.md</code>: dates/durations, authorities, mission &amp; waypoint ratios, flight envelopes, event timelines, and safety observations.</li>
+        <li>In-app report viewer dialog and Sharesheet export of the full flight folder.</li>
+      </ul>
+      <h5>Failure Lab upgrades</h5>
+      <ul>
+        <li>Collapsible scenario catalog; real-time active-failure count badges; per-chip <span class="tag-active">● ACTIVE</span> tags.</li>
+      </ul>
+      <h5>Onboarding &amp; diagnostics UI</h5>
+      <ul>
+        <li>Replayable first-launch onboarding; color-coded MAVLink/QGC link-state indicators.</li>
+      </ul>
+      <h5>Upgrade</h5>
+<pre><code>./gradlew installDebug
+# then open the app, follow onboarding, and use the Ops tab
+# for flight logs, sharing, and the failure catalog</code></pre>
+
+      <h4>v1.5 phase acceptance (snapshot)</h4>
+      <table>
+        <tr><th>Phase</th><th>Status</th></tr>
+        <tr><td>0 · Baseline audit &amp; release definition</td><td class="pass">Done</td></tr>
+        <tr><td>1 · Navigation, product surface, copy polish</td><td class="pass">Done</td></tr>
+        <tr><td>2 · Onboarding upgrade</td><td class="pass">Done</td></tr>
+        <tr><td>3 · Cockpit UI polish</td><td class="pass">Done</td></tr>
+        <tr><td>4 · SIM / 3D visualization upgrade</td><td class="pass">Done</td></tr>
+        <tr><td>5 · Mission &amp; QGC workflow polish</td><td class="todo">Pending real same-phone &amp; desktop-Wi-Fi acceptance</td></tr>
+        <tr><td>6 · Failure-lab explanation polish</td><td class="pass">Done</td></tr>
+        <tr><td>7 · Flight logging, export &amp; review</td><td class="todo">In progress</td></tr>
+        <tr><td>8 · QA, demo, docs &amp; packaging</td><td class="todo">In progress</td></tr>
+      </table>
+      <div class="note"><strong>Release gates.</strong> Real QGC same-phone and desktop-Wi-Fi acceptance,
+      instructor-ready export/report, fresh passing build, and a phone-installable APK under 50 MB remain
+      gates before v1.5 is fully signed off.</div>
+    </div>
+  </details>
+
+  <!-- 15. CONTRIBUTING -->
+  <details id="contributing">
+    <summary>15. Contributing</summary>
+    <div class="body">
+      <p>MAVLab is an Android-first drone education simulator. Keep changes focused, testable, and useful for
+      students learning flight systems.</p>
+      <h4>Local setup</h4>
+      <ol>
+        <li>Install Android Studio or the Android SDK command-line tools.</li>
+        <li>Install Android SDK 35 and Java 17.</li>
+        <li>Open <code>mavlab-android/</code> as the Android project.</li>
+        <li>Build &amp; test:
+<pre><code>cd mavlab-android
+GRADLE_USER_HOME="$PWD/.gradle" ./gradlew lintDebug testDebugUnitTest assembleDebug</code></pre></li>
+      </ol>
+      <h4>Guidelines</h4>
+      <ul>
+        <li>Keep simulator behavior deterministic where possible.</li>
+        <li>Add JVM tests for physics, controller mapping, mission, and failure logic.</li>
+        <li>Avoid network-dependent runtime features unless there is an offline fallback.</li>
+        <li>Keep the APK under 50 MB.</li>
+        <li>Do not commit local SDK paths, build outputs, or device-specific files.</li>
+      </ul>
+      <p>Existing test anchors include <code>MavlinkMessageBuilderTest</code>,
+      <code>MissionUploadSessionTest</code>, <code>MissionEngineTest</code>,
+      <code>ControlAuthorityTest</code>, <code>DroneModelControllerTest</code>,
+      <code>MissionSnapshotCodecTest</code>, <code>MissionUploadStatusTest</code>, and
+      <code>FlightRecorderTest</code>. Licensed under MIT.</p>
+    </div>
+  </details>
+
+  <!-- 16. ASSETS -->
+  <details id="assets">
+    <summary>16. Asset Inventory</summary>
+    <div class="body">
+      <p>The repository ships three tracked binary assets. All are referenced here as local paths only.</p>
+      <table>
+        <tr><th>Path</th><th>Type</th><th>Role</th></tr>
+        <tr><td><code>drone.glb</code></td><td>GLB 3D model</td><td>Runtime digital-twin model loaded by the SIM screen (node-name/pivot contract in §7).</td></tr>
+        <tr><td><code>assets/Mav logo.png</code></td><td>PNG image</td><td>MAVLab / Ascend Labs brand mark (shown in this document's header).</td></tr>
+        <tr><td><code>assets/Screenshot_20260620_184419.jpg</code></td><td>JPEG image</td><td>App interface screenshot (shown in the overview hero).</td></tr>
+      </table>
+      <div class="grid">
+        <div class="card">
+          <strong>Mav logo.png</strong>
+          <img src="assets/Mav logo.png" alt="MAVLab logo" style="max-width:100%;margin-top:10px;border-radius:8px;border:1px solid var(--border)"
+               onerror="this.outerHTML='&lt;div class=&quot;imgfallback&quot; style=&quot;margin-top:10px&quot;&gt;[image unavailable] assets/Mav logo.png&lt;/div&gt;'">
+        </div>
+        <div class="card">
+          <strong>Screenshot_20260620_184419.jpg</strong>
+          <img src="assets/Screenshot_20260620_184419.jpg" alt="App screenshot" style="max-width:100%;margin-top:10px;border-radius:8px;border:1px solid var(--border)"
+               onerror="this.outerHTML='&lt;div class=&quot;imgfallback&quot; style=&quot;margin-top:10px&quot;&gt;[image unavailable] assets/Screenshot_20260620_184419.jpg&lt;/div&gt;'">
+        </div>
+        <div class="card">
+          <strong>drone.glb</strong>
+          <div class="imgfallback" style="margin-top:10px">[binary 3D model — not previewed]<br>drone.glb</div>
+        </div>
+      </div>
+      <div class="note">This document loads no remote resources. Images are local with text-path fallbacks;
+      the GLB model is referenced by path only and is not loaded here.</div>
+    </div>
+  </details>
+
+</main>
+
+<footer>
+  MAVLab by Ascend Labs · v1.5.0 · <code>com.ascend.mavlab</code> · Android 8.0+ · Offline-first · MIT License<br>
+  Self-contained documentation generated 2026-06-28 from the project working tree. No external resources are fetched.
+</footer>
+
+</body>
+</html>
