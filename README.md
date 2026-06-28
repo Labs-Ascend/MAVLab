@@ -1,7 +1,7 @@
 # MAVLab by Ascend Labs
 
 <p align="center">
-  <img src="assets/Screenshot_20260620_184419.jpg" alt="MAVLab Android drone simulator interface" width="420">
+  <img src="assets/Screenshot_20260620_184419.jpg" alt="MAVLab Android drone simulator interface" width="300">
 </p>
 
 MAVLab makes drone simulation approachable. It is an Android-first drone systems simulation and digital-twin platform for learners who want to understand drones without first fighting the steep learning curve of ROS, Gazebo, ArduPilot/PX4 SITL, Docker, MAVProxy, Linux networking, and multi-window simulator setup.
