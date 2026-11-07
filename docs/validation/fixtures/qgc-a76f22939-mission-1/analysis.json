@@ -1,0 +1,45 @@
+{
+  "status": "CONFIRMED REJECTION, not an execution result",
+  "source_file": "/tmp/Mission 1.plan",
+  "source_sha256": "65c71141dd9395c9f5eb4fbe9adddb204215ba46681df4442b02dadf5f0db231",
+  "source_bytes": 618777,
+  "recorded_utc": "2026-11-07T12:36:30.902485+00:00",
+  "qgc_revision": "a76f22939",
+  "expanded_items_in_saved_plan": 830,
+  "wire_count_including_qgc_home": 831,
+  "command_counts": {
+    "22": 1,
+    "16": 661,
+    "206": 167,
+    "20": 1
+  },
+  "current_mavlab_limit": 100,
+  "phone_log": {
+    "local_time": "2026-11-07 15:24:06.248",
+    "tag": "MavlinkUdpServer",
+    "message": "rx id=44 sys=255 comp=190 rejected invalid-count"
+  },
+  "qgc_wire": {
+    "count_utc": "2026-11-07T12:24:06.441+00:00",
+    "count": 831,
+    "ack_utc": "2026-11-07T12:24:06.459+00:00",
+    "ack": 1,
+    "meaning": "MAV_MISSION_ERROR; generic result shown as unspecified error"
+  },
+  "first_blocker": "MISSION_COUNT exceeds MaxMissionItems=100; rejection occurs before requesting mission items",
+  "subsequent_implementation_gap": "DO_SET_CAM_TRIGG_DIST (206) has no mission-engine implementation in current build; increasing count alone cannot execute this survey",
+  "planning": {
+    "estimated_area_km2": 7.646,
+    "qgc_planned_photos": 12570,
+    "camera": {
+      "AdjustedFootprintFrontal": 25,
+      "AdjustedFootprintSide": 25,
+      "CameraName": "Manual (no camera specs)",
+      "DistanceMode": 1,
+      "DistanceToSurface": 60,
+      "version": 2
+    },
+    "inside_bundled_dandora_coverage": false
+  },
+  "actions": "Read plan, Android logcat and CRC-checked QGC log only. Original plan unchanged; no upload retry or flight command."
+}
