@@ -1,0 +1,49 @@
+{
+  "date_utc": "2026-11-07T13:13:25.680060+00:00",
+  "tester": "Codex automated checks and ADB installation",
+  "source_commit": "eb9656b7ef1cfd06e1788a051673dde67754be68",
+  "app": {
+    "version_name": "1.6.1-dev",
+    "version_code": 20,
+    "apk_sha256": "5d2f5ce26e890259ff2f7da22617f90ebc3b42a56983d7c13d29fc24768c9197",
+    "apk_bytes": 54889488,
+    "installed_apk_matches": true
+  },
+  "device": {
+    "model": "SM-G970U",
+    "android": "12",
+    "sdk": "31"
+  },
+  "unit_tests": {
+    "tests": 325,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint_severities": {
+    "Warning": 42
+  },
+  "build": "PASS testDebugUnitTest lintDebug assembleDebug assembleDebugAndroidTest",
+  "android_device_tests": {
+    "passed": 21,
+    "failed": 0,
+    "seconds": 6.239,
+    "environment": "isolated engines/controllers and loopback sockets, private cache fixtures"
+  },
+  "phone_after_reopen": {
+    "armed": false,
+    "mode": "STABILIZE",
+    "authority": "IDLE",
+    "qgc_connected_label": true
+  },
+  "qgc": {
+    "fixture_version": "v5.2.0-dev-143-ga76f22939",
+    "live_upload_start_capture_land": "NOT RUN for this update; user retry pending"
+  },
+  "remaining": [
+    "Mission 1 upload retry in actual QGC",
+    "Small Dandora survey/corridor live start, photo outcomes, progress and land",
+    "Low-end device qualification and sustained offline performance",
+    "Complete all-command MAVLink compatibility is not implemented"
+  ]
+}

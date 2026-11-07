@@ -1,0 +1,520 @@
+{
+  "totals": {
+    "tests": 325,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "suites": [
+    {
+      "name": "com.ascend.mavlab.simulation.audio.BladePassModelTest",
+      "tests": "4",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:48",
+      "hostname": "Ascend",
+      "time": "0.007"
+    },
+    {
+      "name": "com.ascend.mavlab.simulation.safety.SafetyPlanTest",
+      "tests": "6",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:56",
+      "hostname": "Ascend",
+      "time": "0.069"
+    },
+    {
+      "name": "com.ascend.mavlab.feature.drone3d.SimInspectionCameraTest",
+      "tests": "5",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:48",
+      "hostname": "Ascend",
+      "time": "0.005"
+    },
+    {
+      "name": "com.ascend.mavlab.simulation.recording.RecordingPolicyTest",
+      "tests": "5",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:56",
+      "hostname": "Ascend",
+      "time": "0.043"
+    },
+    {
+      "name": "com.ascend.mavlab.core.mavlink.MavlinkParserTest",
+      "tests": "12",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:45",
+      "hostname": "Ascend",
+      "time": "0.184"
+    },
+    {
+      "name": "com.ascend.mavlab.simulation.engine.ControlAuthorityTest",
+      "tests": "4",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:49",
+      "hostname": "Ascend",
+      "time": "0.004"
+    },
+    {
+      "name": "com.ascend.mavlab.simulation.recording.FlightRecorderTest",
+      "tests": "10",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:55",
+      "hostname": "Ascend",
+      "time": "0.516"
+    },
+    {
+      "name": "com.ascend.mavlab.core.mavlink.SafetyMissionTransferTest",
+      "tests": "7",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:45",
+      "hostname": "Ascend",
+      "time": "0.063"
+    },
+    {
+      "name": "com.ascend.mavlab.feature.controller.ControlMapperTest",
+      "tests": "3",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:48",
+      "hostname": "Ascend",
+      "time": "0.03"
+    },
+    {
+      "name": "com.ascend.mavlab.feature.onboarding.OnboardingTelemetryPreviewTest",
+      "tests": "2",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:48",
+      "hostname": "Ascend",
+      "time": "0.019"
+    },
+    {
+      "name": "com.ascend.mavlab.feature.drone3d.SimInspectionLightingTest",
+      "tests": "3",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:48",
+      "hostname": "Ascend",
+      "time": "0.015"
+    },
+    {
+      "name": "com.ascend.mavlab.feature.dashboard.CockpitInstrumentAttitudeTest",
+      "tests": "4",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:48",
+      "hostname": "Ascend",
+      "time": "0.009"
+    },
+    {
+      "name": "com.ascend.mavlab.core.common.AppRuntimeControlTest",
+      "tests": "5",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:43",
+      "hostname": "Ascend",
+      "time": "1.451"
+    },
+    {
+      "name": "com.ascend.mavlab.simulation.mission.MissionSnapshotCodecTest",
+      "tests": "2",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:51",
+      "hostname": "Ascend",
+      "time": "0.003"
+    },
+    {
+      "name": "com.ascend.mavlab.simulation.audio.DroneAcousticProfileTest",
+      "tests": "3",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:48",
+      "hostname": "Ascend",
+      "time": "0.012"
+    },
+    {
+      "name": "com.ascend.mavlab.simulation.autopilot.PositionControllerTest",
+      "tests": "3",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:49",
+      "hostname": "Ascend",
+      "time": "0.007"
+    },
+    {
+      "name": "com.ascend.mavlab.simulation.audio.DroneSoundModelV3Test",
+      "tests": "8",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:48",
+      "hostname": "Ascend",
+      "time": "0.018"
+    },
+    {
+      "name": "com.ascend.mavlab.feature.drone3d.Drone3DScreenTest",
+      "tests": "1",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:48",
+      "hostname": "Ascend",
+      "time": "0.015"
+    },
+    {
+      "name": "com.ascend.mavlab.core.common.ControllerInputStateTest",
+      "tests": "5",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:44",
+      "hostname": "Ascend",
+      "time": "0.019"
+    },
+    {
+      "name": "com.ascend.mavlab.core.common.RuntimeComponentPolicyTest",
+      "tests": "3",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:45",
+      "hostname": "Ascend",
+      "time": "0.011"
+    },
+    {
+      "name": "com.ascend.mavlab.simulation.engine.SafetyFlightTest",
+      "tests": "16",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:49",
+      "hostname": "Ascend",
+      "time": "1.195"
+    },
+    {
+      "name": "com.ascend.mavlab.simulation.failures.FailureScenarioTest",
+      "tests": "4",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:51",
+      "hostname": "Ascend",
+      "time": "0.063"
+    },
+    {
+      "name": "com.ascend.mavlab.simulation.engine.FlightModeAdmissionTest",
+      "tests": "2",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:49",
+      "hostname": "Ascend",
+      "time": "0.003"
+    },
+    {
+      "name": "com.ascend.mavlab.simulation.physics.PhysicsModelTest",
+      "tests": "4",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:51",
+      "hostname": "Ascend",
+      "time": "4.46"
+    },
+    {
+      "name": "com.ascend.mavlab.core.ui.components.RollingChartScaleTest",
+      "tests": "5",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:47",
+      "hostname": "Ascend",
+      "time": "0.252"
+    },
+    {
+      "name": "com.ascend.mavlab.core.common.MissionPersistenceTest",
+      "tests": "4",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:45",
+      "hostname": "Ascend",
+      "time": "0.097"
+    },
+    {
+      "name": "com.ascend.mavlab.simulation.camera.PlanarCameraTest",
+      "tests": "4",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:49",
+      "hostname": "Ascend",
+      "time": "0.012"
+    },
+    {
+      "name": "com.ascend.mavlab.feature.dashboard.CockpitUiStateTest",
+      "tests": "10",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:48",
+      "hostname": "Ascend",
+      "time": "0.064"
+    },
+    {
+      "name": "com.ascend.mavlab.feature.mission.MissionUiStateTest",
+      "tests": "7",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:48",
+      "hostname": "Ascend",
+      "time": "0.019"
+    },
+    {
+      "name": "com.ascend.mavlab.core.operations.OperationsObserverTest",
+      "tests": "9",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:46",
+      "hostname": "Ascend",
+      "time": "0.758"
+    },
+    {
+      "name": "com.ascend.mavlab.feature.controller.ControllerUiStateTest",
+      "tests": "10",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:48",
+      "hostname": "Ascend",
+      "time": "0.077"
+    },
+    {
+      "name": "com.ascend.mavlab.simulation.autopilot.AutopilotTest",
+      "tests": "4",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:49",
+      "hostname": "Ascend",
+      "time": "0.003"
+    },
+    {
+      "name": "com.ascend.mavlab.service.BackgroundRuntimePolicyTest",
+      "tests": "5",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:48",
+      "hostname": "Ascend",
+      "time": "0.007"
+    },
+    {
+      "name": "com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest",
+      "tests": "32",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:49",
+      "hostname": "Ascend",
+      "time": "0.222"
+    },
+    {
+      "name": "com.ascend.mavlab.feature.onboarding.OnboardingPagesTest",
+      "tests": "9",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:48",
+      "hostname": "Ascend",
+      "time": "0.036"
+    },
+    {
+      "name": "com.ascend.mavlab.core.mavlink.MavlinkIdentityStatusTest",
+      "tests": "4",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:45",
+      "hostname": "Ascend",
+      "time": "0.022"
+    },
+    {
+      "name": "com.ascend.mavlab.feature.drone3d.DroneModelControllerTest",
+      "tests": "8",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:48",
+      "hostname": "Ascend",
+      "time": "0.026"
+    },
+    {
+      "name": "com.ascend.mavlab.simulation.autopilot.MissionEngineTest",
+      "tests": "7",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:49",
+      "hostname": "Ascend",
+      "time": "0.055"
+    },
+    {
+      "name": "com.ascend.mavlab.feature.mission.MissionDisplayTest",
+      "tests": "5",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:48",
+      "hostname": "Ascend",
+      "time": "0.024"
+    },
+    {
+      "name": "com.ascend.mavlab.simulation.engine.MissionCameraEngineTest",
+      "tests": "5",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:49",
+      "hostname": "Ascend",
+      "time": "0.412"
+    },
+    {
+      "name": "com.ascend.mavlab.core.mavlink.MavlinkMessageBuilderTest",
+      "tests": "12",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:45",
+      "hostname": "Ascend",
+      "time": "0.05"
+    },
+    {
+      "name": "com.ascend.mavlab.simulation.mission.MissionUploadStatusTest",
+      "tests": "3",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:51",
+      "hostname": "Ascend",
+      "time": "0.041"
+    },
+    {
+      "name": "com.ascend.mavlab.core.mavlink.SurveyMissionTest",
+      "tests": "3",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:45",
+      "hostname": "Ascend",
+      "time": "1.093"
+    },
+    {
+      "name": "com.ascend.mavlab.simulation.audio.ProceduralDroneSynthTest",
+      "tests": "8",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:48",
+      "hostname": "Ascend",
+      "time": "0.268"
+    },
+    {
+      "name": "com.ascend.mavlab.feature.dashboard.CockpitFormattersTest",
+      "tests": "5",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:48",
+      "hostname": "Ascend",
+      "time": "0.087"
+    },
+    {
+      "name": "com.ascend.mavlab.simulation.audio.DroneSoundModelTest",
+      "tests": "10",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:48",
+      "hostname": "Ascend",
+      "time": "0.03"
+    },
+    {
+      "name": "com.ascend.mavlab.simulation.coordinates.SimulationCoordinateFrameTest",
+      "tests": "3",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:49",
+      "hostname": "Ascend",
+      "time": "0.047"
+    },
+    {
+      "name": "com.ascend.mavlab.core.mavlink.ArduPilotCompatibilityProfileTest",
+      "tests": "3",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:45",
+      "hostname": "Ascend",
+      "time": "0.104"
+    },
+    {
+      "name": "com.ascend.mavlab.core.mavlink.MissionUploadSessionTest",
+      "tests": "13",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:45",
+      "hostname": "Ascend",
+      "time": "0.1"
+    },
+    {
+      "name": "com.ascend.mavlab.core.ui.navigation.ScreenSwipeGestureTest",
+      "tests": "11",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:47",
+      "hostname": "Ascend",
+      "time": "0.057"
+    },
+    {
+      "name": "com.ascend.mavlab.feature.drone3d.MissionRouteGeometryTest",
+      "tests": "5",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-11-07T13:07:48",
+      "hostname": "Ascend",
+      "time": "0.017"
+    }
+  ]
+}

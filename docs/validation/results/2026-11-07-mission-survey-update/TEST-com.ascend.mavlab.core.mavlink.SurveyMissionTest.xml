@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ascend.mavlab.core.mavlink.SurveyMissionTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-07T13:07:45" hostname="Ascend" time="1.093">
+  <properties/>
+  <testcase name="cameraRejectsUnimplementedShutterOptionsAndRetainsLegalNaNs" classname="com.ascend.mavlab.core.mavlink.SurveyMissionTest" time="0.005"/>
+  <testcase name="actualMissionOneUploadsEveryItemAndPreservesCameraWireFields" classname="com.ascend.mavlab.core.mavlink.SurveyMissionTest" time="1.087"/>
+  <testcase name="boundedCountAccepts1000AndRejects1001" classname="com.ascend.mavlab.core.mavlink.SurveyMissionTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

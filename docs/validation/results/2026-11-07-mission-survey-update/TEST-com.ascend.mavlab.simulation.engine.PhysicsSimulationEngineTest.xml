@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" tests="32" skipped="0" failures="0" errors="0" timestamp="2026-11-07T13:07:49" hostname="Ascend" time="0.222">
+  <properties/>
+  <testcase name="failedMotorReportsZeroRpm" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.007"/>
+  <testcase name="depletedBatteryDisarmsDroneAndCutsMotors" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.002"/>
+  <testcase name="setHomeToCoordinatesIsReflectedInHomePosition" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.002"/>
+  <testcase name="disarmedMotorsReportZeroRpm" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.001"/>
+  <testcase name="defaultThrottlePhoneInputChangesMotorCommandsImmediatelyAfterArming" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.002"/>
+  <testcase name="testMissionSpeedWithAssociatedChangeSpeed" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.002"/>
+  <testcase name="armedTakeoffReportsNonZeroRpm" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.002"/>
+  <testcase name="uploadedMissionPinsGlobalWaypointToLocalTarget" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.002"/>
+  <testcase name="newPhoneFlightClearsRetainedNavigationModeAndRpmOverride" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.005"/>
+  <testcase name="initialStateStartsOnGroundForQgcTakeoff" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.001"/>
+  <testcase name="qgcRtlItemReturnsToUploadedHomeAtMissionAltitude" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.001"/>
+  <testcase name="testGcsSpeedOverrideAndParameter" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.002"/>
+  <testcase name="directRpmOverrideDoesNotSpinMotorsWhileDisarmed" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.001"/>
+  <testcase name="localTakeoffKeepsPhonePilotInputEffectiveInAuthoritativeState" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.009"/>
+  <testcase name="localRearmPreservesAnExplicitManualAltitudeHoldMode" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.002"/>
+  <testcase name="gcsTakeoffRetainsGuidedNavigationInsteadOfLocalGyroSteering" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.007"/>
+  <testcase name="autoMissionAdvancesTargetAndMovesPhysicsState" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.08"/>
+  <testcase name="missionAutoFlightReportsChangingRpm" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.017"/>
+  <testcase name="autoPathTargetTracksLineSegmentWithLookahead" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.005"/>
+  <testcase name="receivedSourceAndMslAltitudeNormalizeBeforeSpatialPublication" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.005"/>
+  <testcase name="autoPathLookaheadScalesWithUploadedMissionSpeed" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.001"/>
+  <testcase name="landModeHoldsPositionAndBrakesHorizontalVelocity" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.001"/>
+  <testcase name="armingAfterLandingStartsNewFlightInsteadOfInstantlyDisarming" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.004"/>
+  <testcase name="setHomeToCurrentPositionCapturesCurrentLocation" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.0"/>
+  <testcase name="autoModeAckWhileDisarmedDoesNotAdvanceMissionOrClaimExecution" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.003"/>
+  <testcase name="setHomeLocationWhileDisarmedUpdatesGcsVisiblePosition" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.007"/>
+  <testcase name="autoTakeoffClimbsBeforeFlyingToTakeoffPosition" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.003"/>
+  <testcase name="finalUploadDiagnosticsRetainTheLastRequestedAndValidatedSequence" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.001"/>
+  <testcase name="setHomeLocationIsRejectedWhileArmed" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.007"/>
+  <testcase name="autoMissionUsesLatestUploadedSpeedCommand" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.001"/>
+  <testcase name="homePositionDefaultsToInitialLocation" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.001"/>
+  <testcase name="setHomeToCoordinatesRejectsInvalidCoordinates" classname="com.ascend.mavlab.simulation.engine.PhysicsSimulationEngineTest" time="0.025"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
