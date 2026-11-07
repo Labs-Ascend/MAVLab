@@ -1,6 +1,6 @@
 # MAVLab v1.6.1 Release Notes
 
-Status: Release candidate
+Status: Release
 Android version code: 24.
 
 MAVLab v1.6.1 adds bounded QGroundControl survey capture simulation and starts a
@@ -46,6 +46,9 @@ alone does not establish Play Console acceptance or store availability. Release
 attachments contain only the versioned APK and AAB.
 
 ## Evidence and limits
+
+Local release APK/AAB signing, non-debuggable packaging and rejection guards passed;
+see the [prepublication record](validation/results/v1.6.1-2026-11-07-prepublication/README.md).
 
 Host and device evidence for the implementation is retained under
 [validation results](validation/results/README.md), including 328 JVM checks, 25
