@@ -22,3 +22,7 @@ docs/plans/
 keystore.properties
 play-account*.json
 service-account*.json
+
+# Permanent release keystores are kept outside the repository
+*.p12
+*.pfx

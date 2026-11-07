@@ -15,6 +15,8 @@ User documents should:
 - [Install and first run](../setup_guide.md)
 - [Known first-run issues](../known_first_run_issues.md)
 - [Upgrade and retained data](upgrading.md)
+- [Automatic simulated captures and earlier map photos](virtual-camera.md)
+- [v1.6.1 release notes](../v1_6_1_release_notes.md)
 - [v1.6.0 release notes](../v1_6_0_release_notes.md)
 - [Teacher guide](../teacher_guide.md)
 - [v1.6.0 demonstration](../v1_6_demo_script.md)
@@ -23,7 +25,7 @@ User documents should:
 
 ## Product surfaces
 
-These surface guides describe v1.6.0. Earlier v1.5.3 installations retain the previous navigation. See the upgrade guide for this debug release's signing incompatibility.
+These surface guides describe the current layout. v1.6.1 adds automatic simulated captures and removes the Ops camera setup card. Earlier v1.5.3 installations retain the previous navigation. See the upgrade guide for the new permanent certificate's migration requirements.
 
 1. **[Cockpit](cockpit.md)** — live flight state, authority and contextual recovery.
 2. **[Control](controller.md)** — phone/manual input and conditional received-mission actions.

@@ -28,7 +28,7 @@ class ReleaseAssetTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
         self.android = self.root / 'mavlab-android'
-        apk = self.android / 'app/build/outputs/apk/debug/MAVlab.apk'
+        apk = self.android / 'app/build/outputs/apk/release/MAVlab.apk'
         aab = self.android / 'app/build/outputs/bundle/release/app-release.aab'
         for path, content in [(apk, b'apk-fixture'), (aab, b'aab-fixture')]:
             path.parent.mkdir(parents=True, exist_ok=True)

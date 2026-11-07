@@ -1,0 +1,16 @@
+{
+  "version": "1.6.1",
+  "versionCode": 24,
+  "debuggable": false,
+  "certificateSha256": "46ff910b66597a7340d7b7737e598619368b8594bcdc2f05a91efb54d811eb70",
+  "artifacts": {
+    "MAVLab-v1.6.1.apk": {
+      "sha256": "09e37e2a7a62a2712d6d6f09be49234a138e1cbbc190ae98567f6ef40361894e",
+      "bytes": 47356726
+    },
+    "MAVLab-v1.6.1.aab": {
+      "sha256": "d6853f9070715d6a1c55f5f354b6387de5bd9c0f949f732080a154e7a57850db",
+      "bytes": 34580072
+    }
+  }
+}

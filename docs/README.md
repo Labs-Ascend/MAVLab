@@ -4,16 +4,16 @@ MAVLab documentation is organized by reader intent rather than by the order in w
 
 Status: Active index
 Owner: Ascend Labs
-Last reviewed: 2026-10-12 (v1.6.0)
+Last reviewed: 2026-11-07 (v1.6.1)
 
 ## I want to use MAVLab
 
-User documents describe observable behavior without requiring source-code knowledge. The four-surface guides describe v1.6.0; earlier v1.5.3 installations have the previous layout. Signing and qualification limitations remain explicit in versioned release notes.
+User documents describe observable behavior without requiring source-code knowledge. The four-surface guides describe the current layout; v1.6.1 adds automatic simulated captures and removes the Ops camera setup card. Earlier v1.5.3 installations have the previous layout. Signing and qualification limitations remain explicit in versioned release notes.
 
 - [User documentation home](user/README.md)
 - [Setup and first run](setup_guide.md)
 - [Known first-run issues](known_first_run_issues.md)
-- [Installing or upgrading to v1.6.0](user/upgrading.md)
+- [Installing or upgrading to v1.6.1](user/upgrading.md)
 - [Teacher guide](teacher_guide.md)
 - [v1.6.0 demonstration script](v1_6_demo_script.md)
 
@@ -43,6 +43,7 @@ Existing files such as [architecture.md](architecture.md), [protocol_guardrails.
 - [Operations home](operations/README.md)
 - [Release runbook](operations/release.md)
 - [v1.6.0 release disposition and readiness](operations/v1.6.0-readiness.md)
+- [v1.6.1 release notes](v1_6_1_release_notes.md)
 - [v1.6.0 release notes](v1_6_0_release_notes.md)
 - [v1.6.0 acceptance specification](validation/v1.6.0-acceptance.md)
 - [New media, captions and checksums](../assets/media/2026-10/README.md)

@@ -4,13 +4,16 @@ A phone-first, offline-capable drone simulator and digital twin. Learn attitude,
 
 Physics, autopilot, visualization and the MAVLink endpoint run on the phone. QGroundControl is optional for the core learning loop; no aircraft, cloud service or external simulation server is required.
 
-**Latest release:** [**v1.6.0**](https://github.com/Labs-Ascend/MAVLab/releases/tag/v1.6.0), Android version code **19**, published on 12 October 2026 (Africa/Nairobi). See the [release notes](docs/v1_6_0_release_notes.md) and [publication verification](docs/validation/results/v1.6.0-2026-10-12-publication.md). Stable signing and final-artifact phone/QGC qualification remain explicitly deferred.
+**MAVLab v1.6.1** · Android 8.0+ · version code **24** · [Downloads](https://github.com/Labs-Ascend/MAVLab/releases) · [Release notes](docs/v1_6_1_release_notes.md).
+
+The release uses a new permanent signing identity. Export important data before migrating from older debug installations; see [upgrade guidance](docs/user/upgrading.md).
 
 ## Four connected views
 
-| Cockpit | Control | SIM | Ops |
-|---|---|---|---|
-| [![Cockpit — vehicle state and telemetry](assets/media/2026-10/screenshots/cockpit.jpg)](docs/user/cockpit.md) | [![Control — local input and flight actions](assets/media/2026-10/screenshots/control.jpg)](docs/user/controller.md) | [![SIM — engine-driven digital twin](assets/media/2026-10/screenshots/sim.jpg)](docs/user/sim.md) | [![Ops — health, connectivity and setup](assets/media/2026-10/screenshots/ops.jpg)](docs/user/ops.md) |
+- [**Cockpit**](docs/user/cockpit.md): vehicle state, telemetry and mission progress.
+- [**Control**](docs/user/controller.md): local input, calibration and flight actions.
+- [**SIM**](docs/user/sim.md): the engine-driven digital twin and received mission route.
+- [**Ops**](docs/user/ops.md): health, connectivity, recording and setup.
 
 Missions span these views: concise Cockpit progress, expandable Control actions, received-route geometry in SIM and exact upload evidence in Ops. There is no separate Mission tab, built-in sample route or onboard mission planner.
 
@@ -20,30 +23,29 @@ Missions span these views: concise Cockpit progress, expandable Control actions,
 
 Local controls, live telemetry/charts and the 3D digital twin, with original recorded sound.
 
-<a href="assets/media/2026-10/mavlab-on-device.mp4"><img src="assets/media/2026-10/mavlab-on-device-poster.jpg" alt="Play the on-device MAVLab demo" width="280"></a>
+https://github.com/user-attachments/assets/9f67a5bb-a83a-4d4b-a351-1c08257268eb
 
-[Watch/download MP4](assets/media/2026-10/mavlab-on-device.mp4) · 84 seconds · 60 fps.
+84 seconds · compressed issue-upload copy: 30 fps, H.264 MP4, 6.90 MB. Recorded in October 2026; this illustrates the earlier interface, not the v1.6.1 capture changes.
 
 ### MAVLab + QGroundControl
 
 QGC plan editing and simulated AUTO flight, with the MAVLab phone view and its audio alongside it.
 
-[![Play the QGC and MAVLab demo](assets/media/2026-10/mavlab-qgc-poster.jpg)](assets/media/2026-10/mavlab-qgc-demo.mp4)
+https://github.com/user-attachments/assets/6ba838d5-6c53-495b-b535-c90d67b0a061
 
-[Watch/download MP4](assets/media/2026-10/mavlab-qgc-demo.mp4) · 118 seconds · 1080p. The clips are approximately aligned; the recording ends during RTL, before touchdown. It does not demonstrate fence/rally acceptance or every protocol capability.
+118 seconds · 1080p, 30 fps · compressed issue-upload copy: H.264 MP4, 6.75 MB. The recording ends during RTL before touchdown and does not establish all-command compatibility.
 
-[Media gallery, captions and provenance](assets/media/2026-10/README.md).
+[Media provenance](assets/media/2026-10/README.md) · [Issue-upload copies](assets/media/issue-upload/README.md).
 
-<details>
-<summary>Earlier v1.5 demos</summary>
+## What v1.6.1 adds
 
-On-device: https://github.com/user-attachments/assets/31fe9b06-06e0-4d55-aa34-e33151d50802
+- **Bounded survey missions:** up to 1,000 navigation items, preserved mission parameters and physical engine distance triggers.
+- **Automatic simulated captures:** QGC receives virtual exposure events without map loading or image-file writes. No Dandora map is needed; choose the simulated launch location before uploading a mission elsewhere.
+- **Real hold/resume:** BRAKE pauses movement, progression and capture scheduling; AUTO resumes and LAND/disarm remains a reverse path.
+- **Simpler Ops:** no camera setup card; prior map photos remain exportable under Recordings & review. Flight recording remains opt-in.
+- **Permanent signing:** non-debuggable release APK and signed AAB use the new published certificate. This is a deliberate migration from older debug identities.
 
-QGC: https://github.com/user-attachments/assets/1b7cdebd-bcb9-48b3-9dc3-ca9344e6c6aa
-
-</details>
-
-## What v1.6.0 adds
+## Core learning features
 
 - **A focused interface:** Cockpit, Control, SIM and Ops; contextual missions; a nine-page onboarding tour ending with **Start flying**.
 - **Fluid navigation:** continuous guarded horizontal swipes, compact labelled tabs and optional full-screen display. Sliders, route gestures and the 3D camera retain their own input.
@@ -58,23 +60,24 @@ The simulator uses flat ground and straight-line return control. It does not imp
 
 ## Start learning
 
-**Signing warning:** v1.6.0 is distributed as a locally verified debug build. It cannot update the official v1.5.3 APK in place because their certificates differ. Export recordings/save QGC plans and read [upgrade guidance](docs/user/upgrading.md) before deciding to change installations. Uninstalling erases local app data; no automatic migration is provided. Stable release signing is the [next-release priority](docs/operations/release-signing-next.md).
+**Migration:** v1.6.1 cannot update earlier debug or differently signed installations in place. Export recordings and earlier map photos, save QGC plans and preserve settings before deciding to migrate. Uninstalling erases private data; do not uninstall merely to bypass a signature error. [Upgrade guidance](docs/user/upgrading.md).
 
-### Published APK
+### Signed app builds
 
-Download [MAVLab-v1.6.0.apk](https://github.com/Labs-Ascend/MAVLab/releases/download/v1.6.0/MAVLab-v1.6.0.apk) from the [published release](https://github.com/Labs-Ascend/MAVLab/releases/tag/v1.6.0). Release attachments contain only the APK and AAB builds; demos and screenshots remain in the gallery above. Android may ask you to allow installation from your file manager or browser. Read the signing warning above before changing an existing installation.
+Get the versioned APK and AAB from [GitHub Releases](https://github.com/Labs-Ascend/MAVLab/releases). Install the APK directly. The signed AAB is a store-upload artifact, not directly installable or proof of Play approval. Only APK/AAB files are release attachments; videos use the README/gallery.
 
-### Build v1.6.0
+[Permanent public certificate](docs/operations/mavlab-release-certificate.pem) · SHA-256 `46ff910b66597a7340d7b7737e598619368b8594bcdc2f05a91efb54d811eb70`.
+
+### Build from source
 
 Requires Java 17 and Android SDK 35; minimum Android version is 8.0 (API 26).
 
 ```bash
 cd mavlab-android
-GRADLE_USER_HOME="$PWD/.gradle" ./gradlew testDebugUnitTest lintDebug assembleDebug bundleRelease --console=plain
-adb install -r app/build/outputs/apk/debug/MAVlab.apk
+GRADLE_USER_HOME="$PWD/.gradle" ./gradlew testDebugUnitTest lintDebug assembleDebug assembleRelease bundleRelease --console=plain
 ```
 
-The downloadable APK path is a debug-signed build. The release AAB needs production signing and Play Console qualification before Play distribution; it is not directly installable. See the [release runbook](docs/operations/release.md).
+Local debug builds use the local debug certificate. Unsigned release builds are signed by the guarded [release procedure](docs/operations/release.md); never commit private signing material.
 
 ### First local flight
 
@@ -100,15 +103,15 @@ GCS connection is not control authority or proof of successful command/mission d
 - [Architecture](docs/internals/overview.md), [control authority](docs/internals/control-authority.md), [runtime lifecycle](docs/internals/runtime-lifecycle.md) and [MAVLink contract](docs/internals/mavlink-contract.md).
 - [Contributor guide](AGENTS.md), [Android implementation](mavlab-android/README.md), [release runbook](docs/operations/release.md) and [v1.6.0 readiness](docs/operations/v1.6.0-readiness.md).
 - [Validation records](docs/validation/results/README.md). Prior build/device passes are not automatically acceptance of the new versioned artifact.
-- Published release notes: [v1.6.0](docs/v1_6_0_release_notes.md), [v1.5.3](docs/v1_5_3_release_notes.md), [v1.5.2](docs/v1_5_2_release_notes.md), [v1.5.1](docs/v1_5_1_release_notes.md) and [v1.5](docs/v1_5_release_notes.md).
+- Release notes: [v1.6.1](docs/v1_6_1_release_notes.md), [v1.6.0](docs/v1_6_0_release_notes.md), [v1.5.3](docs/v1_5_3_release_notes.md), [v1.5.2](docs/v1_5_2_release_notes.md), [v1.5.1](docs/v1_5_1_release_notes.md) and [v1.5](docs/v1_5_release_notes.md).
 
 ## Technical paper
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21319694.svg)](https://doi.org/10.5281/zenodo.21319694)
+[DOI: 10.5281/zenodo.21319694](https://doi.org/10.5281/zenodo.21319694)
 
 **MAVLab: A Phone-First Drone Digital-Twin Simulator for Flattening the Drone-Systems Learning Curve** — Kioko & Kaira, Ascend Labs, 2026. [DOI](https://doi.org/10.5281/zenodo.21319694) · [Markdown source](docs/paper/paper.md) · [How to cite](CITATION.cff).
 
-The paper describes its evaluated release snapshot. MAVLab v1.6.0 does not silently inherit those acceptance results or revise the published research claims.
+The paper describes its evaluated release snapshot. MAVLab v1.6.1 does not silently inherit those acceptance results or revise the published research claims.
 
 ## License
 

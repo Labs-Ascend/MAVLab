@@ -4,6 +4,8 @@ Store immutable, build-specific MAVLab validation records here. Do not overwrite
 
 ## Results
 
+- [v1.6.1 prepublication build and signing checks — 2026-11-07](v1.6.1-2026-11-07-prepublication/README.md)
+
 - [Build-only release asset cleanup and contributor-sidebar follow-up — 2026-10-12](2026-10-12-release-asset-cleanup.md)
 - [Attribution-only Git history cleanup and historical commit mapping — 2026-10-12](2026-10-12-attribution-rewrite/README.md). Earlier records retain their original tested commit IDs; consult this mapping for their source-identical rewritten counterparts.
 - [v1.6.0 publication, independently downloaded assets and signing deferral — 2026-10-12](v1.6.0-2026-10-12-publication.md)

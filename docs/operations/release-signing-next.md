@@ -1,6 +1,6 @@
 # First priority for the next release: stable signing
 
-Owner: MAVLab maintainer. Status: Required before the next public tag after v1.6.0.
+Owner: MAVLab maintainer. Status: permanent identity configured for v1.6.1; final-artifact checks are recorded with that release.
 
 The maintainer explicitly deferred signing setup for v1.6.0 and authorized that debug release with disclosed upgrade/qualification limits. Its manual-publication exception is restricted to that exact version. Do not extend it to another release without a deliberate decision.
 
@@ -13,3 +13,11 @@ The maintainer explicitly deferred signing setup for v1.6.0 and authorized that 
 7. Publish the next tag only after signing/migration gates and its device/QGC acceptance scope are resolved. Future-tag workflows fail when stable signing inputs are missing or the approved certificate does not match.
 
 This procedure does not establish that keys exist or a release is production-signed. See [v1.6.0 disposition](v1.6.0-readiness.md) and [upgrade guidance](../user/upgrading.md).
+
+2026-11-07 decision: the maintainer chose a new permanent release key. Its public
+certificate is [retained here](mavlab-release-certificate.pem), SHA-256
+`46ff910b66597a7340d7b7737e598619368b8594bcdc2f05a91efb54d811eb70`.
+The key is outside Git; private backup bytes were verified, and named encrypted
+Actions secrets plus the approved public certificate variable were configured.
+APK and AAB use this identity. Existing debug installations require a deliberate
+external-data migration; the user's phone is not uninstalled or overwritten.

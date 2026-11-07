@@ -1,4 +1,4 @@
-# Simulated captures (1.6.3-dev)
+# Simulated captures (v1.6.1)
 
 MAVLab automatically simulates camera exposures for QGC mission training. There
 is no Virtual camera section in Ops and no camera setup step. Runtime Start enables

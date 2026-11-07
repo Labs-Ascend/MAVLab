@@ -32,15 +32,25 @@ jobs:
             exit 1
           fi
       - name: Verify and build release artifacts
-        run: ./gradlew lintDebug testDebugUnitTest assembleDebug bundleRelease
+        run: ./gradlew lintDebug testDebugUnitTest assembleDebug assembleRelease bundleRelease
+      - name: Verify release variant and signing guards
+        run: |
+          "${ANDROID_HOME}/build-tools/35.0.0/aapt" dump badging app/build/outputs/apk/release/MAVlab.apk > "${RUNNER_TEMP}/mavlab-release-badging.txt"
+          if grep -q '^application-debuggable' "${RUNNER_TEMP}/mavlab-release-badging.txt"; then
+            echo 'Refusing to publish a debuggable release APK' >&2
+            exit 1
+          fi
+          python3 ../scripts/test_release_signing.py \
+            --apk app/build/outputs/apk/release/MAVlab.apk \
+            --aab app/build/outputs/bundle/release/app-release.aab
       - name: Prepare release assets
         run: |
           mkdir -p "${GITHUB_WORKSPACE}/release-artifacts"
-          cp app/build/outputs/apk/debug/MAVlab.apk \
+          cp app/build/outputs/apk/release/MAVlab.apk \
             "${GITHUB_WORKSPACE}/release-artifacts/MAVLab-${GITHUB_REF_NAME}.apk"
           cp app/build/outputs/bundle/release/app-release.aab \
             "${GITHUB_WORKSPACE}/release-artifacts/MAVLab-${GITHUB_REF_NAME}.aab"
-      - name: Sign APK with stable upgrade identity
+      - name: Sign APK and AAB with permanent release identity
         # v1.6.0 alone is manually published from the verified local debug build.
         # Future releases retain the stable signing requirement.
         if: github.ref_name != 'v1.6.0'
@@ -53,8 +63,12 @@ jobs:
         run: |
           export MAVLAB_APKSIGNER="${ANDROID_HOME}/build-tools/35.0.0/apksigner"
           signing_stage=$(mktemp -d "${RUNNER_TEMP}/mavlab-apk-signed-XXXXXX")
-          bash ../scripts/sign-release-apk.sh app/build/outputs/apk/debug/MAVlab.apk \
+          bash ../scripts/sign-release-build.sh app/build/outputs/apk/release/MAVlab.apk \
             "${signing_stage}/MAVLab-${GITHUB_REF_NAME}.apk"
+          bash ../scripts/sign-release-build.sh app/build/outputs/bundle/release/app-release.aab \
+            "${signing_stage}/MAVLab-${GITHUB_REF_NAME}.aab"
+          cp "${signing_stage}/MAVLab-${GITHUB_REF_NAME}.aab" \
+            "${GITHUB_WORKSPACE}/release-artifacts/MAVLab-${GITHUB_REF_NAME}.aab"
           cp "${signing_stage}/MAVLab-${GITHUB_REF_NAME}.apk" \
             "${GITHUB_WORKSPACE}/release-artifacts/MAVLab-${GITHUB_REF_NAME}.apk"
       - name: Checksum final release assets

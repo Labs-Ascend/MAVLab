@@ -1,0 +1,39 @@
+[
+  {
+    "file": "mavlab-on-device.mp4",
+    "source_bytes": 12390014,
+    "compressed_bytes": 6895489,
+    "duration_seconds": 84.133333,
+    "video": {
+      "codec_name": "h264",
+      "width": 720,
+      "height": 1520,
+      "avg_frame_rate": "30/1"
+    },
+    "sha256": "f915f6eb826d8f49d4a286339f5f8f2681da6fe61beaa09188154ea1082181ac",
+    "source_sha256": "c1c21d31cf437d31f9c907a522197543235a3f0654ea76d8e14229abf58cf0fd",
+    "full_decode": "PASS",
+    "upload_limit_bytes": 10000000,
+    "attachment_url": "https://github.com/user-attachments/assets/9f67a5bb-a83a-4d4b-a351-1c08257268eb",
+    "attachment_download_sha256_verified": true
+  },
+  {
+    "file": "mavlab-qgc-demo.mp4",
+    "source_bytes": 8743846,
+    "compressed_bytes": 6753256,
+    "duration_seconds": 118.333333,
+    "video": {
+      "codec_name": "h264",
+      "width": 1920,
+      "height": 1080,
+      "avg_frame_rate": "30/1"
+    },
+    "sha256": "d6821ed177154ca2e2d642ede79f701495c6e546cadda8929136e7d9571807b1",
+    "source_sha256": "4fc054a67c9763be71dbed39cfe1eb2735c62459e832790d0cb5528245b5d90e",
+    "full_decode": "PASS",
+    "upload_limit_bytes": 10000000,
+    "video_packets_unchanged": true,
+    "attachment_url": "https://github.com/user-attachments/assets/6ba838d5-6c53-495b-b535-c90d67b0a061",
+    "attachment_download_sha256_verified": true
+  }
+]

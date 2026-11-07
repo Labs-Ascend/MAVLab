@@ -1,14 +1,25 @@
-# Installing or upgrading to v1.6.0
+# Installing or upgrading to v1.6.1
 
-Applies to v1.6.0, distributed as a debug build with stable signing deferred to the next release.
+v1.6.1 starts a permanent release-signing identity. Its APK is non-debuggable and
+its APK/AAB share certificate SHA-256:
 
-Use an in-place installation from the same signing identity; do not uninstall or clear app data. Land/disarm and stop/save recording before upgrading. Export recordings you want an independent backup of. Android may refuse an upgrade signed by a different key; do not delete data to work around that without a deliberate backup decision.
+`46ff910b66597a7340d7b7737e598619368b8594bcdc2f05a91efb54d811eb70`
 
-The distributed v1.6.0 debug build and official v1.5.3 APK use different certificates. **The v1.6.0 APK cannot update that official v1.5.3 installation in place.** Matching local development builds are a separate lineage and may update in place.
+The key differs from earlier debug installations, including the distributed
+v1.6.0 APK and local development builds. **Android cannot update those installations
+in place with this release.** Save QGC plans, export recordings and any earlier map
+photos from Ops → Recordings & review, and preserve important settings externally.
+No automatic private-data migration is implemented. Do not uninstall or clear data
+merely to silence a signature error: uninstalling erases the app's private files.
+Make that migration decision only after preserving what you need.
 
-Removing the old app erases local recordings/settings/plans unless backed up externally. Export valuable recordings, save QGC plans and note settings before deciding to change installations; this version has no automatic data migration. Do not uninstall merely to silence a signature error. Only proceed if you have preserved what you need and explicitly accept the data loss. Stable signing and migration policy are the next-release priority. See [release disposition](../operations/v1.6.0-readiness.md).
+Future releases signed by the same permanent identity can update v1.6.1 in place.
+Land/disarm and stop/save recording before any installation. AAB files are signed
+store-upload artifacts; install the APK directly. A signed AAB is not Play approval.
+[Public certificate](../operations/mavlab-release-certificate.pem) ·
+[Release notes](../v1_6_1_release_notes.md).
 
-## What changes
+## Interface and data continuity
 
 - Navigation becomes **Cockpit · Control · SIM · Ops**. Missions move into a contextual Control row, Cockpit progress, SIM's received-route view and Ops upload evidence.
 - There is no sample route, Load route or separate Mission destination. Upload a plan from QGC to show real received geometry.
