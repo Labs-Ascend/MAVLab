@@ -1,0 +1,30 @@
+{
+  "status": "IN_PROGRESS",
+  "recorded_utc": "2026-11-07T08:32:42.384939+00:00",
+  "branch": "feature/offline-map-camera",
+  "base_commit": "c3b5cc1b67f7849393beb4808d918a46b94c841c",
+  "source_version": "1.6.0 / 19",
+  "installed_before": "1.5.3 / 18; exact commit unknown",
+  "phone": "reference-samsung-01: Samsung SM-G970U, Android 12 (SDK31)",
+  "qgc": "v5.2.0-dev-143-ga76f22939; existing session, passive only so far",
+  "signer_sha256": "ceb07790e125e11da41d7ec675f0d2330ad34768af1083890fbd30681bb3da1d",
+  "data_backup": "Private /tmp/mavlab-before-camera-data.tar; 12135936 bytes, sha256 662f1c4f45acff5025b6a12db528cfe19b660551891f0ae3da4e50d65831bfd2. Not published.",
+  "checks": [
+    {
+      "command": "testDebugUnitTest --console=plain --max-workers=2",
+      "result": "PASS (working-tree E1 edits included; not pristine base)"
+    },
+    {
+      "command": "testDebugUnitTest lintDebug assembleDebug --console=plain --max-workers=2",
+      "result": "PASS, 9m31s; subsequent changes require final rerun"
+    }
+  ],
+  "gates_pending": [
+    "exact QGC expanded plan fixtures",
+    "Android JPEG/eviction/export execution",
+    "direct QGC camera shutter",
+    "survey/corridor execution",
+    "low-end-device/offline/performance acceptance"
+  ],
+  "notes": "Data-preserving APK update and isolated instrumentation executed. No uninstall/clear, live-flight command, mission replacement, PR, release or tag."
+}

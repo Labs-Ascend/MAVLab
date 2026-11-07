@@ -1,0 +1,14 @@
+{
+  "c_library_v2_revision": "085c8344fa721a3d80bf574ae77c4d873f4985f3",
+  "headers": {
+    "storage_information.h": "e2e5a13eada96faedaa86af970d4e9e7b82206272b2facd3a066e0a727f8a6de",
+    "camera_settings.h": "22a63e635023642258224edc09606b358965ef56f0f7f1e00b1f65d2941b90e4",
+    "camera_information.h": "7bd5f2488fbf38462494ba89b2608e712a2132c7cb3e15c9c80d49843968c91f",
+    "camera_capture_status.h": "a87093f045e3f2075b3785632596b345d144716271f7ee0346a90f3b26968ff2",
+    "camera_image_captured.h": "5ef8be3a7c1ccfb3511d0f6e845452033292245f5e858e862ce72def29fc3ccf"
+  },
+  "qgc_revision": "a76f22939",
+  "qgc_take_photo_file": "src/Camera/VehicleCameraControl.cc",
+  "qgc_take_photo_source_sha256": "4d47d1014da1aec270da629569f711771b5869c78094f6e82b0af8200a3e6fd1",
+  "qgc_observation": "takePhoto() passes target camera0, interval0, total1; remaining default params (including capture sequence) are0. This is source verification, not live-client acceptance."
+}

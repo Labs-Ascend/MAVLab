@@ -1,0 +1,163 @@
+{
+  "status": "PARTIAL: discovery only, no live shutter",
+  "observed_utc": "2026-11-07T09:06:06.660763+00:00",
+  "qgc_version": "v5.2.0-dev-143-ga76f22939",
+  "phone": "reference-samsung-01, SM-G970U Android12",
+  "source_log": "/tmp/FlightDataoAmJGC.mavlink",
+  "snapshot_tail_bytes": 2000000,
+  "snapshot_tail_sha256": "abfadc7c6dfa33fbe3e5ad9acac6911376566c3395339e2ef65e5f0f24b9e3c0",
+  "camera_frame_count": 8,
+  "camera_samples": [
+    {
+      "utc": "2026-11-07T09:05:25.368000+00:00",
+      "message_id": 0,
+      "system_id": 1,
+      "component_id": 100,
+      "type": 30,
+      "autopilot": 8
+    },
+    {
+      "utc": "2026-11-07T09:05:25.390000+00:00",
+      "message_id": 262,
+      "system_id": 1,
+      "component_id": 100
+    },
+    {
+      "utc": "2026-11-07T09:05:25.391000+00:00",
+      "message_id": 77,
+      "system_id": 1,
+      "component_id": 100,
+      "command": 512,
+      "result": 3
+    },
+    {
+      "utc": "2026-11-07T09:05:25.550000+00:00",
+      "message_id": 77,
+      "system_id": 1,
+      "component_id": 100,
+      "command": 512,
+      "result": 0
+    },
+    {
+      "utc": "2026-11-07T09:05:25.550000+00:00",
+      "message_id": 259,
+      "system_id": 1,
+      "component_id": 100,
+      "model": "MAVLab Virtual Map Camera",
+      "flags": 2,
+      "width": 640,
+      "height": 480
+    },
+    {
+      "utc": "2026-11-07T09:05:26.080000+00:00",
+      "message_id": 77,
+      "system_id": 1,
+      "component_id": 100,
+      "command": 512,
+      "result": 0
+    },
+    {
+      "utc": "2026-11-07T09:05:26.080000+00:00",
+      "message_id": 260,
+      "system_id": 1,
+      "component_id": 100
+    },
+    {
+      "utc": "2026-11-07T09:05:26.096000+00:00",
+      "message_id": 77,
+      "system_id": 1,
+      "component_id": 100,
+      "command": 512,
+      "result": 3
+    }
+  ],
+  "camera_information": [
+    {
+      "utc": "2026-11-07T09:05:25.550000+00:00",
+      "message_id": 259,
+      "system_id": 1,
+      "component_id": 100,
+      "model": "MAVLab Virtual Map Camera",
+      "flags": 2,
+      "width": 640,
+      "height": 480
+    }
+  ],
+  "qgc_requests": [
+    {
+      "utc": "2026-11-07T09:05:25.390000+00:00",
+      "message_id": 76,
+      "system_id": 255,
+      "component_id": 190,
+      "command": 512,
+      "param1": 280.0
+    },
+    {
+      "utc": "2026-11-07T09:05:25.392000+00:00",
+      "message_id": 76,
+      "system_id": 255,
+      "component_id": 190,
+      "command": 512,
+      "param1": 259.0
+    },
+    {
+      "utc": "2026-11-07T09:05:26.075000+00:00",
+      "message_id": 76,
+      "system_id": 255,
+      "component_id": 190,
+      "command": 512,
+      "param1": 260.0
+    },
+    {
+      "utc": "2026-11-07T09:05:26.090000+00:00",
+      "message_id": 76,
+      "system_id": 255,
+      "component_id": 190,
+      "command": 512,
+      "param1": 271.0
+    },
+    {
+      "utc": "2026-11-07T09:05:27.150000+00:00",
+      "message_id": 76,
+      "system_id": 255,
+      "component_id": 190,
+      "command": 512,
+      "param1": 262.0
+    }
+  ],
+  "camera_acks": [
+    {
+      "utc": "2026-11-07T09:05:25.391000+00:00",
+      "message_id": 77,
+      "system_id": 1,
+      "component_id": 100,
+      "command": 512,
+      "result": 3
+    },
+    {
+      "utc": "2026-11-07T09:05:25.550000+00:00",
+      "message_id": 77,
+      "system_id": 1,
+      "component_id": 100,
+      "command": 512,
+      "result": 0
+    },
+    {
+      "utc": "2026-11-07T09:05:26.080000+00:00",
+      "message_id": 77,
+      "system_id": 1,
+      "component_id": 100,
+      "command": 512,
+      "result": 0
+    },
+    {
+      "utc": "2026-11-07T09:05:26.096000+00:00",
+      "message_id": 77,
+      "system_id": 1,
+      "component_id": 100,
+      "command": 512,
+      "result": 3
+    }
+  ],
+  "limits": "Read existing QGC log only. Camera enabled in Ops while disarmed; no origin reset, arm, takeoff, mission or shutter command. This proves actual component discovery/metadata exchange, not live capture/mission acceptance."
+}

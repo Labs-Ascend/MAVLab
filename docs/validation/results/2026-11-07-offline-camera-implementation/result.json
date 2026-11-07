@@ -1,0 +1,44 @@
+{
+  "status": "PARTIAL: first offline-camera milestone verified; full update acceptance remains open",
+  "source_commit": "0ae021a330c24aa4833558090967878365404e83",
+  "source_fingerprint_sha256": "1e76ce82f4b4cf964b4331795e1889e774861378c382c57742287f29b92e0ef5",
+  "app_version": "1.6.0 (19), experimental feature-branch debug build",
+  "apk_sha256": "f7150129818a80ae28d21eda110bd049cac253163e756956daf8772b1041136c",
+  "apk_bytes": 54939029,
+  "installed_apk_sha256": "f7150129818a80ae28d21eda110bd049cac253163e756956daf8772b1041136c",
+  "installed_matches_candidate": true,
+  "device": "reference-samsung-01 / Samsung SM-G970U",
+  "android": "12 / SDK31",
+  "qgc": "v5.2.0-dev-143-ga76f22939",
+  "tester": "Codex",
+  "recorded_utc": "2026-11-07T09:15:25.561915+00:00",
+  "unit": {
+    "tests": 316,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": 49
+  },
+  "android_instrumentation": {
+    "tests": 18,
+    "failures": 0,
+    "duration_seconds": 5.083,
+    "scope": "isolated engine, controller, cache files and loopback ports; actual JPEG/ledger/export/cancel/storage/import effects"
+  },
+  "lint_debug": "PASS",
+  "assemble_debug": "PASS",
+  "assemble_debug_android_test": "PASS",
+  "live_qgc": "Camera component heartbeat, CAMERA_INFORMATION and CAMERA_SETTINGS exchange observed in existing QGC log. No live shutter or survey acceptance.",
+  "pack_bytes": 1159168,
+  "sample_jpeg_bytes": 19124,
+  "camera_state_after_discovery": "Enabled for live metadata discovery; no active capture. Origin and missions were not changed.",
+  "acceptance_open": [
+    "live QGC shutter",
+    "exact expanded Survey/Corridor plan fixtures",
+    "mission capture engine integration and hold/resume",
+    "complete history/recovery and product workflow",
+    "airplane/upstream-absent offline run",
+    "1000-capture/20-minute performance and low-end-device qualification",
+    "full lifecycle, all-surface sensor and narrow-screen acceptance"
+  ]
+}
