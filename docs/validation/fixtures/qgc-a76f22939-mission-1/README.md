@@ -22,3 +22,12 @@ Camera settings are manual, 60 m relative, trigger/spacing both 25 m.
 No upload retry, arming, takeoff, origin change or plan alteration was performed
 while diagnosing this case. Source code and runtime behavior were not modified.
 Android's unrelated system camera/SurfaceFlinger messages were excluded.
+
+The derived `app/src/test/resources/mission-1-items.bin` contains a little-endian
+16-bit count followed by 831 37-byte MISSION_ITEM_INT payloads. Regenerate it with
+`python3 docs/validation/fixtures/qgc-a76f22939-mission-1/generate-wire-fixture.py`.
+The script independently packs original expanded items and a synthetic home marker;
+it does not call MAVLab's encoder and is not a captured QGC wire stream. Its SHA-256
+is `ca8a56d5b4f631b71259983bfe6308421eb258bcda59438a83df7cd738847283`.
+JVM tests exercise parsing, normalized engine loading, download and V3 persistence;
+isolated Android tests replay the transfer without accessing the user's runtime.

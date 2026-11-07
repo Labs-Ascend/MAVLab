@@ -45,12 +45,13 @@ enum class FlightMode(val customMode: UInt, val displayName: String) {
     GUIDED(4u, "Guided"),
     LOITER(5u, "Loiter"),
     RTL(6u, "RTL"),
-    LAND(9u, "Land");
+    LAND(9u, "Land"),
+    BRAKE(17u, "Brake");
 
     companion object {
         /**
          * Maps an externally supplied Copter custom-mode id to an implemented [FlightMode].
-         * Returns null for ids MAVLab does not implement (for example BRAKE) instead of
+         * Returns null for ids MAVLab does not implement (for example mode 99) instead of
          * silently falling back to a different mode.
          */
         fun fromCustomModeOrNull(customMode: UInt): FlightMode? {

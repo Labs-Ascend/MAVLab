@@ -68,7 +68,31 @@ and retry handling. A live run with the named QGC build remains a separate gate.
 The camera advertises still capture only: video, zoom/focus, interval capture and
 remote image download are unsupported. Review/export happens on the phone.
 
-Photo survey/corridor mission execution remains unsupported until engine triggers,
-coverage/storage preflight and hold/resume are implemented and verified. Do not
-interpret direct shutter support as survey support or all-MAVLink compatibility. Unsupported custom flight modes are rejected rather than changed
-to another mode; BRAKE is still unsupported until real hold behavior is added.
+## QGC distance-triggered survey missions (1.6.1-dev)
+
+Upload a small survey using distance-triggered photos (command 206), takeoff,
+waypoints and RTL. Navigation uploads accept up to 1,000 items including home.
+Upload is separate from starting flight: it leaves the simulated vehicle disarmed.
+Other camera/gimbal/ROI mission commands are still rejected.
+
+For the bundled pack, set **Use Dandora origin before uploading** (it clears old
+plans), enable the virtual camera and place a small survey well inside the 896 m
+square. At 60 m altitude keep waypoints at least 55 m inside the map edge. Use
+25 m trigger spacing and 3 m/s or slower, keep the planned photo count below the
+remaining 1,000-request session allowance, and retain at least 32 MiB free storage.
+Choose Start AUTO or start from QGC. Readiness checks block starting when the map,
+origin, route coverage, requested rate or remaining session budget is unsuitable.
+The exact reason and saved/failed photo counts appear in mission details/Ops.
+
+Immediate trigger items save a real image before continuing. Distance triggers
+save at actual simulated travel positions. A save/cadence failure pauses in BRAKE;
+inspect the reason, resolve it and explicitly Resume AUTO, or take control and land.
+BRAKE/LOITER pause progress; LAND/disarm stop mission triggers. Saved files remain
+available for export. A mid-route photo mission stopped by disarm needs a restart
+from takeoff. A failed exposure remains recorded as a failure after resume.
+
+**Mission 1** (831 uploaded items) is suitable for checking the upload fix. Its
+7.646 km² area and 12,570 planned photos exceed the bundled map/session allowance,
+so use a fresh small Dandora survey for a complete capture flight. Corridor and
+other pattern types need their emitted commands checked separately. Live QGC
+upload/start/photo/land acceptance remains a separate evidence gate.

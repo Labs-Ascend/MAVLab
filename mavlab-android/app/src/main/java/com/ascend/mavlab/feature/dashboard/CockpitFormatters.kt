@@ -72,5 +72,6 @@ private fun objectiveLabel(command: MissionCommand): String {
         MissionCommand.RTL -> "Return"
         MissionCommand.LOITER_TIME -> "Loiter WP"
         MissionCommand.CHANGE_SPEED -> "Speed change"
+        MissionCommand.CAMERA_TRIGGER_DISTANCE -> "Distance photo trigger"
     }
 }

@@ -60,6 +60,11 @@ identifies retries. A sequence-zero/confirmation-zero packet cannot distinguish 
 legitimate new press from a nonconforming retry. This limit is explicit in the
 MAVLink contract. Named QGC discovery/shutter evidence remains pending.
 
-Mission triggers, readiness/hold/resume, complete capture-history recovery, and
-low-end/offline/performance acceptance remain subsequent gates. Still-capture
-capability does not imply these services.
+Distance-trigger mission items now use a small nonblocking MissionCamera boundary
+from the authoritative engine into the existing controller. Immutable exposure
+snapshots are supplied by the engine. No file/bitmap work runs on its tick. Immediate
+items await the real outcome; distance cadence failures use actual BRAKE hold.
+Preflight, pause/resume, capacity and V3 persistence are specified in the MAVLink
+contract. Background lifecycle and phone-sensor ownership remain unchanged.
+Complete capture-history recovery and low-end/performance acceptance remain gates;
+a full QGC patterned flight still needs live validation.

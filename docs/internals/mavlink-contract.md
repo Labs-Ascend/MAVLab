@@ -63,7 +63,7 @@ The canonical phone-sensor correction changes local takeoff to ALT_HOLD so local
 
 ### Mode admission (working tree)
 
-`SET_MODE` (11) and `MAV_CMD_DO_SET_MODE` (176, via `COMMAND_LONG` or `COMMAND_INT`) admit only the implemented custom-mode ids 0 (STABILIZE), 2 (ALT_HOLD), 3 (AUTO), 4 (GUIDED), 5 (LOITER), 6 (RTL) and 9 (LAND). Unknown ids are rejected with `MAV_RESULT_UNSUPPORTED` and leave engine mode and control authority unchanged. In particular, 17 (BRAKE) is not implemented and is never aliased to LOITER or STABILIZE. `DO_SET_MODE` param2 values that cannot be an exact uint32 id (nonfinite, negative, fractional or out of range) are rejected with `MAV_RESULT_DENIED`, so e.g. `4.9` or `NaN` is not silently coerced into GUIDED or STABILIZE. Rejections keep the requesting endpoint as the ACK destination. Device-boundary coverage lives in `MavlinkProtocolDeviceTest`; the lookup unit test alone is not evidence of UDP behavior.
+`SET_MODE` (11) and `MAV_CMD_DO_SET_MODE` (176, via `COMMAND_LONG` or `COMMAND_INT`) admit only the implemented custom-mode ids 0 (STABILIZE), 2 (ALT_HOLD), 3 (AUTO), 4 (GUIDED), 5 (LOITER), 6 (RTL), 9 (LAND) and 17 (BRAKE). Unknown ids are rejected with `MAV_RESULT_UNSUPPORTED` and leave engine mode and control authority unchanged. BRAKE uses engine position/altitude hold, pauses mission advancement and distance triggers, and retains mission authority when pausing AUTO. `DO_SET_MODE` param2 values that cannot be an exact uint32 id (nonfinite, negative, fractional or out of range) are rejected with `MAV_RESULT_DENIED`, so e.g. `4.9` or `NaN` is not silently coerced into GUIDED or STABILIZE. Rejections keep the requesting endpoint as the ACK destination. Device-boundary coverage lives in `MavlinkProtocolDeviceTest`; the lookup unit test alone is not evidence of UDP behavior.
 
 ## Mission evidence
 
@@ -108,10 +108,10 @@ Primary evidence: `MavlinkUdpServer.kt`, `MavlinkMessageBuilder.kt`, `MavlinkIde
 ## Mission consolidation boundary changes (UI/UX branch)
 
 - Upload completion records GCS source; persisted restoration is not a new upload ACK. AUTO mission progress requires an armed autopilot; mode/ACK alone does not establish execution.
-- Unknown mission command IDs are rejected with UNSUPPORTED (3). Unsupported frames are rejected with UNSUPPORTED_FRAME (2); diagnostics name command/frame/zero-based sequence. Invalid values retain INVALID (5). Accepted command IDs are 16, 22, 21, 20, 19 and 178. An unsuccessful replacement does not remove the previous loaded mission.
-- Navigation coordinates accept geographic GLOBAL / GLOBAL_INT (0/5, MSL) or GLOBAL_RELATIVE_ALT / INT (3/6, home-relative metres). Frame MISSION (2) accepts only CHANGE_SPEED or RTL. Local/body/terrain frames are rejected; no terrain model is implemented. Raw MSL altitude converts to AGL at engine load using current simulation ground MSL. Flat simulation ground makes relative-home altitude equal AGL. See [MAVLink frame definitions](https://mavlink.io/en/messages/common.html#MAV_FRAME) and [mission results](https://mavlink.io/en/messages/common.html#MAV_MISSION_RESULT).
+- Unknown mission command IDs are rejected with UNSUPPORTED (3). Unsupported frames are rejected with UNSUPPORTED_FRAME (2); diagnostics name command/frame/zero-based sequence. Invalid values retain INVALID (5). Accepted command IDs are 16, 22, 21, 20, 19, 178 and 206. An unsuccessful replacement does not remove the previous loaded mission.
+- Navigation coordinates accept geographic GLOBAL / GLOBAL_INT (0/5, MSL) or GLOBAL_RELATIVE_ALT / INT (3/6, home-relative metres). Frame MISSION (2) accepts CHANGE_SPEED, DO_SET_CAM_TRIGG_DIST or RTL. Local/body/terrain frames are rejected; no terrain model is implemented. Raw MSL altitude converts to AGL at engine load using current simulation ground MSL. Flat simulation ground makes relative-home altitude equal AGL. See [MAVLink frame definitions](https://mavlink.io/en/messages/common.html#MAV_FRAME) and [mission results](https://mavlink.io/en/messages/common.html#MAV_MISSION_RESULT).
 - LOITER_TIME is **partial**: arrival is implemented, timed dwell is not. autocontinue=false is an **accepted no-op for pausing**: the engine still advances on arrival. These limitations appear in Ops and affected navigation nodes are hollow in SIM. CHANGE_SPEED retains the existing speed handling and has no spatial node.
-- Local Control's Start AUTO/Clear use guarded application actions; this does not redefine external mission start/clear ACKs, add pause/resume support, or advertise new capabilities. Live QGC upload/rejection/start/land interoperability needs separate evidence.
+- Local Control's Start AUTO/Clear use guarded application actions; camera readiness also gates external AUTO/MISSION_START; clear, replacement upload and set-current require disarm. No new autopilot capability bit is advertised. Live QGC upload/rejection/start/land interoperability needs separate evidence.
 
 ## Virtual still-camera component (working tree)
 
@@ -160,6 +160,48 @@ Android loopback coverage; a synthetic wire test is not a live QGC acceptance ru
 Wire offsets, lengths and CRC extras were checked against
 [c_library_v2 085c8344](https://github.com/mavlink/c_library_v2/tree/085c8344fa721a3d80bf574ae77c4d873f4985f3/common)
 and the [camera protocol](https://mavlink.io/en/services/camera.html).
-The navigation mission store still rejects camera mission items. Survey/corridor
-execution and BRAKE hold/resume remain unimplemented; no accepted camera no-ops
-are added to mission uploads.
+## Distance-triggered survey subset (1.6.1-dev)
+
+Navigation uploads are bounded to **1,000 items**, including QGC's home marker.
+Oversize counts receive MAV_MISSION_NO_SPACE (4); the previous mission is retained.
+This limit is separate from the unchanged 100-item fence/rally stores. Replacement,
+clear and set-current are denied while armed. Upload alone never arms or claims
+mission authority. Actual Mission 1 expands to 831 items and is a regression fixture;
+this is isolated protocol evidence, not a live QGC upload acceptance result.
+
+Mission command 206 is implemented through the engine and the real virtual JPEG
+writer: param1 is horizontal physical travel distance in metres (0 disables distance
+triggering), param2 is 0/-1 (ignore integration time), param3 is 0/1 (one immediate
+photo even when param1=0), param4 targets 0/100 (or NaN default); reserved fields
+accept zero/NaN only. Other targets/options are rejected. Each immediate photo holds
+position until saving finishes; repeated command items execute once at their item
+index. Distance accumulates only during armed AUTO under GCS_MISSION. No missing
+past exposures are invented. BRAKE/LOITER pause progress and triggers; explicit AUTO
+resumes the retained item. LAND/disarm/manual recovery stop new mission triggers.
+A late save may finish recording its original outcome but cannot override recovery.
+
+AUTO/MISSION_START preflight requires an enabled camera, matching origin, conservative
+whole-route footprint coverage (maximum route altitude, diagonal radius plus 8 m),
+at least 32 MiB free in the worker-refreshed storage snapshot (each save also checks actual free space), planned distance/speed >=3 seconds, and a conservative estimate
+within the remaining 1,000-request session budget. Readiness failure leaves arming,
+mode and authority unchanged and reports a reason. An admitted save failure, missed
+cadence or required-photo timeout holds in BRAKE with visible mission diagnostics.
+Immediate-photo waiting has a ten-second simulation-time limit. Explicit resume
+rechecks readiness; failed images remain counted and in exported failure records.
+A stopped mid-route photo mission must restart from takeoff after disarm.
+
+Completed mission captures emit CAMERA_IMAGE_CAPTURED from component 100 and enter
+its 32-outcome request window. The pending mission-event window is also bounded to
+32; disconnect/history expiry does not delete saved on-phone image/record pairs.
+Mission snapshots now write V3, retaining original frames/parameters/coordinates
+separately from normalized engine navigation values. V1/V2 remain readable; an
+unreadable saved snapshot is retained with re-upload guidance. Camera/runtime flight
+state is not persisted in the mission snapshot. Original uploaded yaw and hold
+values round-trip; finite navigation yaw, timed dwell and autocontinue=false remain
+partial/accepted no-op as documented, rather than a full flight-stack claim.
+
+Mission 1 covers about 7.646 km² with 12,570 planned photos, outside the bundled
+896 m square map and above the session budget. It can test upload; it cannot pass
+camera-flight preflight with that map. Other camera/gimbal/ROI mission IDs, spline,
+jumps and unsupported layouts remain rejected. No camera no-ops are introduced.
+Reference: [command 206 definitions](https://mavlink.io/en/messages/common.html#MAV_CMD_DO_SET_CAM_TRIGG_DIST).

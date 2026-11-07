@@ -316,9 +316,9 @@ class MavlinkMessageBuilder(
             .putFloat(commandParams[1])
             .putFloat(commandParams[2])
             .putFloat(commandParams[3])
-            .putInt((item.latitudeDeg * 1e7).roundToInt())
-            .putInt((item.longitudeDeg * 1e7).roundToInt())
-            .putFloat(item.altitudeAglMeters)
+            .putInt(wireCoordinate(item, true))
+            .putInt(wireCoordinate(item, false))
+            .putFloat(item.wire?.z ?: item.altitudeAglMeters)
             .putU16(item.sequence)
             .putU16(item.command.mavCmdId)
             .putU8(targetSystem)
@@ -342,9 +342,9 @@ class MavlinkMessageBuilder(
             .putFloat(commandParams[1])
             .putFloat(commandParams[2])
             .putFloat(commandParams[3])
-            .putFloat(item.latitudeDeg.toFloat())
-            .putFloat(item.longitudeDeg.toFloat())
-            .putFloat(item.altitudeAglMeters)
+            .putFloat((item.wire?.x ?: item.latitudeDeg).toFloat())
+            .putFloat((item.wire?.y ?: item.longitudeDeg).toFloat())
+            .putFloat(item.wire?.z ?: item.altitudeAglMeters)
             .putU16(item.sequence)
             .putU16(item.command.mavCmdId)
             .putU8(targetSystem)
@@ -357,6 +357,7 @@ class MavlinkMessageBuilder(
     }
 
     private fun missionCommandParams(item: MissionItem): FloatArray {
+        item.wire?.let { return floatArrayOf(it.p1,it.p2,it.p3,it.p4) }
         return if (item.command == MissionCommand.CHANGE_SPEED) {
             floatArrayOf(1f, item.speedMetersPerSecond ?: 0f, -1f, 0f)
         } else {
@@ -364,10 +365,20 @@ class MavlinkMessageBuilder(
         }
     }
 
-    private fun missionFrame(item: MissionItem, integer: Boolean): Int = when {
-        item.command == MissionCommand.CHANGE_SPEED -> 2 // MAV_FRAME_MISSION (not spatial)
+    private fun wireCoordinate(item:MissionItem,north:Boolean):Int {
+        if(item.wire==null && !item.command.isNav) return 0
+        val value=if(north) item.wire?.x ?: item.latitudeDeg else item.wire?.y ?: item.longitudeDeg
+        if(value.isNaN()) return Int.MAX_VALUE
+        return (if(item.command.isNav) value*1e7 else value).roundToInt()
+    }
+
+    private fun missionFrame(item: MissionItem, integer: Boolean): Int {
+        item.wire?.let { return when(it.frame) { 0,5 -> if(integer) 5 else 0;3,6 -> if(integer) 6 else 3;else -> it.frame } }
+        return when {
+        item.command.isDo -> 2 // MAV_FRAME_MISSION (not spatial)
         item.altitudeIsMsl -> if (integer) 5 else 0
         else -> if (integer) MAV_FRAME_GLOBAL_RELATIVE_ALT_INT else MAV_FRAME_GLOBAL_RELATIVE_ALT
+        }
     }
 
     private fun frame(messageId: Int, crcExtra: Int, payload: ByteArray): ByteArray {

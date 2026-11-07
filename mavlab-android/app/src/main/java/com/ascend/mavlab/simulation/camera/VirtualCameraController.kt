@@ -78,6 +78,8 @@ class VirtualCameraController(private val scope: CoroutineScope, private val pos
             }
         }
     }
+    private val missionEvents=ArrayDeque<Result>()
+    internal fun drainMissionEvents():List<Result> = synchronized(guard) { missionEvents.toList().also { missionEvents.clear() } }
     val isEnabled get() = enabled && pack!=null && status.value.phase!=Phase.LOADING
     fun initialize(context:Context) { this.context=context.applicationContext }
     fun enable() {
@@ -119,7 +121,7 @@ class VirtualCameraController(private val scope: CoroutineScope, private val pos
     }
     fun disable() {
         val token=synchronized(guard) {
-            enabled=false;generation++
+            enabled=false;generation++;missionEvents.clear()
             mutableStatus.value=mutableStatus.value.copy(phase=Phase.OFF,message="Virtual camera off",cachedBytes=0)
             generation
         }
@@ -129,7 +131,9 @@ class VirtualCameraController(private val scope: CoroutineScope, private val pos
     }
     /** Nonblocking admission for UI or UDP. Neither engine nor UDP waits on disk work. */
     fun requestCapture(trigger:String,callback:(Result)->Unit={}):Admission {
-        val snapshot=pose() // acquire engine snapshot before camera guard; no inverse lock order
+        return requestCaptureAt(pose(),trigger,callback)
+    }
+    internal fun requestCaptureAt(snapshot:PhysicalPoseSnapshot,trigger:String,callback:(Result)->Unit={}):Admission {
         return synchronized(guard) {
         val map=pack
         if(!enabled || map==null || mutableStatus.value.phase in listOf(Phase.LOADING,Phase.OFF)) return Admission.UNAVAILABLE
@@ -151,6 +155,52 @@ class VirtualCameraController(private val scope: CoroutineScope, private val pos
         Admission.ACCEPTED
         }
     }
+    val missionLink:MissionCamera=object:MissionCamera {
+        override fun preflight(items:List<com.ascend.mavlab.simulation.mission.MissionItem>,pose:PhysicalPoseSnapshot,speed:Float):String? {
+            val map=pack
+            if(!isEnabled || map==null) return "Enable the virtual camera in Ops"
+            if(kotlin.math.abs(pose.frame.latitudeDeg-map.frame.latitudeDeg)>1e-8 || kotlin.math.abs(pose.frame.longitudeDeg-map.frame.longitudeDeg)>1e-8)
+                return "Simulation origin does not match the selected map"
+            if(storage.freeMiB<32f) return "Camera needs at least 32 MiB free storage"
+            val nav=items.filter { it.command.isNav && it.command!=com.ascend.mavlab.simulation.mission.MissionCommand.RTL }
+            val maxAltitude=nav.maxOfOrNull { it.altitudeAglMeters.toDouble() }?:0.0
+            if(maxAltitude<0.5) return "Photo mission needs a positive flight altitude"
+            var distance=0.0;var shots=0.0;var lastN=pose.northMeters;var lastE=pose.eastMeters
+            var plannedSpeed=speed.toDouble()
+            for(item in items) {
+                if(item.command==com.ascend.mavlab.simulation.mission.MissionCommand.CHANGE_SPEED)
+                    plannedSpeed=item.speedMetersPerSecond?.toDouble()?:plannedSpeed
+                if(item.command==com.ascend.mavlab.simulation.mission.MissionCommand.CAMERA_TRIGGER_DISTANCE) {
+                    distance=item.wire?.p1?.toDouble()?:0.0
+                    if(distance>0 && distance/plannedSpeed.coerceAtLeast(0.1)<MinimumIntervalMs/1000.0)
+                        return "Photo trigger demand exceeds one image per three seconds; reduce speed or increase distance"
+                    if(item.wire?.p3==1f) shots++
+                }
+                if(item.command.isNav) {
+                    val n=item.localNorthMeters?.toDouble()?:continue
+                    val e=item.localEastMeters?.toDouble()?:continue
+                    if(distance>0) shots+=kotlin.math.ceil(kotlin.math.hypot(n-lastN,e-lastE)/distance)
+                    lastN=n;lastE=e
+                    val h=item.altitudeAglMeters.toDouble().coerceAtLeast(maxAltitude)
+                    val radius=h*kotlin.math.hypot(profile.sensorWidthMm,profile.sensorHeightMm)/(2*profile.focalLengthMm)+8.0
+                    if(e-radius<map.validWest || e+radius>map.validEast || n-radius<map.validSouth || n+radius>map.validNorth)
+                        return "Mission footprint is outside the selected map coverage"
+                }
+            }
+            if(shots>MaximumRequestsPerSession-status.value.attempted) return "Mission exceeds the remaining camera-session budget of ${MaximumRequestsPerSession-status.value.attempted} captures"
+            return null
+        }
+        override fun capture(pose:PhysicalPoseSnapshot,trigger:String,completed:(String?)->Unit):MissionCamera.Admission =
+            when(requestCaptureAt(pose,trigger) { result ->
+                synchronized(guard) { if (enabled) { if(missionEvents.size==32) missionEvents.removeFirst();missionEvents.addLast(result) } }
+                completed(if(result.success) null else result.error?:"Photo save failed")
+            }) {
+                Admission.ACCEPTED -> MissionCamera.Admission.ACCEPTED
+                Admission.BUSY -> MissionCamera.Admission.BUSY
+                else -> MissionCamera.Admission.REJECTED
+            }
+    }
+
     private fun capture(request:Request):Result {
         check(request.generation==generation && enabled) { "Capture cancelled: camera stopped" }
         val app=checkNotNull(context);val map=request.map

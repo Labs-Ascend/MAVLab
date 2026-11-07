@@ -15,6 +15,49 @@ import org.junit.Test
 
 /** Isolated engine and loopback sockets: never connects to QGC or changes the app runtime. */
 class MavlinkProtocolDeviceTest {
+    @Test fun armingDuringTransferAndArmedClearCannotReplaceMission() = withServer { server, engine, peer ->
+        val old=MissionItem(0,MissionCommand.WAYPOINT,-1.2921,36.8219,10f)
+        engine.loadMission(listOf(old));val loaded=engine.missionProgress.value.items
+        val sender=MavlinkMessageBuilder(255,190)
+        inject(server,sender.missionCount(1,1,1),peer);receive(peer,51)
+        engine.setArmed(true)
+        inject(server,sender.missionItemInt(old.copy(altitudeAglMeters=20f),0,1,1),peer)
+        assertEquals(14,receive(peer,47).payload[2].toInt())
+        assertEquals(loaded,engine.missionProgress.value.items)
+        inject(server,MavlinkWire.frame(45,byteArrayOf(1,1),0,255,190),peer)
+        assertEquals(14,receive(peer,47).payload[2].toInt())
+        assertEquals(loaded,engine.missionProgress.value.items)
+        assertFalse(engine.setMissionCurrent(0))
+    }
+
+    @Test
+    fun realMissionOneUploads831ItemsWithoutArmingAndOversizeReplacementRetainsIt() = withServer { server, engine, peer ->
+        val bytes=androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().context.assets.open("mission-1-items.bin").use { it.readBytes() }
+        val sender=MavlinkMessageBuilder(255,190)
+        val before=engine.state.value
+        inject(server,sender.missionCount(831,1,1),peer)
+        for(sequence in 0 until 831) {
+            val request=receive(peer,51)
+            assertEquals(sequence,ByteBuffer.wrap(request.payload).order(ByteOrder.LITTLE_ENDIAN).short.toInt())
+            val payload=bytes.copyOfRange(2+37*sequence,2+37*(sequence+1))
+            inject(server,MavlinkWire.frame(73,payload,sequence,255,190),peer)
+        }
+        assertEquals(0,receive(peer,47).payload[2].toInt())
+        val loaded=engine.missionProgress.value
+        assertEquals(831,loaded.items.size)
+        assertEquals(167,loaded.items.count { it.command==MissionCommand.CAMERA_TRIGGER_DISTANCE })
+        assertFalse(engine.state.value.armed)
+        assertEquals(before.controlAuthority,engine.state.value.controlAuthority)
+        assertFalse(engine.startMission()) // real camera absent: never silently discard exposures
+        assertFalse(engine.state.value.armed)
+        inject(server,sender.missionCount(1001,1,1),peer)
+        assertEquals(4,receive(peer,47).payload[2].toInt()) // NO_SPACE
+        assertEquals(loaded.items,engine.missionProgress.value.items)
+        inject(server,sender.missionCount(0,1,1),peer)
+        assertEquals(0,receive(peer,47).payload[2].toInt())
+        assertFalse(engine.missionProgress.value.loaded)
+    }
+
     @Test
     fun batchedCompressedUploadAndRepeatedFinalItemLoadEngineOnlyOnce() = withServer { server, engine, peer ->
         var sequence = 0
@@ -76,7 +119,7 @@ class MavlinkProtocolDeviceTest {
     @Test
     fun setModeRejectsUnknownCustomModeWithoutEngineChange() = withServer { server, engine, peer ->
         val before = engine.state.value
-        inject(server, MavlinkWire.frame(11, setModePayload(17u), 0, 255, 190), peer)
+        inject(server, MavlinkWire.frame(11, setModePayload(99u), 0, 255, 190), peer)
         val ack = receive(peer, 77)
         assertEquals(0, ackCommand(ack))
         assertEquals(3, ack.payload[2].toInt()) // MAV_RESULT_UNSUPPORTED
@@ -97,7 +140,7 @@ class MavlinkProtocolDeviceTest {
     @Test
     fun doSetModeRejectsUnknownCustomModeWithoutEngineChange() = withServer { server, engine, peer ->
         val before = engine.state.value
-        inject(server, MavlinkWire.frame(76, doSetModeCommand(17f), 0, 255, 190), peer)
+        inject(server, MavlinkWire.frame(76, doSetModeCommand(99f), 0, 255, 190), peer)
         val ack = receive(peer, 77)
         assertEquals(176, ackCommand(ack))
         assertEquals(3, ack.payload[2].toInt()) // MAV_RESULT_UNSUPPORTED

@@ -21,7 +21,7 @@ fun missionActionPolicy(state: DroneState, mission: MissionProgress, upload: Mis
         !state.northMeters.isFinite() || !state.eastMeters.isFinite() || !state.altitudeAglMeters.isFinite() || !state.verticalSpeedMS.isFinite() -> "Valid vehicle position required"
         mission.complete -> "Mission complete; upload a new mission to start again"
         state.armed && state.mode == FlightMode.AUTO && state.controlAuthority == ControlAuthority.GCS_MISSION -> "AUTO already active"
-        state.altitudeAglMeters > 0.25f || abs(state.verticalSpeedMS) > 0.2f -> "Start AUTO from the ground"
+        (state.altitudeAglMeters > 0.25f || abs(state.verticalSpeedMS) > 0.2f) && !(state.armed && state.controlAuthority == ControlAuthority.GCS_MISSION && state.mode in setOf(FlightMode.BRAKE, FlightMode.LOITER)) -> "Start AUTO from the ground"
         state.controlAuthority == ControlAuthority.GCS_DIRECT -> "Take local control before starting AUTO"
         !failures.gpsEnabled || state.gpsFixType.toInt() < 3 -> "GPS 3D fix required"
         failures.hasMotorFailure || state.motors.any { it.failed } -> "Reset motor failures before AUTO"

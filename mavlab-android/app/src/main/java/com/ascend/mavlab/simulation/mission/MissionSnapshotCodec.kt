@@ -19,6 +19,7 @@ object MissionSnapshotCodec {
                         item.localEastMeters?.toString().orEmpty(),
                         item.speedMetersPerSecond?.toString().orEmpty(),
                         item.altitudeIsMsl.toString(),
+                        item.wire?.let { listOf(it.frame,it.p1,it.p2,it.p3,it.p4,it.x,it.y,it.z).joinToString(",") }.orEmpty(),
                     ).joinToString(FieldSeparator),
                 )
             }
@@ -31,7 +32,7 @@ object MissionSnapshotCodec {
             ?.filter { it.isNotBlank() }
             ?.toList()
             ?: return emptyList()
-        if (lines.firstOrNull() !in setOf(Version, LegacyVersion)) return emptyList()
+        if (lines.firstOrNull() !in setOf(Version, "MAVLAB_MISSION_V2", LegacyVersion)) return emptyList()
 
         return runCatching {
             lines.drop(1).map { line ->
@@ -49,14 +50,18 @@ object MissionSnapshotCodec {
                     localEastMeters = fields[8].toFloatOrNull(),
                     speedMetersPerSecond = fields.getOrNull(9)?.toFloatOrNull(),
                     altitudeIsMsl = fields.getOrNull(10)?.toBooleanStrictOrNull() ?: false,
+                    wire = fields.getOrNull(11)?.takeIf { it.isNotBlank() }?.split(",")?.let {
+                        require(it.size==8)
+                        MissionWireData(it[0].toInt(),it[1].toFloat(),it[2].toFloat(),it[3].toFloat(),it[4].toFloat(),it[5].toDouble(),it[6].toDouble(),it[7].toFloat())
+                    },
                 )
             }
         }.getOrElse { emptyList() }
     }
 
-    private const val Version = "MAVLAB_MISSION_V2"
+    private const val Version = "MAVLAB_MISSION_V3"
     private const val LegacyVersion = "MAVLAB_MISSION_V1"
     private const val FieldSeparator = "\t"
     private const val LegacyFieldCount = 9
-    private const val FieldCount = 11
+    private const val FieldCount = 12
 }

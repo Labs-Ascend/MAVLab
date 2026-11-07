@@ -21,6 +21,54 @@ class OfflineCameraDeviceTest {
     }
     private fun snapshot(east:Double=0.0,north:Double=0.0,heading:Double=0.0)=PhysicalPoseSnapshot(
         SimulationCoordinateFrame(-1.2425,36.9225),north,east,60.0,heading,System.nanoTime())
+    @Test fun engineMissionSavesActualJpegAndReportsBoundedCaptureOutcome() = runBlocking {
+        val root=File(app.cacheDir,"camera-mission-${System.nanoTime()}").apply { mkdirs() }
+        val isolated=object:android.content.ContextWrapper(app) {
+            override fun getApplicationContext():android.content.Context=this
+            override fun getFilesDir():File=root
+        }
+        val scope=CoroutineScope(SupervisorJob()+Dispatchers.Default)
+        val engine=com.ascend.mavlab.simulation.engine.PhysicsSimulationEngine()
+        val camera=VirtualCameraController(scope) { engine.physicalPoseSnapshot() }
+        try {
+            assertTrue(engine.setHomeLocation(com.ascend.mavlab.simulation.engine.SimLocation("test-dandora","Dandora",-1.2425,36.9225,1805f)))
+            camera.initialize(isolated);camera.enable()
+            withTimeout(15_000) { camera.status.first { it.phase==VirtualCameraController.Phase.READY } }
+            engine.missionCamera=camera.missionLink
+            val frame=engine.physicalPoseSnapshot().frame
+            fun nav(seq:Int,command:com.ascend.mavlab.simulation.mission.MissionCommand)=com.ascend.mavlab.simulation.mission.MissionItem(seq,command,frame.latitudeDeg,frame.longitudeDeg,8f)
+            fun trigger(seq:Int,d:Float,now:Float)=com.ascend.mavlab.simulation.mission.MissionItem(seq,com.ascend.mavlab.simulation.mission.MissionCommand.CAMERA_TRIGGER_DISTANCE,0.0,0.0,0f,
+                wire=com.ascend.mavlab.simulation.mission.MissionWireData(2,d,0f,now,0f,0.0,0.0,0f))
+            engine.loadMission(listOf(nav(0,com.ascend.mavlab.simulation.mission.MissionCommand.TAKEOFF),trigger(1,25f,1f),trigger(2,0f,0f),nav(3,com.ascend.mavlab.simulation.mission.MissionCommand.RTL)))
+            assertNull(engine.missionStartBlockReason())
+            assertTrue(engine.startMission())
+            withTimeout(15_000) {
+                while(!engine.missionProgress.value.complete || engine.state.value.armed) {
+                    engine.tickForTest(.02f)
+                    if(camera.status.value.phase==VirtualCameraController.Phase.CAPTURING) delay(10)
+                }
+            }
+            assertEquals(1,engine.missionProgress.value.cameraSavedImages)
+            assertEquals(1,camera.status.value.saved)
+            val image=File(root,"mavlab/camera").walkTopDown().single { it.extension=="jpg" }
+            val bitmap=BitmapFactory.decodeFile(image.path);assertEquals(640,bitmap.width);bitmap.recycle()
+            val endpoint=com.ascend.mavlab.core.mavlink.CameraMavlinkEndpoint(1,camera) { _,_ -> }
+            val events=endpoint.periodic().map { checkNotNull(com.ascend.mavlab.core.mavlink.MavlinkParser.parse(it,it.size)) }
+            assertEquals(1,events.count { it.messageId==263 })
+            assertEquals(100,events.single { it.messageId==263 }.componentId)
+            assertEquals(0,camera.drainMissionEvents().size)
+            val pose=engine.physicalPoseSnapshot()
+            val items=engine.missionProgress.value.items
+            assertTrue(camera.missionLink.preflight(items,pose.copy(frame=SimulationCoordinateFrame(0.0,0.0)),3f)!!.contains("origin"))
+            val outside=items.map { if(it.command.isNav) it.copy(localNorthMeters=1000f) else it }
+            assertTrue(camera.missionLink.preflight(outside,pose,3f)!!.contains("coverage"))
+            assertTrue(camera.missionLink.preflight(items,pose,20f)!!.contains("three seconds"))
+            val tooMany=items+List(1001) { trigger(it+4,25f,1f) }
+            assertTrue(camera.missionLink.preflight(tooMany,pose,3f)!!.contains("budget"))
+            camera.disable();assertNotNull(camera.missionLink.preflight(items,pose,3f))
+        } finally { engine.stop();camera.disable();scope.cancel();root.deleteRecursively() }
+    }
+
     @Test fun realPackRendersAcrossTilesRotationsAndEvictionsWithinBudget() {
         val file=packFile()
         try { OfflineMapPack(file).use { map ->

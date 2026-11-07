@@ -78,6 +78,7 @@ class MissionEngine {
             mutableProgress.value = updated
             return updated
         }
+        if(current.command==MissionCommand.CAMERA_TRIGGER_DISTANCE) return progress
         val distance = distanceMeters(state, current)
         val altitudeError = abs(state.altitudeAglMeters - current.altitudeAglMeters)
         if (distance <= effectiveAcceptanceRadius(current) && altitudeError <= altitudeToleranceMeters(current)) {
@@ -93,6 +94,20 @@ class MissionEngine {
             return updated
         }
         return progress
+    }
+
+    fun completeCameraAction(sequence:Int) {
+        val p=mutableProgress.value
+        if(p.activeTarget?.sequence!=sequence || p.activeTarget.command!=MissionCommand.CAMERA_TRIGGER_DISTANCE) return
+        val index=p.currentIndex+1
+        mutableProgress.value=p.copy(currentIndex=index,complete=index>=p.items.size,lastReachedSequence=sequence,
+            activeTarget=p.items.getOrNull(index),executionStarted=true)
+    }
+    fun cameraHold(reason:String?) { mutableProgress.value=mutableProgress.value.copy(cameraHoldReason=reason) }
+    fun cameraResult(success:Boolean) {
+        val p=mutableProgress.value
+        mutableProgress.value=p.copy(cameraSavedImages=p.cameraSavedImages+if(success) 1 else 0,
+            cameraFailedImages=p.cameraFailedImages+if(success) 0 else 1)
     }
 
     private fun distanceMeters(state: DroneState, item: MissionItem): Float {

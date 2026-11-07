@@ -12,10 +12,12 @@ android {
         applicationId = "com.ascend.mavlab"
         minSdk = 26
         targetSdk = 35
-        versionCode = 19
-        versionName = "1.6.0"
+        versionCode = 20
+        versionName = "1.6.1-dev"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    sourceSets.getByName("androidTest").assets.srcDir("src/test/resources")
 
     buildFeatures {
         compose = true

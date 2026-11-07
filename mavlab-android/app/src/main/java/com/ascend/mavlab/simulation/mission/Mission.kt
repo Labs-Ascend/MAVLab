@@ -20,7 +20,12 @@ data class MissionItem(
     val localEastMeters: Float? = null,
     val speedMetersPerSecond: Float? = null,
     val altitudeIsMsl: Boolean = false,
+    val wire: MissionWireData? = null,
 )
+
+/** Original wire values survive engine normalization, download and persistence. */
+data class MissionWireData(val frame: Int, val p1: Float, val p2: Float, val p3: Float, val p4: Float,
+    val x: Double, val y: Double, val z: Float)
 
 enum class MissionCommand(val mavCmdId: Int) {
     WAYPOINT(16),
@@ -28,7 +33,8 @@ enum class MissionCommand(val mavCmdId: Int) {
     LAND(21),
     RTL(20),
     LOITER_TIME(19),
-    CHANGE_SPEED(178);
+    CHANGE_SPEED(178),
+    CAMERA_TRIGGER_DISTANCE(206);
 
     val isNav: Boolean
         get() = this == WAYPOINT ||
@@ -38,7 +44,7 @@ enum class MissionCommand(val mavCmdId: Int) {
             this == LOITER_TIME
 
     val isDo: Boolean
-        get() = this == CHANGE_SPEED
+        get() = this == CHANGE_SPEED || this == CAMERA_TRIGGER_DISTANCE
 
     companion object {
         fun fromMavCmdId(mavCmdId: Int): MissionCommand {
@@ -55,6 +61,9 @@ data class MissionProgress(
     val activeTarget: MissionItem? = null,
     val origin: MissionOrigin = MissionOrigin.UNVERIFIED,
     val executionStarted: Boolean = false,
+    val cameraHoldReason: String? = null,
+    val cameraSavedImages: Int = 0,
+    val cameraFailedImages: Int = 0,
 ) {
     val loaded: Boolean get() = items.isNotEmpty()
     val received: Boolean get() = loaded && origin == MissionOrigin.GCS_UPLOAD

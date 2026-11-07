@@ -19,9 +19,14 @@ class MissionPersistenceTest {
     @Test fun codecReadsPriorSnapshotFieldsAndPreservesMslOnNewSnapshots() {
         val new = MissionSnapshotCodec.encode(items)
         assertEquals(items, MissionSnapshotCodec.decode(new))
-        val old = new.lineSequence().filter { it.isNotBlank() }.joinToString("\n") { if (it.startsWith("MAVLAB")) it else it.substringBeforeLast("\t") }
-        assertEquals(items.map { it.copy(altitudeIsMsl = false) }, MissionSnapshotCodec.decode(old.replace("MAVLAB_MISSION_V2", "MAVLAB_MISSION_V1")))
-        val nineFields = old.lineSequence().joinToString("\n") { if (it.startsWith("MAVLAB")) "MAVLAB_MISSION_V1" else it.substringBeforeLast("\t") }
-        assertEquals(items.map { it.copy(altitudeIsMsl = false) }, MissionSnapshotCodec.decode(nineFields))
+        val v2="MAVLAB_MISSION_V2\n0\tWAYPOINT\t-1.0\t36.0\t10.0\t2.0\ttrue\t\t\t\ttrue"
+        assertEquals(items, MissionSnapshotCodec.decode(v2))
+        val v1="MAVLAB_MISSION_V1\n0\tWAYPOINT\t-1.0\t36.0\t10.0\t2.0\ttrue\t\t"
+        assertEquals(items.map { it.copy(altitudeIsMsl = false) }, MissionSnapshotCodec.decode(v1))
+    }
+    @Test fun unreadableSnapshotHasVisibleError() {
+        val restored=decodeStoredMission("MAVLAB_MISSION_V99\noriginal",MissionOrigin.GCS_UPLOAD.name)
+        assertTrue(restored.items.isEmpty())
+        assertNotNull(restored.error)
     }
 }

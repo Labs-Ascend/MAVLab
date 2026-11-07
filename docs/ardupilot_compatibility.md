@@ -63,3 +63,12 @@ Every release that changes MAVLink behavior must verify:
 - mission upload/download/current-item behavior
 - command acknowledgement and unsupported-command behavior
 - connection, reconnect, and telemetry behavior in QGroundControl
+
+## 1.6.1-dev survey subset
+
+Navigation mission uploads now admit at most 1,000 items and implement distance
+trigger command 206 with real offline-map JPEG capture, readiness gates and BRAKE
+(17) hold/resume. This is a bounded subset, not all MAVLink or ArduPilot parity.
+See the [canonical contract](internals/mavlink-contract.md#distance-triggered-survey-subset-161-dev)
+and [user workflow](user/virtual-camera.md). Mission 1 is the exact 831-item
+upload regression input; live QGC flight validation is tracked separately.

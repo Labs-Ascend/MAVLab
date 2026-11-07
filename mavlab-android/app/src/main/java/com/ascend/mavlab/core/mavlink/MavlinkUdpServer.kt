@@ -346,6 +346,9 @@ class MavlinkUdpServer(
             ack(0, MAV_RESULT_UNSUPPORTED, peer, "SET_MODE unsupported $customMode", packet)
             return
         }
+        if(mode==FlightMode.AUTO && simLoop.missionStartBlockReason()!=null) {
+            ack(0,MAV_RESULT_DENIED,peer,"AUTO BLOCKED: ${simLoop.missionStartBlockReason()}",packet);return
+        }
         simLoop.setMode(mode, ControlAuthority.GCS_DIRECT)
         simLoop.noteInbound("SET_MODE ${mode.displayName}")
         sendImmediateTelemetry()
@@ -451,18 +454,13 @@ class MavlinkUdpServer(
                 ack(command, MAV_RESULT_ACCEPTED, peer, "REQUEST_AUTOPILOT_CAPABILITIES")
             }
             MAV_CMD_MISSION_START -> {
-                var accepted = simLoop.missionProgress.value.loaded
-                if (accepted) {
-                    simLoop.setArmed(true, ControlAuthority.GCS_MISSION)
-                    simLoop.setMode(FlightMode.AUTO, ControlAuthority.GCS_MISSION)
-                    accepted = simLoop.state.value.armed && simLoop.state.value.mode == FlightMode.AUTO
-                    sendImmediateTelemetry()
-                }
+                val accepted = invocation.param1==0f && invocation.param2==0f && simLoop.startMission()
+                if(accepted) sendImmediateTelemetry()
                 ack(
                     command,
                     if (accepted) MAV_RESULT_ACCEPTED else MAV_RESULT_DENIED,
                     peer,
-                    if (accepted) "MISSION_START" else "MISSION_START NO MISSION",
+                    if (accepted) "MISSION_START" else "MISSION_START BLOCKED: ${simLoop.missionProgress.value.cameraHoldReason ?: "mission unavailable or unsupported range"}",
                 )
             }
             MAV_CMD_DO_SET_MODE -> {
@@ -472,6 +470,8 @@ class MavlinkUdpServer(
                     ack(command, MAV_RESULT_DENIED, peer, "DO_SET_MODE invalid custom mode ${invocation.param2}")
                 } else if (mode == null) {
                     ack(command, MAV_RESULT_UNSUPPORTED, peer, "DO_SET_MODE unsupported custom mode $customMode")
+                } else if(mode==FlightMode.AUTO && simLoop.missionStartBlockReason()!=null) {
+                    ack(command,MAV_RESULT_DENIED,peer,"AUTO BLOCKED: ${simLoop.missionStartBlockReason()}")
                 } else {
                     simLoop.setMode(mode, ControlAuthority.GCS_DIRECT)
                     sendImmediateTelemetry()
@@ -779,6 +779,9 @@ class MavlinkUdpServer(
             }
             safetyTransfer.count(packet, destination, type); return
         }
+        if(simLoop.state.value.armed) {
+            sendMissionAck(MAV_MISSION_DENIED,packet,destination,"Disarm before replacing a mission");return
+        }
         val activeUpload = missionUploadSession
         if (activeUpload != null && !activeUpload.owns(packet, destination)) {
             sendMissionAck(MAV_MISSION_DENIED, packet, destination, "MISSION_COUNT other uploader")
@@ -793,8 +796,9 @@ class MavlinkUdpServer(
         }
         val session = MissionUploadSession.parseMissionCount(packet, destination)
         if (session == null) {
-            simLoop.rejectMissionUpload("invalid mission count")
-            sendMissionAck(MAV_MISSION_ERROR, packet, destination, "MISSION_COUNT rejected")
+            val count=packet.payload.leUInt16(0)
+            simLoop.rejectMissionUpload("Mission has $count items; limit is ${MissionUploadSession.MaxMissionItems}")
+            sendMissionAck(4, packet, destination, "MISSION_COUNT exceeds ${MissionUploadSession.MaxMissionItems}")
             logInbound(packet, peer, length, "rejected invalid-count")
             return
         }
@@ -831,6 +835,11 @@ class MavlinkUdpServer(
         if (!acceptMissionType(packet, destination, 37)) return
         val type = missionType(packet, 37)
         if (type != 0) { safetyTransfer.item(packet, destination, type, legacy); return }
+        if (simLoop.state.value.armed && missionUploadSession != null) {
+            missionUploadSession=null
+            simLoop.rejectMissionUpload("Vehicle armed during upload; previous mission retained")
+            sendMissionAck(MAV_MISSION_DENIED,packet,destination,"Disarm before completing mission upload");return
+        }
         val session = missionUploadSession
         if (session == null) {
             val previous = completedUpload
@@ -930,6 +939,9 @@ class MavlinkUdpServer(
             }
             return
         }
+        if (simLoop.state.value.armed) {
+            sendMissionAck(MAV_MISSION_DENIED, packet, destination, "Disarm before clearing mission"); return
+        }
         missionUploadSession = null
         completedUpload = null
         simLoop.clearMission()
@@ -945,6 +957,9 @@ class MavlinkUdpServer(
         if (!isTargetedToVehicle(packet, targetSystemOffset = 2, label = "MISSION_SET_CURRENT")) {
             logInbound(packet, peer, length, "ignored target-mismatch")
             return
+        }
+        if (simLoop.state.value.armed) {
+            sendMissionAck(MAV_MISSION_DENIED, packet, destination, "Disarm before changing mission item"); return
         }
         val sequence = packet.payload.leUInt16(0)
         val accepted = simLoop.setMissionCurrent(sequence)

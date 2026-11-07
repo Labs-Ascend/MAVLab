@@ -49,6 +49,17 @@ class PhysicsSimulationEngine(
     private val mutableSafetyPlans = MutableStateFlow(SafetyPlans())
     val safetyPlans: StateFlow<SafetyPlans> = mutableSafetyPlans.asStateFlow()
     private var fenceGeometry = FenceGeometry.compile(emptyList())
+    var missionCamera: com.ascend.mavlab.simulation.camera.MissionCamera? = null
+    private var cameraDistance=0f
+    private var cameraRemainder=0f
+    private var cameraPrevious: Pair<Float,Float>?=null
+    private var cameraPending=false
+    private var cameraActionSequence:Int?=null
+    private var cameraActionCompleted=false
+    private var cameraActionWait=0f
+    private var cameraActionPose: com.ascend.mavlab.simulation.coordinates.PhysicalPoseSnapshot?=null
+    private var cameraEpoch=0L
+    private var cameraRun=System.nanoTime()
     private var geographicOrigin = SimLocation.Nairobi
     private var coordinateFrame = SimulationCoordinateFrame(geographicOrigin.latitudeDeg, geographicOrigin.longitudeDeg)
     private data class ReturnTarget(val north: Float, val east: Float, val altitude: Float, val label: String)
@@ -362,8 +373,10 @@ class PhysicsSimulationEngine(
         armed: Boolean,
         authority: ControlAuthority = ControlAuthority.CONTROLLER,
     ) {
+        if (armed && !state.value.armed && autopilot.mode==FlightMode.AUTO && missionStartBlockReason()!=null) return
         if (armed && fenceRecovering) return
         if (armed && fenceBreach(mutableState.value) != 0) { noteAck("ARM DENIED · outside enabled fence"); return }
+        if (!armed) stopMissionCamera()
         if (!armed) { fenceRecovering = false; returnTarget = null; missionReturn = false; minimumFenceReached = false }
         val freshArm = armed && !autopilot.armed
         autopilot.setArmed(armed, mutableState.value)
@@ -401,11 +414,17 @@ class PhysicsSimulationEngine(
         authority: ControlAuthority = ControlAuthority.CONTROLLER,
     ) {
         val current = mutableState.value
+        if(mode==FlightMode.AUTO) {
+            val blocked=missionStartBlockReason()
+            if(blocked!=null) { missionEngine.cameraHold(blocked);noteAck("AUTO BLOCKED: $blocked");return }
+            missionEngine.cameraHold(null);cameraPrevious=null;cameraActionWait=0f
+        } else if(mode !in listOf(FlightMode.LOITER,FlightMode.BRAKE)) stopMissionCamera()
         if (fenceRecovering && mode !in listOf(FlightMode.RTL, FlightMode.LAND)) return
         returnTarget = null
         if (mode !in listOf(FlightMode.RTL, FlightMode.LAND)) returnLabel = "None"
         if (mode != FlightMode.RTL) missionReturn = false
-        if (mode == FlightMode.LOITER) {
+        if (mode == FlightMode.LOITER || mode == FlightMode.BRAKE) {
+            cameraPrevious=null
             captureLoiterTarget(current)
         }
         if (mode == FlightMode.GUIDED) {
@@ -413,7 +432,7 @@ class PhysicsSimulationEngine(
             guidedEastMeters = current.eastMeters
             guidedAltitudeMeters = current.altitudeAglMeters.coerceAtLeast(0f)
         }
-        val resolvedAuthority = if (mode == FlightMode.AUTO) {
+        val resolvedAuthority = if (mode == FlightMode.AUTO || (mode in listOf(FlightMode.BRAKE,FlightMode.LOITER) && current.controlAuthority==ControlAuthority.GCS_MISSION)) {
             ControlAuthority.GCS_MISSION
         } else {
             authority
@@ -538,6 +557,7 @@ class PhysicsSimulationEngine(
     }
 
     @Synchronized fun loadMission(items: List<MissionItem>, origin: MissionOrigin = MissionOrigin.INTERNAL_FIXTURE) {
+        stopMissionCamera();cameraRun=System.nanoTime()
         val current = mutableState.value
         val sorted = items.sortedBy { it.sequence }
         val homeMarker = sorted.takeIf { isQgcHomeMarker(it) }?.firstOrNull()
@@ -578,7 +598,7 @@ class PhysicsSimulationEngine(
             )
         }
         missionEngine.load(sanitized, origin)
-        missionEngine.progress.value.activeTarget?.let { autopilot.setTargetAltitude(it.altitudeAglMeters) }
+        missionEngine.progress.value.activeTarget?.takeIf { it.command.isNav }?.let { autopilot.setTargetAltitude(it.altitudeAglMeters) }
         noteAck("MISSION ${items.size}")
     }
 
@@ -647,15 +667,18 @@ class PhysicsSimulationEngine(
     }
 
     @Synchronized fun clearMission() {
+        stopMissionCamera();cameraRun=System.nanoTime()
         missionEngine.clear()
         mutableMissionUploadStatus.value = MissionUploadStatus()
         noteAck("MISSION CLEAR")
     }
 
     @Synchronized fun setMissionCurrent(sequence: Int): Boolean {
+        if(state.value.armed) return false
+        stopMissionCamera()
         val updated = missionEngine.setCurrent(sequence)
         if (updated) {
-            missionEngine.progress.value.activeTarget?.let { autopilot.setTargetAltitude(it.altitudeAglMeters) }
+            missionEngine.progress.value.activeTarget?.takeIf { it.command.isNav }?.let { autopilot.setTargetAltitude(it.altitudeAglMeters) }
             noteAck("MISSION CURRENT $sequence")
         }
         return updated
@@ -779,8 +802,8 @@ class PhysicsSimulationEngine(
         if (autopilot.mode == FlightMode.AUTO && !autopilot.armed) return PilotInput(throttle = 0f)
         return when {
             !state.armed -> PilotInput(throttle = 0f)
-            autopilot.mode == FlightMode.LOITER -> {
-                autopilot.setTargetAltitude(autopilot.targetAltitudeM.coerceAtLeast(state.altitudeAglMeters))
+            autopilot.mode == FlightMode.LOITER || autopilot.mode == FlightMode.BRAKE -> {
+                autopilot.setTargetAltitude(autopilot.targetAltitudeM.coerceAtLeast(0f))
                 positionController.computePilotInput(
                     state = state,
                     targetNorthMeters = loiterNorthMeters,
@@ -801,7 +824,16 @@ class PhysicsSimulationEngine(
                 )
             }
             autopilot.mode == FlightMode.AUTO -> {
+                if(missionEngine.progress.value.activeTarget?.command==MissionCommand.CAMERA_TRIGGER_DISTANCE)
+                    return cameraActionInput(state,dt)
+                updateDistanceCapture(state)
+                if(autopilot.mode!=FlightMode.AUTO) return activePilotInput(state,dt)
                 if (missionEngine.progress.value.activeTarget?.command == MissionCommand.RTL) {
+                    if(cameraPending) {
+                        if(cameraActionPose==null) cameraActionPose=physicalPoseSnapshot()
+                        return cameraWaitingInput(state,dt)
+                    }
+                    stopMissionCamera()
                     missionReturn = true
                     missionEngine.beginReturn()
                     autopilot.setMode(FlightMode.RTL, state)
@@ -810,6 +842,7 @@ class PhysicsSimulationEngine(
                 }
                 val progress = missionEngine.update(state)
                 val target = progress.activeTarget
+                if(target?.command==MissionCommand.CAMERA_TRIGGER_DISTANCE) return cameraActionInput(state,dt)
                 if (target == null) {
                     captureLoiterTarget(state)
                     autopilot.setMode(FlightMode.LOITER, state)
@@ -830,6 +863,92 @@ class PhysicsSimulationEngine(
             autopilot.mode == FlightMode.LAND -> landingPilotInput(state, dt)
             autopilot.mode == FlightMode.RTL -> returnPilotInput(state, dt)
             else -> pilotInput
+        }
+    }
+
+    @Synchronized fun missionStartBlockReason():String? {
+        val p=missionProgress.value
+        if(p.items.none { it.command==MissionCommand.CAMERA_TRIGGER_DISTANCE && ((it.wire?.p1?:0f)>0 || it.wire?.p3==1f) }) return null
+        if(p.complete) return "Photo mission is complete; re-upload to restart"
+        if(!state.value.armed && p.executionStarted && p.currentIndex>1) return "Restart a stopped photo mission from takeoff"
+        return missionCamera?.preflight(p.items,physicalPoseSnapshot(),missionSpeedFor(p)) ?: if(missionCamera==null) "Virtual camera is unavailable" else null
+    }
+
+    @Synchronized fun startMission():Boolean {
+        if(!missionProgress.value.loaded || missionProgress.value.complete) return false
+        val blocked=missionStartBlockReason()
+        if(blocked!=null) { missionEngine.cameraHold(blocked);noteAck("MISSION BLOCKED: $blocked");return false }
+        val before=state.value
+        setArmed(true,ControlAuthority.GCS_MISSION)
+        if(!state.value.armed) return false
+        setMode(FlightMode.AUTO,ControlAuthority.GCS_MISSION)
+        if(state.value.mode!=FlightMode.AUTO && !before.armed) setArmed(false,before.controlAuthority)
+        return state.value.armed && state.value.mode==FlightMode.AUTO
+    }
+
+    private fun stopMissionCamera() {
+        cameraEpoch++;cameraDistance=0f;cameraRemainder=0f;cameraPrevious=null
+        cameraPending=false;cameraActionSequence=null;cameraActionCompleted=false;cameraActionPose=null;cameraActionWait=0f
+    }
+    private fun holdForCamera(reason:String) {
+        missionEngine.cameraHold(reason);noteAck("PHOTO HOLD: $reason")
+        if(state.value.armed && !fenceRecovering && autopilot.mode in listOf(FlightMode.AUTO,FlightMode.BRAKE,FlightMode.LOITER))
+            setMode(FlightMode.BRAKE,ControlAuthority.GCS_MISSION)
+    }
+    private fun requestMissionPhoto(action:Boolean):com.ascend.mavlab.simulation.camera.MissionCamera.Admission {
+        val port=missionCamera?:return com.ascend.mavlab.simulation.camera.MissionCamera.Admission.REJECTED
+        val epoch=cameraEpoch;val run=cameraRun
+        cameraPending=true
+        val admission=port.capture(physicalPoseSnapshot(),"mission:$run item:${missionProgress.value.activeTarget?.sequence}") { error ->
+            synchronized(this) {
+                if(run==cameraRun) missionEngine.cameraResult(error==null)
+                if(epoch==cameraEpoch && run==cameraRun) {
+                    cameraPending=false
+                    if(error==null) { if(action) cameraActionCompleted=true }
+                    else holdForCamera("$error; capture data may have a gap")
+                }
+            }
+        }
+        if(admission!=com.ascend.mavlab.simulation.camera.MissionCamera.Admission.ACCEPTED) cameraPending=false
+        return admission
+    }
+    private fun cameraWaitingInput(state:DroneState,dt:Float):PilotInput {
+        val target=cameraActionPose?:physicalPoseSnapshot().also { cameraActionPose=it }
+        autopilot.setTargetAltitude(target.altitudeAglMeters.toFloat())
+        return positionController.computePilotInput(state,target.northMeters.toFloat(),target.eastMeters.toFloat(),target.altitudeAglMeters.toFloat(),dt)
+    }
+    private fun cameraActionInput(state:DroneState,dt:Float):PilotInput {
+        val item=missionProgress.value.activeTarget?:return PilotInput(throttle=.5f)
+        if(cameraActionSequence!=item.sequence) {
+            cameraActionSequence=item.sequence;cameraActionCompleted=false;cameraActionWait=0f;cameraActionPose=physicalPoseSnapshot()
+            cameraDistance=item.wire?.p1?:0f;cameraRemainder=0f;cameraPrevious=null
+            if(item.wire?.p3!=1f) cameraActionCompleted=true
+        }
+        cameraActionWait+=dt
+        if(cameraActionCompleted && !cameraPending) {
+            val input=cameraWaitingInput(state,dt)
+            missionEngine.completeCameraAction(item.sequence);cameraActionSequence=null;cameraActionPose=null
+            return input
+        } else if(cameraActionWait>10f) holdForCamera("Timed out waiting for required photo")
+        else if(!cameraPending) {
+            when(requestMissionPhoto(true)) {
+                com.ascend.mavlab.simulation.camera.MissionCamera.Admission.REJECTED -> holdForCamera("Camera unavailable for required photo")
+                else -> Unit // BUSY waits here, with a fixed position target and no unbounded queue.
+            }
+        }
+        return cameraWaitingInput(state,dt)
+    }
+    private fun updateDistanceCapture(state:DroneState) {
+        if(cameraDistance<=0f || state.controlAuthority!=ControlAuthority.GCS_MISSION) { cameraPrevious=null;return }
+        val previous=cameraPrevious
+        cameraPrevious=state.northMeters to state.eastMeters
+        if(previous!=null) cameraRemainder+=kotlin.math.hypot(state.northMeters-previous.first,state.eastMeters-previous.second)
+        if(cameraRemainder>=cameraDistance) {
+            if(cameraPending || cameraRemainder>=cameraDistance*2) { holdForCamera("Photo cadence exceeded; no past exposures were invented");return }
+            when(requestMissionPhoto(false)) {
+                com.ascend.mavlab.simulation.camera.MissionCamera.Admission.ACCEPTED -> cameraRemainder-=cameraDistance
+                else -> holdForCamera("Required photo was not admitted; check camera and capture rate")
+            }
         }
     }
 
@@ -870,7 +989,7 @@ class PhysicsSimulationEngine(
             return state.copy(mode = FlightMode.LAND, lastAck = "RTL GPS LOST · LAND")
         }
         if (!failures.gpsEnabled &&
-            (autopilot.mode == FlightMode.LOITER || autopilot.mode == FlightMode.GUIDED || autopilot.mode == FlightMode.AUTO)
+            (autopilot.mode == FlightMode.LOITER || autopilot.mode == FlightMode.BRAKE || autopilot.mode == FlightMode.GUIDED || autopilot.mode == FlightMode.AUTO)
         ) {
             autopilot.setMode(FlightMode.ALT_HOLD, state)
             noteAck("GPS FAILSAFE")

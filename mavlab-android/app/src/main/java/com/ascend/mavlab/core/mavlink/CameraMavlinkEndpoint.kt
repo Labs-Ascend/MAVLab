@@ -26,10 +26,19 @@ internal class CameraMavlinkEndpoint(
     @Synchronized fun start() { running=true }
     @Synchronized fun periodic():List<ByteArray> {
         if(!running || !camera.isEnabled) return emptyList()
+        if(cachedEpoch!=camera.epoch) { captures.clear();history.clear();zeroSequenceKey=null;cachedEpoch=camera.epoch }
+        val events=camera.drainMissionEvents().mapNotNull { result ->
+            val snapshot=result.pose?:return@mapNotNull null
+            val event=builder.captured(((snapshot.monotonicNanos-startedNanos)/1_000_000).toInt(),result.utcMicros,
+                if(result.index>=0) result.index else camera.totalSaved,result.success,snapshot,
+                result.image?.let { "mavlab/camera/${it.parentFile?.name}/${it.name}" }?:"")
+            if(result.success) { history[result.index]=event;while(history.size>32) history.remove(history.keys.first()) }
+            event
+        }
         val now=System.nanoTime()
-        if(now-lastHeartbeatNanos<1_000_000_000) return emptyList()
+        if(now-lastHeartbeatNanos<1_000_000_000) return events
         lastHeartbeatNanos=now
-        return listOf(builder.heartbeat(),status())
+        return events+listOf(builder.heartbeat(),status())
     }
     private fun status()=builder.captureStatus(bootMs(),camera.status.value.phase==VirtualCameraController.Phase.CAPTURING,camera.totalSaved,camera.storage.freeMiB)
     private fun integer(value:Float)=value.isFinite() && value>=0 && value<=16_777_215 && value==floor(value)

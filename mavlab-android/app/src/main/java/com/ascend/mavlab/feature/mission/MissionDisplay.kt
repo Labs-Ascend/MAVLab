@@ -17,7 +17,9 @@ internal fun missionRunStatus(
 ): String {
     return when {
         !mission.loaded -> "No mission loaded"
+        mission.complete && mission.cameraFailedImages > 0 -> "Mission complete · image failures recorded"
         mission.complete -> "Mission complete"
+        mission.cameraHoldReason != null -> mission.cameraHoldReason
         state.mode == FlightMode.AUTO -> "Mission running"
         else -> "Mission ready"
     }
@@ -35,6 +37,7 @@ internal fun missionObjectiveLabel(mission: MissionProgress): String {
             MissionCommand.RTL -> "Return to launch"
             MissionCommand.LOITER_TIME -> "Loiter at WP${item.sequence + 1}"
             MissionCommand.CHANGE_SPEED -> "Apply speed change"
+            MissionCommand.CAMERA_TRIGGER_DISTANCE -> "Set distance photo trigger"
         }
     } ?: "Mission waiting"
 }

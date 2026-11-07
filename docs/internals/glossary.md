@@ -77,3 +77,6 @@ Last verified: 2026-08-31
 **Simulation local grid** — `mavlab-local-grid-v1`, the fixed-origin flat north/east metre convention shared by physical/geographic conversion and virtual map packs. Moving return-home does not move this origin; GPS noise is reported separately.
 
 **Virtual map capture** — a saved image rendered from an offline map pack at an authoritative physical simulated pose. It is labelled simulated data and is neither an aerial photograph nor phone-camera imagery.
+
+- **Distance photo trigger**: mission command 206 schedules virtual exposures from actual horizontal engine travel; zero distance stops that cadence, while its immediate-photo flag still requests one saved image.
+- **Photo hold**: an observable BRAKE state after a required capture cannot complete; mission progression and distance triggers wait for an explicit AUTO resume or recovery command.

@@ -19,6 +19,7 @@ class FlightModeAdmissionTest {
             5u to FlightMode.LOITER,
             6u to FlightMode.RTL,
             9u to FlightMode.LAND,
+            17u to FlightMode.BRAKE,
         )
         implemented.forEach { (customMode, mode) ->
             assertEquals(mode, FlightMode.fromCustomModeOrNull(customMode))
@@ -27,7 +28,7 @@ class FlightModeAdmissionTest {
 
     @Test
     fun unknownIdsReturnNullInsteadOfFallingBack() {
-        listOf(1u, 7u, 8u, 17u, 216u, UInt.MAX_VALUE).forEach { customMode ->
+        listOf(1u, 7u, 8u, 99u, 216u, UInt.MAX_VALUE).forEach { customMode ->
             assertNull(FlightMode.fromCustomModeOrNull(customMode))
         }
     }

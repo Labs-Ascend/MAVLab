@@ -5,12 +5,14 @@ import com.ascend.mavlab.simulation.mission.MissionItem
 import com.ascend.mavlab.simulation.mission.MissionSnapshotCodec
 import com.ascend.mavlab.simulation.mission.MissionOrigin
 
-data class StoredMission(val items: List<MissionItem>, val origin: MissionOrigin)
+data class StoredMission(val items: List<MissionItem>, val origin: MissionOrigin, val error:String?=null)
 
-internal fun decodeStoredMission(snapshot: String?, origin: String?): StoredMission = StoredMission(
-    MissionSnapshotCodec.decode(snapshot),
-    if (origin == MissionOrigin.GCS_UPLOAD.name) MissionOrigin.GCS_UPLOAD else MissionOrigin.UNVERIFIED,
-)
+internal fun decodeStoredMission(snapshot: String?, origin: String?): StoredMission {
+    val items=MissionSnapshotCodec.decode(snapshot)
+    return StoredMission(items,
+        if(origin==MissionOrigin.GCS_UPLOAD.name) MissionOrigin.GCS_UPLOAD else MissionOrigin.UNVERIFIED,
+        if(!snapshot.isNullOrBlank() && items.isEmpty()) "Saved mission format cannot be read; original retained, re-upload from QGC" else null)
+}
 
 object MissionPersistence {
     fun load(context: Context): StoredMission {

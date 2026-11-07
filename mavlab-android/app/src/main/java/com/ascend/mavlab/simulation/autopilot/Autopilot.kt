@@ -50,7 +50,7 @@ class Autopilot(
         mode = value
         if (value == FlightMode.ALT_HOLD ||
             value == FlightMode.GUIDED ||
-            value == FlightMode.LOITER ||
+            value == FlightMode.LOITER || value == FlightMode.BRAKE ||
             value == FlightMode.AUTO ||
             value == FlightMode.RTL
         ) {
@@ -118,6 +118,7 @@ class Autopilot(
             FlightMode.ALT_HOLD,
             FlightMode.GUIDED,
             FlightMode.LOITER,
+            FlightMode.BRAKE,
             FlightMode.AUTO,
             FlightMode.LAND,
             FlightMode.RTL,

@@ -2,6 +2,7 @@ package com.ascend.mavlab.core.mavlink
 
 import com.ascend.mavlab.simulation.mission.MissionCommand
 import com.ascend.mavlab.simulation.mission.MissionItem
+import com.ascend.mavlab.simulation.mission.MissionWireData
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
@@ -58,7 +59,7 @@ class MissionUploadSession(
     }
 
     companion object {
-        const val MaxMissionItems = 100
+        const val MaxMissionItems = 1000
         const val UploadTimeoutMs = 10_000L
         const val RequestTimeoutMs = 250L
         const val MaxRetries = 5
@@ -89,6 +90,7 @@ class MissionUploadSession(
                 speedMetersPerSecond = packet.payload.leFloat(4),
                 autocontinue = packet.payload[36].toInt() != 0,
                 altitudeIsMsl = packet.payload[34].toInt() in listOf(0, 5),
+                wire = wireData(packet),
             )
         }
 
@@ -104,7 +106,18 @@ class MissionUploadSession(
                 speedMetersPerSecond = packet.payload.leFloat(4),
                 autocontinue = packet.payload[36].toInt() != 0,
                 altitudeIsMsl = packet.payload[34].toInt() in listOf(0, 5),
+                wire = wireData(packet),
             )
+        }
+
+        private fun wireData(packet: MavlinkPacket): MissionWireData {
+            val p=packet.payload
+            val frame=p[34].toInt() and 255
+            val spatial=MissionCommand.entries.first { it.mavCmdId==p.leUInt16(30) }.isNav
+            fun coordinate(offset:Int):Double = if(packet.messageId==39) p.leFloat(offset).toDouble()
+                else if(spatial) p.leInt32(offset)/1e7
+                else if(p.leInt32(offset)==Int.MAX_VALUE) Double.NaN else p.leInt32(offset).toDouble()
+            return MissionWireData(frame,p.leFloat(0),p.leFloat(4),p.leFloat(8),p.leFloat(12),coordinate(16),coordinate(20),p.leFloat(24))
         }
 
         private fun missionItem(
@@ -117,9 +130,10 @@ class MissionUploadSession(
             speedMetersPerSecond: Float,
             autocontinue: Boolean,
             altitudeIsMsl: Boolean,
+            wire: MissionWireData,
         ): MissionItem? {
             val command = MissionCommand.entries.firstOrNull { it.mavCmdId == commandId } ?: return null
-            if (command != MissionCommand.CHANGE_SPEED &&
+            if (command.isNav &&
                 (!latitudeDeg.isFinite() || !longitudeDeg.isFinite() || !altitudeAglMeters.isFinite() || latitudeDeg !in -90.0..90.0 || longitudeDeg !in -180.0..180.0)
             ) {
                 return null
@@ -127,6 +141,7 @@ class MissionUploadSession(
             return MissionItem(
                 sequence = sequence,
                 command = command,
+                wire = wire,
                 latitudeDeg = latitudeDeg.takeIf { it.isFinite() } ?: 0.0,
                 longitudeDeg = longitudeDeg.takeIf { it.isFinite() } ?: 0.0,
                 altitudeAglMeters = altitudeAglMeters.takeIf { it.isFinite() }?.let { if (altitudeIsMsl) it else it.coerceAtLeast(0f) } ?: 0f,

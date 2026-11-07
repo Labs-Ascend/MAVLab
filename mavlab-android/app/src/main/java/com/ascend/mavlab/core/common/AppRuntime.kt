@@ -138,6 +138,7 @@ object AppRuntime {
         try {
             applicationContext = appContext
             virtualCamera.initialize(appContext)
+            simLoop.missionCamera = virtualCamera.missionLink
             recordingPolicy.setAutomaticEnabled(appContext.getSharedPreferences(RecordingPrefsName, Context.MODE_PRIVATE)
                 .getBoolean(AutomaticRecordingKey, false))
             if (flightRecorder == null) {
@@ -692,11 +693,9 @@ object AppRuntime {
             simLoop.noteAck("LOCAL AUTO BLOCKED: ${policy.startBlockedReason}")
             return false
         }
-        simLoop.setArmed(true, ControlAuthority.GCS_MISSION)
-        if (!state.value.armed) return false
-        simLoop.setMode(FlightMode.AUTO, ControlAuthority.GCS_MISSION)
+        val started=simLoop.startMission()
         syncControllerMotorOverride()
-        return state.value.mode == FlightMode.AUTO
+        return started
     }
 
     private fun localMissionPolicy(): MissionActionPolicy {
@@ -720,6 +719,7 @@ object AppRuntime {
         if (restoredPersistedMission || simLoop.missionProgress.value.loaded) return
         val stored = MissionPersistence.load(context)
         restoredPersistedMission = true
+        stored.error?.let { simLoop.noteAck(it) }
         if (stored.items.isEmpty()) return
 
         simLoop.loadMission(stored.items, stored.origin)

@@ -22,6 +22,8 @@ internal fun MissionControlRow(mission: MissionProgress, ui: MissionUiState, exp
             }
             if (expanded) {
                 Text(ui.phase.label, style = MaterialTheme.typography.titleSmall)
+                mission.cameraHoldReason?.let { Text(it, color = MaterialTheme.colorScheme.error) }
+                if (mission.items.any { it.command == com.ascend.mavlab.simulation.mission.MissionCommand.CAMERA_TRIGGER_DISTANCE }) Text("Photos saved · ${mission.cameraSavedImages} · failed ${mission.cameraFailedImages}", style = MaterialTheme.typography.bodySmall)
                 Text("Source · ${if (mission.received) "GCS upload (QGC workflow)" else "Unverified"}", style = MaterialTheme.typography.bodySmall)
                 if (mission.received) {
                     Text("Route progress · ${missionProgressPercent(mission)}%", style = MaterialTheme.typography.bodyMedium)
@@ -37,7 +39,7 @@ internal fun MissionControlRow(mission: MissionProgress, ui: MissionUiState, exp
                 ui.warning?.let { Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall) }
                 feedback?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    if (ui.policy.canStart) Button(onClick = { confirmation = "start" }) { Text("Start AUTO") }
+                    if (ui.policy.canStart) Button(onClick = { confirmation = "start" }) { Text(if (mission.executionStarted) "Resume AUTO" else "Start AUTO") }
                     if (mission.received) OutlinedButton(onClick = onOpenSim) { Text("View route in SIM") }
                     if (ui.policy.canClear) OutlinedButton(onClick = { confirmation = "clear" }) { Text("Clear mission") }
                     TextButton(onClick = onOpenOps) { Text("Upload details in Ops") }
