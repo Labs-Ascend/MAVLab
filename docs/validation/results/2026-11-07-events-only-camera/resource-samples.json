@@ -1,0 +1,16 @@
+{
+  "candidate": "Corrected 1.6.2-dev code 22, APK f6c936f35765783df57e2246f9ff0d70eea72cadac10c003df85f66c7cca55fb",
+  "source": "device-resource-samples.log from corrected-code-22 device tests, PID 29162",
+  "map_sample": {
+    "captures": 1,
+    "jpeg_bytes": 19124,
+    "decoded_tile_cache_bytes": 1048576
+  },
+  "events_sample": {
+    "captures": 20,
+    "created_capture_files": 0,
+    "decoded_tile_cache_bytes": 0,
+    "elapsed_ms_including_admission_spacing": 5017
+  },
+  "cpu_or_battery_saving_percentage": "not measured"
+}

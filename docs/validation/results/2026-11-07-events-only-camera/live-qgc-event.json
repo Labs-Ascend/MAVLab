@@ -1,0 +1,53 @@
+{
+  "qgc_version": "v5.2.0-dev-143-ga76f22939",
+  "action": {
+    "qgc_log": "/tmp/FlightDataoAmJGC.mavlink",
+    "start_offset": 10734555,
+    "requested_utc": "2026-11-07T16:50:33.810035+00:00",
+    "action": "One Ops simulated exposure; no arm/start/flight command"
+  },
+  "crc_validated": true,
+  "camera_information": {
+    "received_utc": "2026-11-07T16:47:38.582000+00:00",
+    "message_id": 259,
+    "system_id": 1,
+    "component_id": 100,
+    "model": "MAVLab Events Only - No Images",
+    "flags": 2
+  },
+  "capture_event": {
+    "received_utc": "2026-11-07T16:50:34.476000+00:00",
+    "message_id": 263,
+    "system_id": 1,
+    "component_id": 100,
+    "index": 0,
+    "success": true,
+    "file_url": "",
+    "latitude": -1.2921,
+    "longitude": 36.8219,
+    "altitude_agl_m": 0.0,
+    "exposure_utc_micros": 1794070233142000,
+    "quaternion": [
+      0.7071067690849304,
+      0.0,
+      -0.7071067690849304,
+      0.0
+    ]
+  },
+  "capture_status": {
+    "received_utc": "2026-11-07T16:51:58.480000+00:00",
+    "message_id": 262,
+    "system_id": 1,
+    "component_id": 100,
+    "capture_count": 1
+  },
+  "vehicle_heartbeat": {
+    "received_utc": "2026-11-07T16:51:58.582000+00:00",
+    "message_id": 0,
+    "system_id": 1,
+    "component_id": 1,
+    "mode": 0,
+    "armed": false
+  },
+  "scope": "Real phone / real QGC telemetry-log feedback. No flight started. QGC marker UI not visually inspected."
+}

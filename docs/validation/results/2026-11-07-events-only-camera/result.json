@@ -1,0 +1,58 @@
+{
+  "status": "IMPLEMENTED, INSTALLED AND VERIFIED FOR RECORDED SCOPE",
+  "recorded_utc": "2026-11-07T16:54:04.563544+00:00",
+  "tester": "Codex automated checks, ADB installation and real phone/QGC feedback check",
+  "source_commit": "886bebfbc5a9468e5a0438b1e407e5803b163b21",
+  "app": {
+    "version_name": "1.6.2-dev",
+    "version_code": 22,
+    "apk_sha256": "f6c936f35765783df57e2246f9ff0d70eea72cadac10c003df85f66c7cca55fb",
+    "apk_bytes": 54625553,
+    "signer_sha256": "ceb07790e125e11da41d7ec675f0d2330ad34768af1083890fbd30681bb3da1d",
+    "manual_apk": "/home/ambrose/Downloads/MAVLab-1.6.2-dev.apk"
+  },
+  "unit_tests": {
+    "tests": 328,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint_severities": {
+    "Warning": 42
+  },
+  "build": "PASS testDebugUnitTest lintDebug assembleDebug assembleDebugAndroidTest",
+  "initial_device_candidate": {
+    "version_code": 21,
+    "device": "Samsung SM-G970U, Android 12 / SDK 31",
+    "passed": 24,
+    "failed": 1,
+    "failure": "Ground-level events reached map-only CameraPose altitude validation during feedback serialization",
+    "fix": "Independent nadir quaternion function; new JVM feedback regression verifies a ground-level success event with empty URL"
+  },
+  "corrected_device_tests": {
+    "passed": 25,
+    "failed": 0,
+    "seconds": 11.163,
+    "device": "Samsung SM-G970U",
+    "android": "12",
+    "sdk": 31,
+    "scope": "isolated controllers/engines/loopback; private test files/preferences; target APK code 22"
+  },
+  "live_qgc_events": {
+    "verified": true,
+    "event": "One Ops event at ground level, received by real QGC as CAMERA_IMAGE_CAPTURED success with empty URL; count 1",
+    "vehicle_remained_disarmed": true,
+    "new_files": 0,
+    "marker_ui_visually_checked": false,
+    "reference": "live-qgc-event.json"
+  },
+  "qgc_target": "v5.2.0-dev-143-ga76f22939",
+  "phone_last_installed_version_code": 22,
+  "data_preservation": "430 original user files and six preferences unchanged, including after live event. Runtime profile marker changed.",
+  "pending": [
+    "Optional full user-operated events-only survey flight in QGC (isolated engine mission tests passed)",
+    "Low-end device qualification and sustained CPU/battery measurements",
+    "Visual confirmation of photo markers in QGC UI"
+  ],
+  "installed_apk_matches": true
+}

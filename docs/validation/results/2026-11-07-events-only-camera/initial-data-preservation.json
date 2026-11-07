@@ -1,0 +1,12 @@
+{
+  "stage": "After initial code-21 device tests, before disconnected final update",
+  "original_user_files_preserved": 430,
+  "preferences_preserved": 6,
+  "changed_user_files": [],
+  "changed_runtime_markers": [
+    "files/profileInstalled"
+  ],
+  "new_user_files": [],
+  "backup_sha256": "da387e27d0b6a47e30beee32e353ba6172137f298e8257dcc62ccadd3475148f",
+  "corrected_build_install_and_preservation_check": "pending USB reconnection"
+}

@@ -1,0 +1,19 @@
+Saved recordings (78)
+Virtual camera
+Simulated capture 1 · no image file
+Hide Virtual camera
+Simulated captures · no image files
+Simulated captures
+Map photos
+Turn the camera off while disarmed to change mode. Flight control and recording are independent.
+QGC receives simulated capture events at the vehicle's position. No map is loaded and no image files are created. Recent feedback is held in memory only.
+Simulated capture 1 · no image file
+1 simulated · 0 JPEGs saved · 0 failed · 1/100000 requests · cache 0 KiB
+Camera off
+Simulate capture
+Minimum simulated capture interval: 250 ms. Runtime Start enables this mode automatically. Camera off pauses capture availability; it does not land the vehicle.
+State transitions
+Cockpit
+Control
+SIM
+Ops

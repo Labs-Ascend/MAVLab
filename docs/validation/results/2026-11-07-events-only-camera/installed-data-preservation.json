@@ -1,0 +1,15 @@
+{
+  "original_user_files_preserved": 430,
+  "preferences_preserved": 6,
+  "changed_user_files": [],
+  "changed_runtime_markers": [
+    "files/profileInstalled"
+  ],
+  "new_user_files": [],
+  "backup_sha256": "e7233974c817294648fca206ea9ccfd875af2ecd9e217984437283e79120337b",
+  "installed_apk_sha256": "f6c936f35765783df57e2246f9ff0d70eea72cadac10c003df85f66c7cca55fb",
+  "installed_apk_matches": true,
+  "version_code": 22,
+  "after_live_event_changed_user_files": [],
+  "after_live_event_new_user_files": []
+}
