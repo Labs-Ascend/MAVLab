@@ -112,3 +112,54 @@ Primary evidence: `MavlinkUdpServer.kt`, `MavlinkMessageBuilder.kt`, `MavlinkIde
 - Navigation coordinates accept geographic GLOBAL / GLOBAL_INT (0/5, MSL) or GLOBAL_RELATIVE_ALT / INT (3/6, home-relative metres). Frame MISSION (2) accepts only CHANGE_SPEED or RTL. Local/body/terrain frames are rejected; no terrain model is implemented. Raw MSL altitude converts to AGL at engine load using current simulation ground MSL. Flat simulation ground makes relative-home altitude equal AGL. See [MAVLink frame definitions](https://mavlink.io/en/messages/common.html#MAV_FRAME) and [mission results](https://mavlink.io/en/messages/common.html#MAV_MISSION_RESULT).
 - LOITER_TIME is **partial**: arrival is implemented, timed dwell is not. autocontinue=false is an **accepted no-op for pausing**: the engine still advances on arrival. These limitations appear in Ops and affected navigation nodes are hollow in SIM. CHANGE_SPEED retains the existing speed handling and has no spatial node.
 - Local Control's Start AUTO/Clear use guarded application actions; this does not redefine external mission start/clear ACKs, add pause/resume support, or advertise new capabilities. Live QGC upload/rejection/start/land interoperability needs separate evidence.
+
+## Virtual still-camera component (working tree)
+
+Camera enablement exposes component 100 under the vehicle SYSID. It has its own
+MAV_TYPE_CAMERA/MAV_AUTOPILOT_INVALID heartbeat at approximately 1 Hz and advertises
+only CAMERA_CAP_FLAGS_CAPTURE_IMAGE (2). Disabled cameras are not advertised.
+Camera commands never change flight mode, armed state or control authority.
+Command ACKs originate from component 100 and address the requester; foreign
+system/component traffic cannot fall through into autopilot control.
+
+| Boundary | Working-tree effect and limit |
+|---|---|
+| REQUEST_MESSAGE 512 | Camera information 259, settings 260, storage 261, capture status 262; outcome 263 re-request for an index in the last 32 retained successful outcomes |
+| Legacy requests 521/522/525/527 | Camera information/settings/storage/capture status, with validated implemented parameters |
+| SET_CAMERA_MODE 530 | Select the implemented image mode (0); other modes rejected |
+| IMAGE_START_CAPTURE 2000 | One shot, interval 0, total 1, target camera 0/100; accepted request schedules a real saved JPEG and later outcome |
+| IMAGE_STOP_CAPTURE 2001 | Idempotent stop with no interval service active; an already exposed single-shot pose may finish saving |
+| Camera-addressed COMMAND_INT | COMMAND_LONG_ONLY; no attempted reinterpretation of its x/y fields |
+| Other camera commands/options | Rejected; no video, interval/count sequence, gimbal, zoom, focus, formatting or file-transfer capability |
+
+The camera uses the virtual optics documented in [ADR-0014](decisions/0014-offline-map-camera.md).
+CAMERA_IMAGE_CAPTURED has physical simulated geographic coordinates and AGL/MSL,
+a stabilized-nadir camera quaternion in NED (camera FRD optical forward points
+down), a zero-based image index and real completion outcome. Its local file path
+is not a MAVLink FTP or HTTP download service. Image count/index recover from
+completed on-phone ledger/image pairs; no active capture resumes after restart.
+The in-memory 32-outcome re-request window does not restore after process death.
+This is partial camera-protocol history support, not a complete media service.
+
+Sequence-numbered single shots deduplicate by requester and capture sequence;
+reusing a sequence for different parameters is denied. The pinned QGC
+[a76f22939 takePhoto implementation](https://github.com/mavlink/qgroundcontrol/blob/a76f22939/src/Camera/VehicleCameraControl.cc)
+omits capture param4, so its value is zero. For that path, command confirmation>0
+replays the last matching accepted request within 30 seconds. Fresh zero-sequence,
+zero-confirmation presses are distinct and obey the three-second cadence limit.
+A client retransmitting the same request with both numbers zero is ambiguous;
+exactly-once semantics cannot be guaranteed for that non-identifying retry.
+
+Admission ACK and completed capture outcome are separate. Busy/unavailable and
+invalid-pose requests are rejected before exposure. File/decoder/storage errors
+after admission emit a failed outcome, with no fabricated JPEG. Work is bounded
+to one active job/one pending request and 1,000 accepted requests per session.
+A stopped generation cannot report into a new session. These paths have focused
+Android loopback coverage; a synthetic wire test is not a live QGC acceptance run.
+
+Wire offsets, lengths and CRC extras were checked against
+[c_library_v2 085c8344](https://github.com/mavlink/c_library_v2/tree/085c8344fa721a3d80bf574ae77c4d873f4985f3/common)
+and the [camera protocol](https://mavlink.io/en/services/camera.html).
+The navigation mission store still rejects camera mission items. Survey/corridor
+execution and BRAKE hold/resume remain unimplemented; no accepted camera no-ops
+are added to mission uploads.

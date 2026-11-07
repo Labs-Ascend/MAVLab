@@ -1,0 +1,65 @@
+{
+  "codec_bytes": {
+    "png": 1644238,
+    "webp": 1002160
+  },
+  "encoding_seconds": {
+    "png": 7.481,
+    "webp": 8.598
+  },
+  "tile_count": 85,
+  "selected_codec": "webp",
+  "byte_identical_decoded": true,
+  "pack_bytes": 1159168,
+  "pack_sha256": "9115fb5b9448fcfefd8c7f039092056169633d156b855beeb78aeb9665f2d8fa",
+  "features": {
+    "water_line": 4,
+    "water": 3,
+    "road": 185,
+    "landuse": 6,
+    "building": 4059
+  },
+  "source": {
+    "source_url": "https://api.openstreetmap.org/api/0.6/map?bbox=36.918,-1.247,36.927,-1.238",
+    "retrieved_utc": "2026-11-07T08:13:54.954862+00:00",
+    "raw_sha256": "70ad827516a721112552b776848f95570149d9c27c85e9303c4e47aafc89cec1",
+    "sanitized_xml_sha256": "b0788714759b00748514e958c017102f80c851796343056e6dacf4d554b0f810",
+    "gzip_sha256": "740480f11f6d226cc2a9b565bbecd5a416ac90905ddc2d0a0c69efc7408fd66d",
+    "sanitization": "Removed user, uid, changeset; retained geometry, element IDs, versions, timestamps, and tags. Full ways returned; rendering deliberately uses closed ways and linework only.",
+    "raw_bytes": 5174724,
+    "redistributable_bytes": 317557,
+    "license": "ODbL-1.0",
+    "attribution": "© OpenStreetMap contributors",
+    "copyright_url": "https://www.openstreetmap.org/copyright",
+    "note": "One bounded development snapshot; regeneration uses the pinned bundled source, never a tile server. For new areas use permitted read-only extracts/Overpass, not routine editing API downloads."
+  },
+  "metadata": {
+    "schema": 1,
+    "id": "dandora-osm-v1",
+    "name": "Dandora · OSM training map",
+    "frame": "mavlab-local-grid-v1",
+    "origin_lat": -1.2425,
+    "origin_lon": 36.9225,
+    "tile_size": 256,
+    "width": 2048,
+    "height": 2048,
+    "meters_per_pixel": 0.5,
+    "west": -512.0,
+    "north": 512.0,
+    "valid_west": -448.0,
+    "valid_east": 448.0,
+    "valid_south": -448.0,
+    "valid_north": 448.0,
+    "levels": 4,
+    "codec": "webp",
+    "attribution": "© OpenStreetMap contributors",
+    "license": "ODbL-1.0",
+    "copyright_url": "https://www.openstreetmap.org/copyright",
+    "source": "OpenStreetMap geometry",
+    "source_sha256": "b0788714759b00748514e958c017102f80c851796343056e6dacf4d554b0f810",
+    "source_date": "2026-11-07T08:13:54.954862+00:00",
+    "style": "MAVLab simple-way style v1; closed ways and linear roads/waterways; no labels or relation fill",
+    "ground": "flat simulated ground; no surveyed elevation",
+    "simulation_altitude_msl": 1805.0
+  }
+}

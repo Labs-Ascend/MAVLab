@@ -79,6 +79,7 @@ object AppRuntime {
     private val fallbackSoundSettings = MutableStateFlow(DroneSoundSettings())
     private val fallbackSoundDebugState = MutableStateFlow(DroneSoundDebugState())
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    val virtualCamera = com.ascend.mavlab.simulation.camera.VirtualCameraController(scope, simLoop::physicalPoseSnapshot)
     private var mavlinkServer: MavlinkUdpServer? = null
     private var flightRecorder: FlightRecorder? = null
     private var droneSoundController: DroneSoundController? = null
@@ -136,6 +137,7 @@ object AppRuntime {
         val appContext = context.applicationContext
         try {
             applicationContext = appContext
+            virtualCamera.initialize(appContext)
             recordingPolicy.setAutomaticEnabled(appContext.getSharedPreferences(RecordingPrefsName, Context.MODE_PRIVATE)
                 .getBoolean(AutomaticRecordingKey, false))
             if (flightRecorder == null) {
@@ -161,6 +163,7 @@ object AppRuntime {
                 mavlinkServer = MavlinkUdpServer(
                     simLoop = simLoop,
                     config = MavlinkSocketConfig(systemId = id),
+                    camera = virtualCamera,
                     onMissionLoaded = { items ->
                         MissionPersistence.save(appContext, items, MissionOrigin.GCS_UPLOAD)
                         recordFailureEvent("mission_upload", "${items.size} items uploaded")
@@ -197,6 +200,7 @@ object AppRuntime {
 
     fun stop() {
         mutableRuntimeLifecycle.value = RuntimeLifecycleState.STOPPING
+        virtualCamera.disable()
         mavlinkServer?.stopNow()
         recordingJob?.cancel()
         recordingJob = null
@@ -505,6 +509,7 @@ object AppRuntime {
         val safeLocation = location.sanitized()
         val applied = simLoop.setHomeLocation(safeLocation)
         if (!applied) return false
+        virtualCamera.disable()
         mutableSimLocation.value = safeLocation
         applicationContext?.let { context ->
             persistSimLocation(context, safeLocation)

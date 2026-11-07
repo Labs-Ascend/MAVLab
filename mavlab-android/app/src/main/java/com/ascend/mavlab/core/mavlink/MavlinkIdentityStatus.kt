@@ -3,6 +3,7 @@ package com.ascend.mavlab.core.mavlink
 data class MavlinkIdentityStatus(
     val vehicleSystemId: Int = DefaultMavLabVehicleSystemId,
     val vehicleComponentId: Int = DefaultMavLabAutopilotComponentId,
+    val cameraComponentId: Int? = null,
     val lastGcsSystemId: Int? = null,
     val lastGcsComponentId: Int? = null,
     val lastGcsMessageAtMs: Long? = null,

@@ -41,3 +41,7 @@ Recording has its own active indicator and elapsed time. Saved sessions offer **
 Confirmed **Stop simulation** stops physics/networking and saves the recording. It freezes vehicle state; it does not land or disarm. **Start simulation** resumes the same process state. Background handoff behavior remains unchanged.
 
 **Advanced configuration** contains QGC setup and the simulated GPS origin. Changing origin requires confirmation and disarmed state, clears stored navigation/fence/rally data and disables fencing. **About MAVLab** contains the Ascend Labs identity, installed version and onboarding replay.
+
+## Virtual map camera (working tree)
+
+Ops exposes the offline virtual camera, map-origin setup, a test photo and latest-session ZIP export. See [virtual camera](virtual-camera.md) for the supported local workflow and current integration limits. Camera activation does not enable automatic flight recording.

@@ -35,11 +35,15 @@ class MavlinkUdpServer(
     private val config: MavlinkSocketConfig = MavlinkSocketConfig(),
     private val onMissionLoaded: (List<MissionItem>) -> Unit = {},
     private val onMissionCleared: () -> Unit = {},
+    private val camera: com.ascend.mavlab.simulation.camera.VirtualCameraController? = null,
 ) : MavlinkEndpoint {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val vehicleSystemId = config.systemId
     private val builder = MavlinkMessageBuilder(vehicleSystemId, config.componentId)
     private val safetyTransfer = SafetyMissionTransfer(simLoop, builder, ::send)
+    private val cameraEndpoint = camera?.let { controller -> CameraMavlinkEndpoint(vehicleSystemId,controller) { data,peer ->
+        if(peer!=null) send(data,peer) else gcsPeers().forEach { send(data,it) }
+    } }
     private val mutableStatus = MutableStateFlow("Stopped")
     val status: StateFlow<String> = mutableStatus.asStateFlow()
     private val mutableIdentityStatus = MutableStateFlow(
@@ -73,6 +77,7 @@ class MavlinkUdpServer(
         openedSocket.broadcast = true
         openedSocket.soTimeout = 100
         socket = openedSocket
+        cameraEndpoint?.start()
         mutableStatus.value = "Running UDP ${openedSocket.localPort} -> QGC ${config.sameDeviceQgcPort}"
 
         val destinations = destinations(context)
@@ -114,6 +119,7 @@ class MavlinkUdpServer(
     }
 
     fun stopNow() {
+        cameraEndpoint?.stop()
         telemetryJob?.cancel()
         receiveJob?.cancel()
         gcsConnectionJob?.cancel()
@@ -160,6 +166,10 @@ class MavlinkUdpServer(
         val state = simLoop.state.value
         val missionProgress = simLoop.missionProgress.value
         val peers = gcsPeers()
+        val cameraId=if(camera?.isEnabled==true) 100 else null
+        if(mutableIdentityStatus.value.cameraComponentId!=cameraId) mutableIdentityStatus.value=mutableIdentityStatus.value.copy(cameraComponentId=cameraId)
+        val cameraMessages=cameraEndpoint?.periodic().orEmpty()
+        (peers.ifEmpty { destinations }).forEach { destination -> cameraMessages.forEach { send(it,destination) } }
 
         if (peers.isEmpty()) {
             val heartbeatData = builder.heartbeat(state)
@@ -243,6 +253,7 @@ class MavlinkUdpServer(
         }
         noteGcsPacket(packet, timestampMs)
         logInbound(packet, peer, length, "received")
+        if(cameraEndpoint?.handle(packet,peer)==true) return
         when (packet.messageId) {
             0 -> handleHeartbeat(packet, peer, length, timestampMs)
             11 -> handleSetMode(packet, peer)

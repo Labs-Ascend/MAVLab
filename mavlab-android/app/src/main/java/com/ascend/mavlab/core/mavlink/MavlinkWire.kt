@@ -16,6 +16,8 @@ internal object MavlinkWire {
         76 to Definition(33, 152), 77 to Definition(3, 143), 147 to Definition(36, 154),
         148 to Definition(60, 178), 242 to Definition(52, 104), 245 to Definition(2, 130),
         162 to Definition(8, 189),
+        259 to Definition(235, 92), 260 to Definition(5, 146), 261 to Definition(27, 179),
+        262 to Definition(18, 12), 263 to Definition(255, 133),
     )
 
     fun crc(bytes: ByteArray, start: Int, end: Int, extra: Int): Int {

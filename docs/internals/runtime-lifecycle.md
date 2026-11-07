@@ -98,3 +98,7 @@ Ops history is derived by AppRuntime on the existing 200 ms recording monitor, i
 ## Safety-plan lifecycle review (working tree)
 
 Accepted fence/rally/configuration snapshots restore after the persisted simulation origin and navigation mission, without restoring armed flight or recovery authority. AppRuntime observes only distinct persisted safety content on IO; transfer-progress text does not cause repeated snapshot writes. This observer is process-local and idle when content is unchanged, not a new service or retention condition. An explicit endpoint stop discards transfer caches while retaining accepted plans. Origin changes atomically remove old-location plans through the engine; Ops clear does not remove navigation data. Armed/recovery flight continues under the existing armed-flight retention policy, and background phone input remains suspended. Engine safety operations/ticks share a monitor so plan commit, clear and origin change cannot race with arming. See [ADR-0013](decisions/0013-simulated-fence-and-rally.md).
+
+## Virtual map camera review (working tree)
+
+AppRuntime owns the camera independently of Compose. Capture IO has a bounded request queue and decoded tile cache. Camera enablement adds no service-retention condition; Stop and origin reset invalidate capture generations and asynchronously release map resources. Process recreation retains completed files and starts with the camera off. Automatic flight recording remains opt-in, and foreground phone-sensor eligibility is unchanged. See [ADR-0014](decisions/0014-offline-map-camera.md).
