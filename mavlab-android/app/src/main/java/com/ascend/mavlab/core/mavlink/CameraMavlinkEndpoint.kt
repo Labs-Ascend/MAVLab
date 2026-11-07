@@ -24,23 +24,27 @@ internal class CameraMavlinkEndpoint(
     private fun bootMs()=((System.nanoTime()-startedNanos)/1_000_000).toInt()
     @Synchronized fun stop() { running=false;captures.clear();history.clear();lastHeartbeatNanos=0 }
     @Synchronized fun start() { running=true }
+    private fun information()=builder.information(bootMs(),camera.mode==VirtualCameraController.Mode.EVENTS_ONLY)
+    private fun storage()=builder.storage(bootMs(),camera.storage.totalMiB,camera.storage.freeMiB,camera.mode==VirtualCameraController.Mode.EVENTS_ONLY)
     @Synchronized fun periodic():List<ByteArray> {
         if(!running || !camera.isEnabled) return emptyList()
-        if(cachedEpoch!=camera.epoch) { captures.clear();history.clear();zeroSequenceKey=null;cachedEpoch=camera.epoch }
+        val changed=cachedEpoch!=camera.epoch
+        if(changed) { captures.clear();history.clear();zeroSequenceKey=null;cachedEpoch=camera.epoch }
         val events=camera.drainMissionEvents().mapNotNull { result ->
             val snapshot=result.pose?:return@mapNotNull null
             val event=builder.captured(((snapshot.monotonicNanos-startedNanos)/1_000_000).toInt(),result.utcMicros,
-                if(result.index>=0) result.index else camera.totalSaved,result.success,snapshot,
+                if(result.index>=0) result.index else camera.captureCount,result.success,snapshot,
                 result.image?.let { "mavlab/camera/${it.parentFile?.name}/${it.name}" }?:"")
             if(result.success) { history[result.index]=event;while(history.size>32) history.remove(history.keys.first()) }
             event
         }
         val now=System.nanoTime()
+        if(changed) { lastHeartbeatNanos=now;return listOf(builder.heartbeat(),information(),status())+events }
         if(now-lastHeartbeatNanos<1_000_000_000) return events
         lastHeartbeatNanos=now
         return events+listOf(builder.heartbeat(),status())
     }
-    private fun status()=builder.captureStatus(bootMs(),camera.status.value.phase==VirtualCameraController.Phase.CAPTURING,camera.totalSaved,camera.storage.freeMiB)
+    private fun status()=builder.captureStatus(bootMs(),camera.status.value.phase==VirtualCameraController.Phase.CAPTURING,camera.captureCount,camera.storage.freeMiB)
     private fun integer(value:Float)=value.isFinite() && value>=0 && value<=16_777_215 && value==floor(value)
     private fun reserved(params:List<Float>,from:Int)=params.drop(from).all { it==0f || it.isNaN() }
 
@@ -72,9 +76,9 @@ internal class CameraMavlinkEndpoint(
                 }
                 if(!valid) { ack(3);return true }
                 val response=when(params[0].toInt()) {
-                    259 -> builder.information(bootMs())
+                    259 -> information()
                     260 -> builder.settings(bootMs())
-                    261 -> builder.storage(bootMs(),camera.storage.totalMiB,camera.storage.freeMiB)
+                    261 -> storage()
                     262 -> status()
                     263 -> if(integer(params[1])) history[params[1].toInt()] else null
                     else -> null
@@ -89,9 +93,9 @@ internal class CameraMavlinkEndpoint(
                 if(!valid) { ack(2);return true }
                 ack(0)
                 send(when(command) {
-                    521 -> builder.information(bootMs())
+                    521 -> information()
                     522 -> builder.settings(bootMs())
-                    525 -> builder.storage(bootMs(),camera.storage.totalMiB,camera.storage.freeMiB)
+                    525 -> storage()
                     else -> status()
                 },peer)
             }
@@ -129,7 +133,7 @@ internal class CameraMavlinkEndpoint(
                             val snapshot=result.pose
                             if(snapshot!=null) {
                                 val event=builder.captured(((snapshot.monotonicNanos-startedNanos)/1_000_000).toInt(),result.utcMicros,
-                                    if(result.index>=0) result.index else camera.totalSaved,result.success,snapshot,
+                                    if(result.index>=0) result.index else camera.captureCount,result.success,snapshot,
                                     result.image?.let { "mavlab/camera/${it.parentFile?.name}/${it.name}" }?:"")
                                 entry.event=event
                                 if(result.success) {

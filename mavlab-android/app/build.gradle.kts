@@ -12,8 +12,8 @@ android {
         applicationId = "com.ascend.mavlab"
         minSdk = 26
         targetSdk = 35
-        versionCode = 20
-        versionName = "1.6.1-dev"
+        versionCode = 22
+        versionName = "1.6.2-dev"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

@@ -68,3 +68,32 @@ Preflight, pause/resume, capacity and V3 persistence are specified in the MAVLin
 contract. Background lifecycle and phone-sensor ownership remain unchanged.
 Complete capture-history recovery and low-end/performance acceptance remain gates;
 a full QGC patterned flight still needs live validation.
+
+## 1.6.2-dev: events-only default
+
+The user's approved resource-saving mode adds EVENTS_ONLY alongside MAP_PHOTOS in
+the existing controller. It models an exposure and emits ordinary camera feedback
+without opening a map or creating capture files. The controller's existing bounded
+worker/queue is reused; no second flight state, new service or dependency is added.
+The worker reports a mode-tagged result. The engine latches that mode at admission,
+so simulated exposures increment a separate mission counter and never JPEGs saved.
+Mode changes are off/disarmed-only and persist in a small mavlab_camera preference.
+Runtime Start automatically enables EVENTS_ONLY; MAP_PHOTOS remains explicitly
+enabled. Origin changes restart an enabled events-only session after invalidation.
+No auto flight/recording/authority/background retention follows from enablement.
+
+Events-only uses a 250 ms admission interval, a 100,000-request session cap, and
+bounded 32-entry feedback/history windows. It validates physical pose and planned
+rate/budget but bypasses map coverage/origin/storage checks. No event ledger is
+written or exported in this increment. Map JPEGs/ledgers and the 4 MiB decoded
+cache path are unchanged. A generation token on each result prevents old callbacks
+from entering a newly enabled mode. Existing map export/import remain available
+after selecting MAP_PHOTOS while off; old files are preserved.
+
+The camera's component-100 model identifies events-only operation when queried.
+CAMERA_IMAGE_CAPTURED success means a completed simulated exposure in that explicit
+mode, with an empty file_url. Storage is NOT_SUPPORTED with zero storage count.
+No file is invented and no FTP/image-transfer service is advertised. QGC a76f22939
+uses success/coordinates to add photo markers without reading an image file; its
+camera manager caches model information and can require reconnection to refresh
+a name after a mode switch. See the canonical contract and dated validation.

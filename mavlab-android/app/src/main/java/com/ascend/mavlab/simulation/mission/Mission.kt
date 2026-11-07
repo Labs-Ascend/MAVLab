@@ -63,6 +63,7 @@ data class MissionProgress(
     val executionStarted: Boolean = false,
     val cameraHoldReason: String? = null,
     val cameraSavedImages: Int = 0,
+    val cameraSimulatedCaptures: Int = 0,
     val cameraFailedImages: Int = 0,
 ) {
     val loaded: Boolean get() = items.isNotEmpty()

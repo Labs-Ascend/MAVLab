@@ -104,9 +104,10 @@ class MissionEngine {
             activeTarget=p.items.getOrNull(index),executionStarted=true)
     }
     fun cameraHold(reason:String?) { mutableProgress.value=mutableProgress.value.copy(cameraHoldReason=reason) }
-    fun cameraResult(success:Boolean) {
+    fun cameraResult(success:Boolean,simulated:Boolean=false) {
         val p=mutableProgress.value
-        mutableProgress.value=p.copy(cameraSavedImages=p.cameraSavedImages+if(success) 1 else 0,
+        mutableProgress.value=p.copy(cameraSavedImages=p.cameraSavedImages+if(success && !simulated) 1 else 0,
+            cameraSimulatedCaptures=p.cameraSimulatedCaptures+if(success && simulated) 1 else 0,
             cameraFailedImages=p.cameraFailedImages+if(success) 0 else 1)
     }
 

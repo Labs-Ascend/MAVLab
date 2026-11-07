@@ -45,10 +45,16 @@ class PlanarCamera(val profile: VirtualCameraProfile, val pose: CameraPose) {
     }
     /** Camera FRD frame in world NED: forward optical axis points down, right is image-right. */
     fun quaternionNed(): FloatArray {
-        val ch=cos(pose.headingRadians/2)/sqrt(2.0)
-        val sh=sin(pose.headingRadians/2)/sqrt(2.0)
-        return floatArrayOf(ch.toFloat(),sh.toFloat(),(-ch).toFloat(),sh.toFloat())
+        return nadirCameraQuaternionNed(pose.headingRadians)
     }
     val corners: List<GroundPoint> get() = listOf(groundAt(0.0,0.0), groundAt(profile.width.toDouble(),0.0),
         groundAt(profile.width.toDouble(),profile.height.toDouble()), groundAt(0.0,profile.height.toDouble()))
+}
+
+/** Orientation has no map footprint or minimum-altitude dependency. */
+fun nadirCameraQuaternionNed(headingRadians:Double):FloatArray {
+    require(headingRadians.isFinite())
+    val ch=cos(headingRadians/2)/sqrt(2.0)
+    val sh=sin(headingRadians/2)/sqrt(2.0)
+    return floatArrayOf(ch.toFloat(),sh.toFloat(),(-ch).toFloat(),sh.toFloat())
 }

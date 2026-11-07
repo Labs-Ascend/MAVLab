@@ -179,6 +179,7 @@ object AppRuntime {
             simLoop.start()
             mavlinkServer?.start(appContext)
             runtimeActive = true
+            if(virtualCamera.mode==com.ascend.mavlab.simulation.camera.VirtualCameraController.Mode.EVENTS_ONLY) virtualCamera.enable()
             mutableRuntimeLifecycle.value = RuntimeLifecycleState.RUNNING
             applyRuntimeComponentPolicy(appContext)
             startRecordingMonitor()
@@ -510,7 +511,9 @@ object AppRuntime {
         val safeLocation = location.sanitized()
         val applied = simLoop.setHomeLocation(safeLocation)
         if (!applied) return false
+        val resumeEvents=virtualCamera.isEnabled && virtualCamera.mode==com.ascend.mavlab.simulation.camera.VirtualCameraController.Mode.EVENTS_ONLY
         virtualCamera.disable()
+        if(resumeEvents) virtualCamera.enable()
         mutableSimLocation.value = safeLocation
         applicationContext?.let { context ->
             persistSimLocation(context, safeLocation)

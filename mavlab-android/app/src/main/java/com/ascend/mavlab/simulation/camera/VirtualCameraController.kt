@@ -21,12 +21,17 @@ import java.util.zip.ZipOutputStream
 
 /** Runtime owned, independent of Compose and flight recording. All disk/bitmap work is on IO. */
 class VirtualCameraController(private val scope: CoroutineScope, private val pose: () -> PhysicalPoseSnapshot) {
+    enum class Mode(val label:String,val intervalMs:Long,val limit:Int) {
+        EVENTS_ONLY("Simulated captures · no image files",250L,100_000),
+        MAP_PHOTOS("Map photos · saved JPEGs",3000L,1000)
+    }
     enum class Phase { OFF, LOADING, READY, CAPTURING, ERROR }
     data class Status(val phase:Phase=Phase.OFF,val message:String="Virtual camera off",val saved:Int=0,val attempted:Int=0,val failed:Int=0,
-        val sessionId:String?=null,val latestImage:String?=null,val cachedBytes:Int=0,val exportBusy:Boolean=false)
-    data class Result(val success:Boolean,val index:Int,val image:File?=null,val pose:PhysicalPoseSnapshot?=null,val error:String?=null,val utcMicros:Long=0)
+        val sessionId:String?=null,val latestImage:String?=null,val cachedBytes:Int=0,val exportBusy:Boolean=false,
+        val mode:Mode=Mode.EVENTS_ONLY,val simulated:Int=0)
+    data class Result(val success:Boolean,val index:Int,val image:File?=null,val pose:PhysicalPoseSnapshot?=null,val error:String?=null,val utcMicros:Long=0,val simulated:Boolean=false,val epoch:Long=-1)
     enum class Admission { ACCEPTED, UNAVAILABLE, BUSY, INVALID }
-    private data class Request(val generation:Long,val snapshot:PhysicalPoseSnapshot,val trigger:String,val utc:String,val callback:(Result)->Unit,val folder:File,val map:OfflineMapPack)
+    private data class Request(val generation:Long,val snapshot:PhysicalPoseSnapshot,val trigger:String,val utc:String,val callback:(Result)->Unit,val folder:File?,val map:OfflineMapPack?,val mode:Mode)
     private val mutableStatus=MutableStateFlow(Status())
     val status:StateFlow<Status> = mutableStatus.asStateFlow()
     val profile=VirtualCameraProfile()
@@ -39,7 +44,7 @@ class VirtualCameraController(private val scope: CoroutineScope, private val pos
     @Volatile private var pack:OfflineMapPack?=null
     private var session:File?=null // assigned on IO before pack publication; admission copies its identity
     private var nextIndex=0
-    @Volatile var totalSaved=0
+    @Volatile var captureCount=0
         private set
     private var lastAcceptedAt=Long.MIN_VALUE
     private var outstanding=0
@@ -54,9 +59,9 @@ class VirtualCameraController(private val scope: CoroutineScope, private val pos
                 var result:Result
                 try {
                     result=ioMutex.withLock {
-                        try { capture(request) } catch(e:Exception) {
+                        try { if(request.mode==Mode.EVENTS_ONLY) simulateCapture(request) else capture(request) } catch(e:Exception) {
                             if(e is CancellationException) throw e
-                            runCatching { recordFailure(request,e) }
+                            if(request.mode==Mode.MAP_PHOTOS) runCatching { recordFailure(request,e) }
                             Result(false,-1,pose=request.snapshot,error=e.message?:"Capture failed")
                         }
                     }
@@ -67,33 +72,56 @@ class VirtualCameraController(private val scope: CoroutineScope, private val pos
                     if (request.generation==generation && enabled) {
                         val previous=mutableStatus.value
                         mutableStatus.value=previous.copy(phase=if(result.success) { if(outstanding>0) Phase.CAPTURING else Phase.READY } else Phase.ERROR,
-                            message=if(result.success) "Saved virtual map capture ${result.index}" else result.error?:"Capture failed",
-                            saved=if(result.success) previous.saved+1 else previous.saved,
+                            message=if(result.success) { if(result.simulated) "Simulated capture ${result.index+1} · no image file" else "Saved virtual map capture ${result.index}" } else result.error?:"Capture failed",
+                            saved=if(result.success && !result.simulated) previous.saved+1 else previous.saved,
+                            simulated=if(result.success && result.simulated) previous.simulated+1 else previous.simulated,
                             failed=if(result.success) previous.failed else previous.failed+1,
                             latestImage=result.image?.path?:previous.latestImage,cachedBytes=pack?.cachedBytes?:0,
                             sessionId=session?.name)
                     }
                 }
-                runCatching { request.callback(result) }
+                runCatching { request.callback(result.copy(epoch=request.generation)) }
             }
         }
     }
     private val missionEvents=ArrayDeque<Result>()
     internal fun drainMissionEvents():List<Result> = synchronized(guard) { missionEvents.toList().also { missionEvents.clear() } }
-    val isEnabled get() = enabled && pack!=null && status.value.phase!=Phase.LOADING
-    fun initialize(context:Context) { this.context=context.applicationContext }
+    val mode get() = status.value.mode
+    val isEnabled get() = enabled && (mode==Mode.EVENTS_ONLY || pack!=null) && status.value.phase !in listOf(Phase.LOADING,Phase.OFF)
+    fun initialize(context:Context) {
+        if(this.context!=null) return
+        this.context=context.applicationContext
+        val saved=context.getSharedPreferences("mavlab_camera",Context.MODE_PRIVATE).getString("mode",null)
+        val restored=Mode.entries.firstOrNull { it.name==saved }?:Mode.EVENTS_ONLY
+        mutableStatus.value=Status(mode=restored)
+    }
+    fun selectMode(selected:Mode,disarmed:Boolean):Boolean = synchronized(guard) {
+        if(!disarmed || enabled || outstanding!=0 || status.value.exportBusy) return false
+        mutableStatus.value=Status(mode=selected)
+        context?.getSharedPreferences("mavlab_camera",Context.MODE_PRIVATE)?.edit()?.putString("mode",selected.name)?.apply()
+        true
+    }
     fun enable() {
         val app=context?:return
+        val selected=mode
         val token=synchronized(guard) {
             if(enabled || mutableStatus.value.exportBusy) return
             enabled=true; generation++; lastAcceptedAt=Long.MIN_VALUE
-            mutableStatus.value=Status(Phase.LOADING,"Opening offline map…")
+            mutableStatus.value=Status(Phase.LOADING,if(selected==Mode.EVENTS_ONLY) "Starting capture simulation…" else "Opening offline map…",mode=selected)
             generation
         }
         scope.launch(Dispatchers.IO) {
             ioMutex.withLock {
                 try {
                     pack?.close(); pack=null
+                    if(selected==Mode.EVENTS_ONLY) {
+                        synchronized(guard) {
+                            if(token!=generation || !enabled) return@withLock
+                            nextIndex=0;captureCount=0;session=null;storage=Storage()
+                            mutableStatus.value=Status(Phase.READY,"Simulated captures ready · no map or image files",mode=selected)
+                        }
+                        return@withLock
+                    }
                     val maps=File(app.filesDir,"mavlab/maps").apply { mkdirs() }
                     val mapFile=File(maps,"active.mavmap")
                     if (!mapFile.exists()) {
@@ -107,11 +135,11 @@ class VirtualCameraController(private val scope: CoroutineScope, private val pos
                     val savedIndex=File(app.filesDir,"mavlab/camera").walkTopDown()
                         .filter { it.isFile && it.name.matches(Regex("[0-9]{6}\\.json")) && File(it.parentFile,it.nameWithoutExtension+".jpg").isFile }
                         .map { it.nameWithoutExtension.toInt() }.maxOrNull()?.plus(1)?:0
-                    nextIndex=savedIndex;totalSaved=savedIndex
+                    nextIndex=savedIndex;captureCount=savedIndex
                     synchronized(guard) {
                         if(token!=generation || !enabled) { opened.close(); return@withLock }
                         pack=opened;session=File(app.filesDir,"mavlab/camera/${System.currentTimeMillis()}-${UUID.randomUUID()}")
-                        mutableStatus.value=Status(Phase.READY,"${opened.name} · set matching origin, then take off above 0.5 m")
+                        mutableStatus.value=Status(Phase.READY,"${opened.name} · set matching origin, then take off above 0.5 m",mode=selected)
                     }
                 } catch(e:Exception) {
                     synchronized(guard) { if(token==generation && enabled) mutableStatus.value=Status(Phase.ERROR,e.message?:"Map could not open") }
@@ -133,38 +161,54 @@ class VirtualCameraController(private val scope: CoroutineScope, private val pos
     fun requestCapture(trigger:String,callback:(Result)->Unit={}):Admission {
         return requestCaptureAt(pose(),trigger,callback)
     }
+    fun requestCaptureWithFeedback(trigger:String):Admission = requestCapture(trigger,::publishFeedback)
+    private fun publishFeedback(result:Result) = synchronized(guard) {
+        if(enabled && result.epoch==generation) { if(missionEvents.size==32) missionEvents.removeFirst();missionEvents.addLast(result) }
+    }
     internal fun requestCaptureAt(snapshot:PhysicalPoseSnapshot,trigger:String,callback:(Result)->Unit={}):Admission {
         return synchronized(guard) {
         val map=pack
-        if(!enabled || map==null || mutableStatus.value.phase in listOf(Phase.LOADING,Phase.OFF)) return Admission.UNAVAILABLE
-        if(mutableStatus.value.attempted>=MaximumRequestsPerSession) {
+        val selected=mode
+        if(!isEnabled) return Admission.UNAVAILABLE
+        if(mutableStatus.value.attempted>=selected.limit) {
             mutableStatus.value=mutableStatus.value.copy(phase=Phase.ERROR,message="Session limit reached; turn camera off and on to start a new session")
             return Admission.INVALID
         }
         if(outstanding>=2) return Admission.BUSY
         val now=SystemClock.elapsedRealtime()
-        if(lastAcceptedAt!=Long.MIN_VALUE && now-lastAcceptedAt<MinimumIntervalMs) return Admission.BUSY
-        try { map.validateFootprint(map.camera(snapshot,profile)) } catch(e:IllegalArgumentException) {
+        if(lastAcceptedAt!=Long.MIN_VALUE && now-lastAcceptedAt<selected.intervalMs) return Admission.BUSY
+        try {
+            validatePose(snapshot)
+            if(selected==Mode.MAP_PHOTOS) checkNotNull(map).validateFootprint(map.camera(snapshot,profile))
+        } catch(e:IllegalArgumentException) {
             mutableStatus.value=mutableStatus.value.copy(phase=Phase.ERROR,message=e.message?:"Camera not ready")
             return Admission.INVALID
         }
-        val folder=session?:return Admission.UNAVAILABLE
-        if(!queue.trySend(Request(generation,snapshot,trigger.take(100),Instant.now().toString(),callback,folder,map)).isSuccess) return Admission.BUSY
+        val folder=session
+        if(selected==Mode.MAP_PHOTOS && folder==null) return Admission.UNAVAILABLE
+        if(!queue.trySend(Request(generation,snapshot,trigger.take(100),Instant.now().toString(),callback,folder,map,selected)).isSuccess) return Admission.BUSY
         outstanding++;lastAcceptedAt=now
-        mutableStatus.value=mutableStatus.value.copy(phase=Phase.CAPTURING,message="Saving virtual map capture…",attempted=mutableStatus.value.attempted+1)
+        mutableStatus.value=mutableStatus.value.copy(phase=Phase.CAPTURING,message=if(selected==Mode.EVENTS_ONLY) "Simulating capture…" else "Saving virtual map capture…",attempted=mutableStatus.value.attempted+1)
         Admission.ACCEPTED
         }
     }
     val missionLink:MissionCamera=object:MissionCamera {
+        override val simulated get() = mode==Mode.EVENTS_ONLY
         override fun preflight(items:List<com.ascend.mavlab.simulation.mission.MissionItem>,pose:PhysicalPoseSnapshot,speed:Float):String? {
             val map=pack
-            if(!isEnabled || map==null) return "Enable the virtual camera in Ops"
-            if(kotlin.math.abs(pose.frame.latitudeDeg-map.frame.latitudeDeg)>1e-8 || kotlin.math.abs(pose.frame.longitudeDeg-map.frame.longitudeDeg)>1e-8)
-                return "Simulation origin does not match the selected map"
-            if(storage.freeMiB<32f) return "Camera needs at least 32 MiB free storage"
-            val nav=items.filter { it.command.isNav && it.command!=com.ascend.mavlab.simulation.mission.MissionCommand.RTL }
-            val maxAltitude=nav.maxOfOrNull { it.altitudeAglMeters.toDouble() }?:0.0
-            if(maxAltitude<0.5) return "Photo mission needs a positive flight altitude"
+            if(!isEnabled) return "Enable the virtual camera in Ops"
+            val selected=mode
+            try { validatePose(pose) } catch(e:IllegalArgumentException) { return e.message }
+            if(selected==Mode.MAP_PHOTOS) {
+                val requiredMap=map?:return "Offline map unavailable"
+                if(kotlin.math.abs(pose.frame.latitudeDeg-requiredMap.frame.latitudeDeg)>1e-8 || kotlin.math.abs(pose.frame.longitudeDeg-requiredMap.frame.longitudeDeg)>1e-8)
+                    return "Simulation origin does not match the selected map"
+                if(storage.freeMiB<32f) return "Camera needs at least 32 MiB free storage"
+            }
+            val maxAltitude=if(selected==Mode.MAP_PHOTOS) items.asSequence()
+                .filter { it.command.isNav && it.command!=com.ascend.mavlab.simulation.mission.MissionCommand.RTL }
+                .maxOfOrNull { it.altitudeAglMeters.toDouble() }?:0.0 else 0.0
+            if(selected==Mode.MAP_PHOTOS && maxAltitude<0.5) return "Photo mission needs a positive flight altitude"
             var distance=0.0;var shots=0.0;var lastN=pose.northMeters;var lastE=pose.eastMeters
             var plannedSpeed=speed.toDouble()
             for(item in items) {
@@ -172,8 +216,8 @@ class VirtualCameraController(private val scope: CoroutineScope, private val pos
                     plannedSpeed=item.speedMetersPerSecond?.toDouble()?:plannedSpeed
                 if(item.command==com.ascend.mavlab.simulation.mission.MissionCommand.CAMERA_TRIGGER_DISTANCE) {
                     distance=item.wire?.p1?.toDouble()?:0.0
-                    if(distance>0 && distance/plannedSpeed.coerceAtLeast(0.1)<MinimumIntervalMs/1000.0)
-                        return "Photo trigger demand exceeds one image per three seconds; reduce speed or increase distance"
+                    if(distance>0 && distance/plannedSpeed.coerceAtLeast(0.1)<selected.intervalMs/1000.0)
+                        return "Photo trigger demand exceeds ${selected.intervalMs} ms minimum interval; reduce speed or increase distance"
                     if(item.wire?.p3==1f) shots++
                 }
                 if(item.command.isNav) {
@@ -181,18 +225,20 @@ class VirtualCameraController(private val scope: CoroutineScope, private val pos
                     val e=item.localEastMeters?.toDouble()?:continue
                     if(distance>0) shots+=kotlin.math.ceil(kotlin.math.hypot(n-lastN,e-lastE)/distance)
                     lastN=n;lastE=e
+                    if(selected!=Mode.MAP_PHOTOS) continue
+                    val map=checkNotNull(map)
                     val h=item.altitudeAglMeters.toDouble().coerceAtLeast(maxAltitude)
                     val radius=h*kotlin.math.hypot(profile.sensorWidthMm,profile.sensorHeightMm)/(2*profile.focalLengthMm)+8.0
                     if(e-radius<map.validWest || e+radius>map.validEast || n-radius<map.validSouth || n+radius>map.validNorth)
                         return "Mission footprint is outside the selected map coverage"
                 }
             }
-            if(shots>MaximumRequestsPerSession-status.value.attempted) return "Mission exceeds the remaining camera-session budget of ${MaximumRequestsPerSession-status.value.attempted} captures"
+            if(shots>selected.limit-status.value.attempted) return "Mission exceeds the remaining camera-session budget of ${selected.limit-status.value.attempted} captures"
             return null
         }
         override fun capture(pose:PhysicalPoseSnapshot,trigger:String,completed:(String?)->Unit):MissionCamera.Admission =
             when(requestCaptureAt(pose,trigger) { result ->
-                synchronized(guard) { if (enabled) { if(missionEvents.size==32) missionEvents.removeFirst();missionEvents.addLast(result) } }
+                publishFeedback(result)
                 completed(if(result.success) null else result.error?:"Photo save failed")
             }) {
                 Admission.ACCEPTED -> MissionCamera.Admission.ACCEPTED
@@ -201,9 +247,20 @@ class VirtualCameraController(private val scope: CoroutineScope, private val pos
             }
     }
 
+    private fun validatePose(snapshot:PhysicalPoseSnapshot) {
+        require(listOf(snapshot.northMeters,snapshot.eastMeters,snapshot.altitudeAglMeters,snapshot.yawRadians,snapshot.groundAltitudeMslMeters).all { it.isFinite() } && snapshot.altitudeAglMeters>=0) { "Invalid simulated camera pose" }
+        require(snapshot.frame.latitude(snapshot.northMeters) in -90.0..90.0 && snapshot.frame.longitude(snapshot.eastMeters) in -180.0..180.0) { "Invalid simulated camera coordinates" }
+    }
+    private fun simulateCapture(request:Request):Result {
+        check(request.generation==generation && enabled) { "Capture cancelled: camera stopped" }
+        val instant=Instant.parse(request.utc)
+        val index=nextIndex++
+        captureCount=nextIndex
+        return Result(true,index,pose=request.snapshot,utcMicros=instant.epochSecond*1_000_000+instant.nano/1000,simulated=true)
+    }
     private fun capture(request:Request):Result {
         check(request.generation==generation && enabled) { "Capture cancelled: camera stopped" }
-        val app=checkNotNull(context);val map=request.map
+        val app=checkNotNull(context);val map=checkNotNull(request.map)
         writeManifest(request)
         require(app.filesDir.usableSpace>32L*1024*1024) { "Low storage: keep at least 32 MiB free" }
         val camera=map.camera(request.snapshot,profile)
@@ -212,7 +269,7 @@ class VirtualCameraController(private val scope: CoroutineScope, private val pos
         try {
             val index=nextIndex
             require(index<1_000_000) { "Camera image index limit reached" }
-            val folder=request.folder;val stem="%06d".format(java.util.Locale.ROOT,index)
+            val folder=checkNotNull(request.folder);val stem="%06d".format(java.util.Locale.ROOT,index)
             image=File(folder,"$stem.jpg");stage=File(folder,"$stem.jpg.tmp");record=File(folder,"$stem.json")
             FileOutputStream(stage).use { stream -> check(bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG,80,stream));stream.fd.sync() }
             val hash=sha256(stage)
@@ -229,7 +286,7 @@ class VirtualCameraController(private val scope: CoroutineScope, private val pos
             check(stage.renameTo(image)) { "Cannot publish JPEG" }
             atomicJson(record,entry) // commit marker; orphan JPEG is never a completed capture
             check(request.generation==generation && enabled) { "Capture cancelled: camera stopped" }
-            nextIndex++;totalSaved=nextIndex
+            nextIndex++;captureCount=nextIndex
             refreshStorage(app)
             val instant=Instant.parse(request.utc)
             return Result(true,index,image,snapshot,utcMicros=instant.epochSecond*1_000_000+instant.nano/1000)
@@ -239,7 +296,7 @@ class VirtualCameraController(private val scope: CoroutineScope, private val pos
         } finally { bitmap.recycle() }
     }
     private fun writeManifest(request:Request) {
-        val folder=request.folder;val map=request.map
+        val folder=checkNotNull(request.folder);val map=checkNotNull(request.map)
         check(folder.isDirectory || folder.mkdirs()) { "Cannot create capture session" }
         if(File(folder,"manifest.json").isFile) return
         atomicJson(File(folder,"manifest.json"),JSONObject().put("schema",1).put("type","virtual-map-captures")
@@ -250,8 +307,8 @@ class VirtualCameraController(private val scope: CoroutineScope, private val pos
     }
     private fun recordFailure(request:Request,error:Exception) {
         writeManifest(request)
-        atomicJson(File(request.folder,"failed-${request.snapshot.monotonicNanos}.json"),JSONObject()
-            .put("schema",1).put("success",false).put("trigger",request.trigger).put("map_id",request.map.id)
+        atomicJson(File(checkNotNull(request.folder),"failed-${request.snapshot.monotonicNanos}.json"),JSONObject()
+            .put("schema",1).put("success",false).put("trigger",request.trigger).put("map_id",checkNotNull(request.map).id)
             .put("generation",request.generation).put("exposure_utc",request.utc)
             .put("exposure_monotonic_nanos",request.snapshot.monotonicNanos).put("completed_utc",Instant.now().toString())
             .put("error",error.message?:"Capture failed"))

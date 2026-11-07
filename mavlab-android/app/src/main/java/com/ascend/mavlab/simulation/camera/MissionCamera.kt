@@ -5,6 +5,7 @@ import com.ascend.mavlab.simulation.mission.MissionItem
 
 /** Nonblocking engine boundary; only the runtime implementation owns Android IO. */
 interface MissionCamera {
+    val simulated:Boolean get() = false
     enum class Admission { ACCEPTED, BUSY, REJECTED }
     fun preflight(items:List<MissionItem>,pose:PhysicalPoseSnapshot,speed:Float):String?
     fun capture(pose:PhysicalPoseSnapshot,trigger:String,completed:(String?)->Unit):Admission

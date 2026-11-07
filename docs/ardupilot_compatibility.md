@@ -72,3 +72,9 @@ trigger command 206 with real offline-map JPEG capture, readiness gates and BRAK
 See the [canonical contract](internals/mavlink-contract.md#distance-triggered-survey-subset-161-dev)
 and [user workflow](user/virtual-camera.md). Mission 1 is the exact 831-item
 upload regression input; live QGC flight validation is tracked separately.
+
+## 1.6.2-dev virtual exposure mode
+
+The default events-only camera simulates capture feedback without map/image-file
+work; saved map photos remain an explicit option. This does not add mission-command
+breadth or claim ArduPilot equivalence. See the [camera contract](internals/mavlink-contract.md#events-only-camera-mode-162-dev).

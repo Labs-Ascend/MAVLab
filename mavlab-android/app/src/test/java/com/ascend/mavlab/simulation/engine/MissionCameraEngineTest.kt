@@ -7,6 +7,8 @@ import kotlin.test.*
 
 class MissionCameraEngineTest {
     private class Camera:MissionCamera {
+        var simulatedMode=false
+        override val simulated get()=simulatedMode
         var blocked:String?=null
         var deferred=false
         val poses=mutableListOf<PhysicalPoseSnapshot>()
@@ -33,6 +35,13 @@ class MissionCameraEngineTest {
     private fun until(engine:PhysicsSimulationEngine,condition:()->Boolean) {
         repeat(15000) { if(condition()) return;engine.tickForTest(.02f) }
         error("Timed out: ${engine.state.value.mode}, ${engine.missionProgress.value}")
+    }
+    @Test fun simulatedExposureCountsNeverClaimSavedImages() {
+        val camera=Camera().apply { simulatedMode=true };val e=setup(camera);assertTrue(e.startMission())
+        until(e) { e.missionProgress.value.complete && !e.state.value.armed }
+        assertTrue(camera.poses.size>=3)
+        assertEquals(0,e.missionProgress.value.cameraSavedImages)
+        assertEquals(camera.poses.size,e.missionProgress.value.cameraSimulatedCaptures)
     }
     @Test fun blockedPreflightDoesNotArmOrTakeAuthority() {
         val camera=Camera().apply { blocked="Map unavailable" };val e=setup(camera);val before=e.state.value

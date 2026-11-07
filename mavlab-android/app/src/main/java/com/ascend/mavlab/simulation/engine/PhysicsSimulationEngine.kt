@@ -897,11 +897,11 @@ class PhysicsSimulationEngine(
     }
     private fun requestMissionPhoto(action:Boolean):com.ascend.mavlab.simulation.camera.MissionCamera.Admission {
         val port=missionCamera?:return com.ascend.mavlab.simulation.camera.MissionCamera.Admission.REJECTED
-        val epoch=cameraEpoch;val run=cameraRun
+        val epoch=cameraEpoch;val run=cameraRun;val simulated=port.simulated
         cameraPending=true
         val admission=port.capture(physicalPoseSnapshot(),"mission:$run item:${missionProgress.value.activeTarget?.sequence}") { error ->
             synchronized(this) {
-                if(run==cameraRun) missionEngine.cameraResult(error==null)
+                if(run==cameraRun) missionEngine.cameraResult(error==null,simulated)
                 if(epoch==cameraEpoch && run==cameraRun) {
                     cameraPending=false
                     if(error==null) { if(action) cameraActionCompleted=true }

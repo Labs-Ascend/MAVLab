@@ -80,3 +80,6 @@ Last verified: 2026-08-31
 
 - **Distance photo trigger**: mission command 206 schedules virtual exposures from actual horizontal engine travel; zero distance stops that cadence, while its immediate-photo flag still requests one saved image.
 - **Photo hold**: an observable BRAKE state after a required capture cannot complete; mission progression and distance triggers wait for an explicit AUTO resume or recovery command.
+
+- **Simulated capture / events-only camera**: a completed virtual exposure producing timestamp, physical pose, index and MAVLink feedback without an image file. It increments simulated captures, never JPEGs saved.
+- **Map photos**: the optional offline-map camera mode that renders and saves real JPEG/pose-record pairs on the phone.

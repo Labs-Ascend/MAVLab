@@ -23,16 +23,13 @@ class OfflineCameraDeviceTest {
         SimulationCoordinateFrame(-1.2425,36.9225),north,east,60.0,heading,System.nanoTime())
     @Test fun engineMissionSavesActualJpegAndReportsBoundedCaptureOutcome() = runBlocking {
         val root=File(app.cacheDir,"camera-mission-${System.nanoTime()}").apply { mkdirs() }
-        val isolated=object:android.content.ContextWrapper(app) {
-            override fun getApplicationContext():android.content.Context=this
-            override fun getFilesDir():File=root
-        }
+        val isolated=CameraTestContext(app,root)
         val scope=CoroutineScope(SupervisorJob()+Dispatchers.Default)
         val engine=com.ascend.mavlab.simulation.engine.PhysicsSimulationEngine()
         val camera=VirtualCameraController(scope) { engine.physicalPoseSnapshot() }
         try {
             assertTrue(engine.setHomeLocation(com.ascend.mavlab.simulation.engine.SimLocation("test-dandora","Dandora",-1.2425,36.9225,1805f)))
-            camera.initialize(isolated);camera.enable()
+            camera.initialize(isolated);assertTrue(camera.selectMode(VirtualCameraController.Mode.MAP_PHOTOS,true));camera.enable()
             withTimeout(15_000) { camera.status.first { it.phase==VirtualCameraController.Phase.READY } }
             engine.missionCamera=camera.missionLink
             val frame=engine.physicalPoseSnapshot().frame
@@ -62,11 +59,11 @@ class OfflineCameraDeviceTest {
             assertTrue(camera.missionLink.preflight(items,pose.copy(frame=SimulationCoordinateFrame(0.0,0.0)),3f)!!.contains("origin"))
             val outside=items.map { if(it.command.isNav) it.copy(localNorthMeters=1000f) else it }
             assertTrue(camera.missionLink.preflight(outside,pose,3f)!!.contains("coverage"))
-            assertTrue(camera.missionLink.preflight(items,pose,20f)!!.contains("three seconds"))
+            assertTrue(camera.missionLink.preflight(items,pose,20f)!!.contains("3000 ms"))
             val tooMany=items+List(1001) { trigger(it+4,25f,1f) }
             assertTrue(camera.missionLink.preflight(tooMany,pose,3f)!!.contains("budget"))
             camera.disable();assertNotNull(camera.missionLink.preflight(items,pose,3f))
-        } finally { engine.stop();camera.disable();scope.cancel();root.deleteRecursively() }
+        } finally { engine.stop();camera.disable();scope.cancel();isolated.close();root.deleteRecursively() }
     }
 
     @Test fun realPackRendersAcrossTilesRotationsAndEvictionsWithinBudget() {
@@ -118,14 +115,11 @@ class OfflineCameraDeviceTest {
     }
     @Test fun stopRestartCancelsQueuedPoseWithoutPublishingIntoNewSession() = runBlocking {
         val root=File(app.cacheDir,"camera-generation-${System.nanoTime()}").apply { mkdirs() }
-        val isolated=object:android.content.ContextWrapper(app) {
-            override fun getApplicationContext():android.content.Context=this
-            override fun getFilesDir():File=root
-        }
+        val isolated=CameraTestContext(app,root)
         val scope=CoroutineScope(SupervisorJob()+Dispatchers.Default)
         val camera=VirtualCameraController(scope) { snapshot() }
         try {
-            camera.initialize(isolated);camera.enable()
+            camera.initialize(isolated);assertTrue(camera.selectMode(VirtualCameraController.Mode.MAP_PHOTOS,true));camera.enable()
             withTimeout(15_000) { camera.status.first { it.phase==VirtualCameraController.Phase.READY } }
             val mutex=VirtualCameraController::class.java.getDeclaredField("ioMutex").apply { isAccessible=true }.get(camera) as kotlinx.coroutines.sync.Mutex
             mutex.lock()
@@ -145,20 +139,17 @@ class OfflineCameraDeviceTest {
             assertEquals(1,failures.size)
             assertFalse(JSONObject(failures.single().readText()).getBoolean("success"))
             assertTrue(failures.single().parentFile!!.name!=camera.status.value.sessionId)
-        } finally { camera.disable();scope.cancel();root.deleteRecursively() }
+        } finally { camera.disable();scope.cancel();isolated.close();root.deleteRecursively() }
     }
 
     @Test fun lowStorageAndBadImportFailVisiblyAndKeepPreviousPack() = runBlocking {
         val root=File(app.cacheDir,"camera-failure-${System.nanoTime()}").apply { mkdirs() }
         val emptySpace=object:File(root.path) { override fun getUsableSpace():Long=0 }
-        val isolated=object:android.content.ContextWrapper(app) {
-            override fun getApplicationContext():android.content.Context=this
-            override fun getFilesDir():File=emptySpace
-        }
+        val isolated=CameraTestContext(app,emptySpace)
         val scope=CoroutineScope(SupervisorJob()+Dispatchers.Default)
         val camera=VirtualCameraController(scope) { snapshot() }
         try {
-            camera.initialize(isolated);camera.enable()
+            camera.initialize(isolated);assertTrue(camera.selectMode(VirtualCameraController.Mode.MAP_PHOTOS,true));camera.enable()
             withTimeout(15_000) { camera.status.first { it.phase==VirtualCameraController.Phase.READY } }
             val failed=CompletableDeferred<VirtualCameraController.Result>()
             assertEquals(VirtualCameraController.Admission.ACCEPTED,camera.requestCapture("low storage") { failed.complete(it) })
@@ -180,19 +171,16 @@ class OfflineCameraDeviceTest {
                 assertEquals(2,archive.size())
                 assertTrue(archive.entries().asSequence().any { it.name.startsWith("failed-") })
             }
-        } finally { camera.disable();scope.cancel();root.deleteRecursively() }
+        } finally { camera.disable();scope.cancel();isolated.close();root.deleteRecursively() }
     }
     @Test fun actualJpegCommittedWithLedgerAndExportedWithoutFlightRecording() = runBlocking {
         // Test controller uses a separate ContextWrapper files directory, preserving all app sessions.
         val root=File(app.cacheDir,"camera-test-${System.nanoTime()}").apply { mkdirs() }
-        val isolated=object:android.content.ContextWrapper(app) {
-            override fun getApplicationContext():android.content.Context=this
-            override fun getFilesDir():File=root
-        }
+        val isolated=CameraTestContext(app,root)
         val scope=CoroutineScope(SupervisorJob()+Dispatchers.Default)
         val camera=VirtualCameraController(scope) { snapshot() }
         try {
-            camera.initialize(isolated);camera.enable()
+            camera.initialize(isolated);assertTrue(camera.selectMode(VirtualCameraController.Mode.MAP_PHOTOS,true));camera.enable()
             withTimeout(15_000) { camera.status.first { it.phase==VirtualCameraController.Phase.READY || it.phase==VirtualCameraController.Phase.ERROR } }
             assertEquals(camera.status.value.message,VirtualCameraController.Phase.READY,camera.status.value.phase)
             val completion=CompletableDeferred<VirtualCameraController.Result>()
@@ -201,6 +189,7 @@ class OfflineCameraDeviceTest {
             val result=withTimeout(15_000) { completion.await() }
             assertTrue(result.error,result.success)
             val image=result.image!!
+            println("MAP_RESOURCE captures=1 image_bytes=${image.length()} decoded_cache_bytes=${camera.status.value.cachedBytes}")
             val bitmap=BitmapFactory.decodeFile(image.path)
             assertNotNull(bitmap);assertEquals(640,bitmap.width);assertEquals(480,bitmap.height);bitmap.recycle()
             image.copyTo(File(app.cacheDir,"mavlab-validation-virtual-photo.jpg"),overwrite=true)
@@ -221,6 +210,6 @@ class OfflineCameraDeviceTest {
             }
             zip.copyTo(File(app.cacheDir,"mavlab-validation-virtual-captures.zip"),overwrite=true)
             assertEquals(VirtualCameraController.Admission.UNAVAILABLE,camera.requestCapture("off"))
-        } finally { camera.disable();scope.cancel();root.deleteRecursively() }
+        } finally { camera.disable();scope.cancel();isolated.close();root.deleteRecursively() }
     }
 }

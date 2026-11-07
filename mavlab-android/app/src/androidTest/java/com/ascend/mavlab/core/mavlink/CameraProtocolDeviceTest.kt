@@ -1,5 +1,6 @@
 package com.ascend.mavlab.core.mavlink
 
+import com.ascend.mavlab.simulation.camera.CameraTestContext
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
 import com.ascend.mavlab.simulation.camera.VirtualCameraController
@@ -19,10 +20,7 @@ class CameraProtocolDeviceTest {
     @Test fun cameraDiscoveryShutterRetryAndRoutingHaveRealEffects() = runBlocking {
         val app=InstrumentationRegistry.getInstrumentation().targetContext
         val root=File(app.cacheDir,"camera-wire-test-${System.nanoTime()}").apply { mkdirs() }
-        val isolated=object:android.content.ContextWrapper(app) {
-            override fun getApplicationContext():Context=this
-            override fun getFilesDir():File=root
-        }
+        val isolated=CameraTestContext(app,root)
         val scope=CoroutineScope(SupervisorJob()+Dispatchers.Default)
         val camera=VirtualCameraController(scope) { PhysicalPoseSnapshot(SimulationCoordinateFrame(-1.2425,36.9225),0.0,0.0,60.0,0.0,System.nanoTime(),1805.0) }
         val engine=PhysicsSimulationEngine()
@@ -50,7 +48,7 @@ class CameraProtocolDeviceTest {
             error("No message $id")
         }
         try {
-            camera.initialize(isolated);camera.enable()
+            camera.initialize(isolated);assertTrue(camera.selectMode(VirtualCameraController.Mode.MAP_PHOTOS,true));camera.enable()
             withTimeout(15_000) { camera.status.first { it.phase==VirtualCameraController.Phase.READY || it.phase==VirtualCameraController.Phase.ERROR } }
             assertEquals(camera.status.value.message,VirtualCameraController.Phase.READY,camera.status.value.phase)
             command(512,listOf(259f))
@@ -94,6 +92,6 @@ class CameraProtocolDeviceTest {
             camera.disable()
             command(2000,listOf(0f,0f,1f,3f))
             assertEquals(1,message(77).payload[2].toInt())
-        } finally { server.stopNow();camera.disable();scope.cancel();peer.close();socket.close();root.deleteRecursively() }
+        } finally { server.stopNow();camera.disable();scope.cancel();peer.close();socket.close();isolated.close();root.deleteRecursively() }
     }
 }

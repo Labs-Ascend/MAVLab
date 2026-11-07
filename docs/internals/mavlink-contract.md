@@ -136,7 +136,7 @@ The camera uses the virtual optics documented in [ADR-0014](decisions/0014-offli
 CAMERA_IMAGE_CAPTURED has physical simulated geographic coordinates and AGL/MSL,
 a stabilized-nadir camera quaternion in NED (camera FRD optical forward points
 down), a zero-based image index and real completion outcome. Its local file path
-is not a MAVLink FTP or HTTP download service. Image count/index recover from
+is not a MAVLink FTP or HTTP download service. In EVENTS_ONLY its file_url is empty and the success event represents an emulated exposure, with no stored image. Image count/index recover from
 completed on-phone ledger/image pairs; no active capture resumes after restart.
 The in-memory 32-outcome re-request window does not restore after process death.
 This is partial camera-protocol history support, not a complete media service.
@@ -153,7 +153,7 @@ exactly-once semantics cannot be guaranteed for that non-identifying retry.
 Admission ACK and completed capture outcome are separate. Busy/unavailable and
 invalid-pose requests are rejected before exposure. File/decoder/storage errors
 after admission emit a failed outcome, with no fabricated JPEG. Work is bounded
-to one active job/one pending request and 1,000 accepted requests per session.
+to one active job/one pending request. MAP_PHOTOS admits 1,000 requests per session; EVENTS_ONLY admits 100,000.
 A stopped generation cannot report into a new session. These paths have focused
 Android loopback coverage; a synthetic wire test is not a live QGC acceptance run.
 
@@ -180,7 +180,7 @@ past exposures are invented. BRAKE/LOITER pause progress and triggers; explicit 
 resumes the retained item. LAND/disarm/manual recovery stop new mission triggers.
 A late save may finish recording its original outcome but cannot override recovery.
 
-AUTO/MISSION_START preflight requires an enabled camera, matching origin, conservative
+In MAP_PHOTOS, AUTO/MISSION_START preflight requires an enabled camera, matching origin, conservative
 whole-route footprint coverage (maximum route altitude, diagonal radius plus 8 m),
 at least 32 MiB free in the worker-refreshed storage snapshot (each save also checks actual free space), planned distance/speed >=3 seconds, and a conservative estimate
 within the remaining 1,000-request session budget. Readiness failure leaves arming,
@@ -205,3 +205,34 @@ Mission 1 covers about 7.646 km² with 12,570 planned photos, outside the bundle
 camera-flight preflight with that map. Other camera/gimbal/ROI mission IDs, spline,
 jumps and unsupported layouts remain rejected. No camera no-ops are introduced.
 Reference: [command 206 definitions](https://mavlink.io/en/messages/common.html#MAV_CMD_DO_SET_CAM_TRIGG_DIST).
+
+## Events-only camera mode (1.6.2-dev)
+
+EVENTS_ONLY is the default selected camera mode and auto-enables on Runtime Start.
+It shares the implemented component-100 command/admission/retry/mission scheduling
+paths, but each accepted capture produces a simulated exposure result with physical
+pose/time/index and no JPEG, image path, bitmap, map access or capture-file writes.
+The camera model is `MAVLab Events Only - No Images`; image mode (0) and still-capture
+capability (2) describe the emulated capture API. CAMERA_IMAGE_CAPTURED.capture_result=1
+means successful simulated exposure in this mode; file_url is empty. Capture count
+is a virtual session count. STORAGE_INFORMATION reports zero stores/capacity and
+STORAGE_STATUS_NOT_SUPPORTED (3); no storage/file-transfer capability is claimed.
+A fresh generation broadcasts information/status and clears bounded retry history.
+QGC's cached camera model label may require reconnecting to refresh after switching.
+
+Events-only preflight validates the current physical pose, planned capture demand
+(minimum 250 ms interval) and remaining 100,000-request session allowance. It has no
+map-origin/coverage/free-space requirement. Unsupported mission commands/parameters,
+mission count limit, control authority, BRAKE/resume and LAND/disarm precedence are
+unchanged. Simulated captures and saved JPEG counts are separate engine fields.
+Origin changes restart an already-enabled events-only session; mode changes require
+o active capture, an off camera and disarmed vehicle. Selection persists, but active
+requests/counters/history do not restore. Explicit off remains off within the runtime.
+No persistent event ledger/export is implemented; two independent 32-entry windows
+bound pending feedback and successful history. Optional flight recording is unchanged.
+Existing MAP_PHOTOS behavior and stored files remain available via mode selection.
+
+Source basis: [QGC a76f22939 image-event handling](https://github.com/mavlink/qgroundcontrol/blob/a76f22939/src/Vehicle/Vehicle.cc#L818)
+and [MAVLink camera message definitions](https://mavlink.io/en/messages/common.html#CAMERA_IMAGE_CAPTURED).
+The distinct no-image simulation semantics are an explicit MAVLab mode; validation
+must distinguish generated feedback from saved media and live QGC evidence.
