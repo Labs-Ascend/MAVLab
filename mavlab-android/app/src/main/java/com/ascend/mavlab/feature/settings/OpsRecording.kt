@@ -1,5 +1,7 @@
 package com.ascend.mavlab.feature.settings
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -20,6 +22,7 @@ import com.ascend.mavlab.core.common.AppRuntime
 import com.ascend.mavlab.core.ui.navigation.screenSwipeExcluded
 import com.ascend.mavlab.core.common.RuntimeLifecycleState
 import com.ascend.mavlab.simulation.recording.FlightSession
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.flow.map
@@ -35,6 +38,16 @@ internal fun RecordingSection(expanded: Boolean, onExpanded: (Boolean) -> Unit, 
     val armed by armedFlow.collectAsStateWithLifecycle(false)
     val now = rememberOpsClock()
     val context = LocalContext.current
+    val camera=AppRuntime.virtualCamera
+    var savedMapPhotos by remember { mutableStateOf(false) }
+    var legacyExportFeedback by remember { mutableStateOf<String?>(null) }
+    val uiScope=rememberCoroutineScope()
+    val exportBusyFlow=remember { camera.status.map { it.exportBusy }.distinctUntilChanged() }
+    val exportBusy by exportBusyFlow.collectAsStateWithLifecycle(false)
+    LaunchedEffect(expanded) { if(expanded) savedMapPhotos=camera.hasSavedMapPhotos() }
+    val exportMapPhotos=rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
+        if(uri!=null) camera.exportLatest(uri) { message -> uiScope.launch { legacyExportFeedback=message } }
+    }
     var historyExpanded by rememberSaveable { mutableStateOf(false) }
     var selectedReport by remember { mutableStateOf<FlightSession?>(null) }
     val current = recording.currentSession ?: recording.lastSession
@@ -65,6 +78,15 @@ internal fun RecordingSection(expanded: Boolean, onExpanded: (Boolean) -> Unit, 
             OutlinedButton(enabled = !recording.actionInProgress, onClick = AppRuntime::refreshSessionHistory) { Text("Refresh recordings") }
         }
         Text("Stop and save does not land, disarm or stop simulation. If automatic capture is enabled, a deliberate stop lasts for this flight. Begin recording can resume it.", style = MaterialTheme.typography.bodySmall)
+        if(savedMapPhotos) {
+            HorizontalDivider()
+            Text("Saved map photos",style=MaterialTheme.typography.titleSmall)
+            OutlinedButton(enabled=!armed && !exportBusy,onClick={ exportMapPhotos.launch("MAVLab-saved-map-photos.zip") }) {
+                Text(if(exportBusy) "Exporting saved map photos…" else "Export saved map photos")
+            }
+            Text("Photos from earlier versions remain on this phone. Exporting keeps the originals and leaves simulated captures running.",style=MaterialTheme.typography.bodySmall)
+            legacyExportFeedback?.let { Text(it,style=MaterialTheme.typography.bodySmall) }
+        }
         current?.let { session ->
             HorizontalDivider()
             Text(if (recording.active) "Current recording" else if (session.endedAtMs != null) "Latest saved session" else "Unfinished previous session", style = MaterialTheme.typography.titleSmall)

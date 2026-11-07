@@ -173,7 +173,7 @@ class OfflineCameraDeviceTest {
             }
         } finally { camera.disable();scope.cancel();isolated.close();root.deleteRecursively() }
     }
-    @Test fun actualJpegCommittedWithLedgerAndExportedWithoutFlightRecording() = runBlocking {
+    @Test fun actualJpegRetainedAndExportedWhileEventsContinue() = runBlocking {
         // Test controller uses a separate ContextWrapper files directory, preserving all app sessions.
         val root=File(app.cacheDir,"camera-test-${System.nanoTime()}").apply { mkdirs() }
         val isolated=CameraTestContext(app,root)
@@ -199,8 +199,14 @@ class OfflineCameraDeviceTest {
             camera.disable()
             File(image.parentFile,"999999.jpg").writeBytes(byteArrayOf(1,2,3)) // unfinished image has no commit marker
             File(image.parentFile,"999998.jpg.tmp").writeBytes(byteArrayOf(1,2,3))
+            assertTrue(camera.hasSavedMapPhotos())
+            assertTrue(camera.selectMode(VirtualCameraController.Mode.EVENTS_ONLY,true));camera.enable()
+            withTimeout(5000) { camera.status.first { it.phase==VirtualCameraController.Phase.READY } }
             val zip=File(root,"export.zip")
-            camera.exportLatest(Uri.fromFile(zip))
+            val exported=CompletableDeferred<String>()
+            camera.exportLatest(Uri.fromFile(zip)) { exported.complete(it) }
+            assertTrue(withTimeout(15_000) { exported.await() }.startsWith("Exported"))
+            assertTrue(camera.isEnabled)
             withTimeout(15_000) { camera.status.first { !it.exportBusy } }
             assertTrue(camera.status.value.message,zip.isFile)
             ZipFile(zip).use { archive ->
@@ -209,6 +215,11 @@ class OfflineCameraDeviceTest {
                 assertEquals(image.length(),archive.getEntry(image.name).size)
             }
             zip.copyTo(File(app.cacheDir,"mavlab-validation-virtual-captures.zip"),overwrite=true)
+            val event=CompletableDeferred<VirtualCameraController.Result>()
+            assertEquals(VirtualCameraController.Admission.ACCEPTED,camera.requestCapture("after legacy export") { event.complete(it) })
+            assertTrue(withTimeout(5000) { event.await() }.simulated)
+            assertEquals(image.length(),entry.getLong("bytes"))
+            camera.disable()
             assertEquals(VirtualCameraController.Admission.UNAVAILABLE,camera.requestCapture("off"))
         } finally { camera.disable();scope.cancel();isolated.close();root.deleteRecursively() }
     }

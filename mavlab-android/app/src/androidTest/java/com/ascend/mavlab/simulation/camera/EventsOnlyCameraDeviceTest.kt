@@ -100,7 +100,7 @@ class EventsOnlyCameraDeviceTest {
         assertFalse(engine.state.value.armed);assertEquals(ControlAuthority.IDLE,engine.state.value.controlAuthority)
         assertFalse(root.walkTopDown().any { it.isFile });endpoint.stop()
     }
-    @Test fun canceledGenerationCannotPublishIntoNewModeAndSelectionPersists()=withCamera { camera,_,_,context,scope ->
+    @Test fun canceledGenerationCannotPublishAndLegacyModeCannotDisableAutomaticEvents()=withCamera { camera,_,_,context,scope ->
         assertFalse(camera.selectMode(VirtualCameraController.Mode.MAP_PHOTOS,true))
         val mutex=VirtualCameraController::class.java.getDeclaredField("ioMutex").apply { isAccessible=true }.get(camera) as kotlinx.coroutines.sync.Mutex
         mutex.lock();val completed=CompletableDeferred<String?>()
@@ -115,8 +115,9 @@ class EventsOnlyCameraDeviceTest {
         camera.disable()
         assertFalse(camera.selectMode(VirtualCameraController.Mode.MAP_PHOTOS,false))
         assertTrue(camera.selectMode(VirtualCameraController.Mode.MAP_PHOTOS,true))
+        context.getSharedPreferences("mavlab_camera",android.content.Context.MODE_PRIVATE).edit().putString("mode","MAP_PHOTOS").commit()
         val restored=VirtualCameraController(scope) { error("No capture expected") }
-        restored.initialize(context);assertEquals(VirtualCameraController.Mode.MAP_PHOTOS,restored.mode)
+        restored.initialize(context);assertEquals(VirtualCameraController.Mode.EVENTS_ONLY,restored.mode)
         assertEquals(VirtualCameraController.Phase.OFF,restored.status.value.phase)
     }
 }

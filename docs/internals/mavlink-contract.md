@@ -226,13 +226,22 @@ map-origin/coverage/free-space requirement. Unsupported mission commands/paramet
 mission count limit, control authority, BRAKE/resume and LAND/disarm precedence are
 unchanged. Simulated captures and saved JPEG counts are separate engine fields.
 Origin changes restart an already-enabled events-only session; mode changes require
-o active capture, an off camera and disarmed vehicle. Selection persists, but active
+o active capture, an off camera and disarmed vehicle. In the 1.6.3-dev product, EVENTS_ONLY is initialized regardless of legacy mode preferences; active
 requests/counters/history do not restore. Explicit off remains off within the runtime.
 No persistent event ledger/export is implemented; two independent 32-entry windows
 bound pending feedback and successful history. Optional flight recording is unchanged.
-Existing MAP_PHOTOS behavior and stored files remain available via mode selection.
+The internal MAP_PHOTOS backend and stored files remain compatible. Since 1.6.3-dev there is no product mode-selection UI; saved-data export is under Recordings & review and can run with events-only capture enabled.
 
 Source basis: [QGC a76f22939 image-event handling](https://github.com/mavlink/qgroundcontrol/blob/a76f22939/src/Vehicle/Vehicle.cc#L818)
 and [MAVLink camera message definitions](https://mavlink.io/en/messages/common.html#CAMERA_IMAGE_CAPTURED).
 The distinct no-image simulation semantics are an explicit MAVLab mode; validation
 must distinguish generated feedback from saved media and live QGC evidence.
+
+### Ops simplification (1.6.3-dev)
+
+The Virtual camera card, manual enable/mode/test controls and map import/origin
+controls are removed from Ops. Camera discovery and simulated capture are automatic
+with Runtime Start. An old MAP_PHOTOS preference is ignored, preserving the original
+preferences/files but preventing an inaccessible disabled camera state. Existing
+map-image exports remain available under Recordings & review without interrupting
+EVENTS_ONLY. No command IDs, wire semantics, capture rates or capability bits change.

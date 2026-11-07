@@ -78,3 +78,7 @@ upload regression input; live QGC flight validation is tracked separately.
 The default events-only camera simulates capture feedback without map/image-file
 work; saved map photos remain an explicit option. This does not add mission-command
 breadth or claim ArduPilot equivalence. See the [camera contract](internals/mavlink-contract.md#events-only-camera-mode-162-dev).
+
+In 1.6.3-dev, simulated captures are automatic and the dedicated camera Ops card is
+removed. Legacy saved map photos remain exportable from Recordings & review. This
+UI change does not expand protocol or firmware compatibility.

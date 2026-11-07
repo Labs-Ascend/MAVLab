@@ -99,7 +99,6 @@ fun SettingsScreen(
             RuntimeSection(operations, onConfirm = { confirmation = it })
             FailureSection(onConfirm = { confirmation = it })
             RecordingSection(expanded = recordingExpanded, onExpanded = { recordingExpanded = it }, headerModifier = Modifier.bringIntoViewRequester(recordingAnchor))
-            CameraSection(onConfirm = { confirmation = it })
             EventHistory(operations.events)
             DisplaySection(fullScreen, onFullScreenChange)
             ExpandableSection("Advanced configuration", "QGC setup and simulation origin", setupExpanded, { setupExpanded = it }, headerModifier = Modifier.bringIntoViewRequester(setupAnchor)) {

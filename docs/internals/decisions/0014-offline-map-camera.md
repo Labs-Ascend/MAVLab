@@ -97,3 +97,18 @@ No file is invented and no FTP/image-transfer service is advertised. QGC a76f229
 uses success/coordinates to add photo markers without reading an image file; its
 camera manager caches model information and can require reconnection to refresh
 a name after a mode switch. See the canonical contract and dated validation.
+
+## 1.6.3-dev: automatic capture and Ops simplification
+
+User direction removes the Virtual camera section from Ops. The product always
+initializes EVENTS_ONLY and enables it on Runtime Start. Legacy mode preferences
+are ignored without deleting data. Internal mode selection remains off/disarmed-only
+for the retained map backend and its regression tests, not a product settings flow.
+The map backend/assets are retained; no new JPEGs are produced by normal app flows.
+
+Saved map export moves to Recordings & review and appears only when legacy capture
+data exists. That directory check runs on IO when the section opens. Export accepts
+an enabled events-only controller, since it has no image writers, and reports its
+result separately in the recordings UI. Flow updates preserve concurrent capture
+counters. Export does not stop capture, change authority or delete originals. Map
+export/import format and integrity checks remain unchanged.

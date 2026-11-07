@@ -91,14 +91,11 @@ class VirtualCameraController(private val scope: CoroutineScope, private val pos
     fun initialize(context:Context) {
         if(this.context!=null) return
         this.context=context.applicationContext
-        val saved=context.getSharedPreferences("mavlab_camera",Context.MODE_PRIVATE).getString("mode",null)
-        val restored=Mode.entries.firstOrNull { it.name==saved }?:Mode.EVENTS_ONLY
-        mutableStatus.value=Status(mode=restored)
+        mutableStatus.value=Status(mode=Mode.EVENTS_ONLY)
     }
     fun selectMode(selected:Mode,disarmed:Boolean):Boolean = synchronized(guard) {
         if(!disarmed || enabled || outstanding!=0 || status.value.exportBusy) return false
         mutableStatus.value=Status(mode=selected)
-        context?.getSharedPreferences("mavlab_camera",Context.MODE_PRIVATE)?.edit()?.putString("mode",selected.name)?.apply()
         true
     }
     fun enable() {
@@ -313,10 +310,14 @@ class VirtualCameraController(private val scope: CoroutineScope, private val pos
             .put("exposure_monotonic_nanos",request.snapshot.monotonicNanos).put("completed_utc",Instant.now().toString())
             .put("error",error.message?:"Capture failed"))
     }
-    fun exportLatest(uri:Uri) {
+    suspend fun hasSavedMapPhotos():Boolean = withContext(Dispatchers.IO) { context?.let { latestSession(it)!=null }?:false }
+    fun exportLatest(uri:Uri,onComplete:(String)->Unit={}) {
         val app=context?:return
         synchronized(guard) {
-            if(enabled || mutableStatus.value.exportBusy) { mutableStatus.value=mutableStatus.value.copy(message="Turn camera off before export");return }
+            if((enabled && mode==Mode.MAP_PHOTOS) || mutableStatus.value.exportBusy) {
+                val message="Map capture or export is busy; originals retained"
+                mutableStatus.value=mutableStatus.value.copy(message=message);onComplete(message);return
+            }
             mutableStatus.value=mutableStatus.value.copy(exportBusy=true,message="Exporting saved captures…")
         }
         scope.launch(Dispatchers.IO) {
@@ -342,8 +343,12 @@ class VirtualCameraController(private val scope: CoroutineScope, private val pos
                         }
                     }
                 }
-                mutableStatus.value=mutableStatus.value.copy(message="Exported ${records.count { !it.name.startsWith("failed-") }} captures and ${records.count { it.name.startsWith("failed-") }} failure records",exportBusy=false)
-            } catch(e:Exception) { mutableStatus.value=mutableStatus.value.copy(message=e.message?:"Export failed; originals retained",exportBusy=false) }
+                val message="Exported ${records.count { !it.name.startsWith("failed-") }} captures and ${records.count { it.name.startsWith("failed-") }} failure records"
+                mutableStatus.update { it.copy(message=message,exportBusy=false) };onComplete(message)
+            } catch(e:Exception) {
+                val message=e.message?:"Export failed; originals retained"
+                mutableStatus.update { it.copy(message=message,exportBusy=false) };onComplete(message)
+            }
         }
     }
     /** Stage an explicit user-selected pack; previous pack survives all validation failures. */
