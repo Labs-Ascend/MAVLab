@@ -1,0 +1,7 @@
+Starting: Intent { cmp=com.ascend.mavlab/.MainActivity }
+Status: ok
+LaunchState: COLD
+Activity: com.ascend.mavlab/.MainActivity
+TotalTime: 5679
+WaitTime: 5741
+Complete

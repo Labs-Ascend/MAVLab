@@ -1,0 +1,17 @@
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): true
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+Signer #1 certificate DN: CN=MAVLab Release, O=Ascend Labs
+Signer #1 certificate SHA-256 digest: 46ff910b66597a7340d7b7737e598619368b8594bcdc2f05a91efb54d811eb70
+Signer #1 certificate SHA-1 digest: 9b89524ca0245bf794eb822f30f82d722540350c
+Signer #1 certificate MD5 digest: 045a44db539fa237f0f035aba6e59971
+Signer #1 key algorithm: RSA
+Signer #1 key size (bits): 3072
+Signer #1 public key SHA-256 digest: e62c03db50dabe21025df2fa19eb9e447ed605904053cd9705911425ef1895c2
+Signer #1 public key SHA-1 digest: b5c34e0c325edc9545e1fd532d0c7f925c95aa3b
+Signer #1 public key MD5 digest: 5e0b0b57ca54d733fa02e91bd1a38d80

@@ -1,0 +1,9 @@
+
+jar verified.
+
+Warning:
+This jar contains entries whose certificate chain is invalid. Reason: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+This jar contains entries whose signer certificate is self-signed.
+This jar contains signatures that do not include a timestamp. Without a timestamp, users may not be able to validate this jar after any of the signer certificates expire (as early as 2056-10-30).
+
+Re-run with the -verbose and -certs options for more details.

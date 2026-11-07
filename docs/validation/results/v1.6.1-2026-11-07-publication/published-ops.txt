@@ -1,0 +1,21 @@
+Ops
+GCS disconnected
+No active issues detected
+Authority: Idle
+Disarmed · Stabilize · Live state
+Recording stopped
+Peers & identity
+No peer detected
+Show Peers & identity
+Flight boundaries & rally
+Fence disabled · 0 rally points
+Show Flight boundaries & rally
+Runtime components
+Running · foreground
+Show Runtime components
+Failure scenarios
+0 active injected conditions
+Show Failure scenarios
+Cockpit
+Control
+SIM

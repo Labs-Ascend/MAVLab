@@ -1,0 +1,24 @@
+{
+  "version": "1.6.1",
+  "versionCode": 24,
+  "tag": "v1.6.1",
+  "sourceCommit": "e9a29c82c425f089caa6a68d1232bee395dc615e",
+  "releaseUrl": "https://github.com/Labs-Ascend/MAVLab/releases/tag/v1.6.1",
+  "releasePublishedAt": "2026-11-07T18:08:44Z",
+  "releaseNotesMatch": true,
+  "onlyApkAndAab": true,
+  "debuggable": false,
+  "certificateSha256": "46ff910b66597a7340d7b7737e598619368b8594bcdc2f05a91efb54d811eb70",
+  "artifacts": {
+    "MAVLab-v1.6.1.aab": {
+      "bytes": 34580368,
+      "sha256": "06675dcb0c467a664a5855dbc72222a74fe50a597f24e1d9690a3d6d63436bd2",
+      "githubDigestMatches": true
+    },
+    "MAVLab-v1.6.1.apk": {
+      "bytes": 47356726,
+      "sha256": "ab8c162832d904aa9a516f96efe22022f1ce871f7037743e62f3395c20e9c17e",
+      "githubDigestMatches": true
+    }
+  }
+}

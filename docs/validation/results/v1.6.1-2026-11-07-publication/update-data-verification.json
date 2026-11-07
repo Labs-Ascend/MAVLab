@@ -1,0 +1,43 @@
+{
+  "scenario": "Same-version local-signed to public-CI APK update on isolated emulator",
+  "version": "1.6.1",
+  "versionCode": 24,
+  "certificateSha256": "46ff910b66597a7340d7b7737e598619368b8594bcdc2f05a91efb54d811eb70",
+  "before": {
+    "uid": "10209",
+    "preferences": {
+      "mavlab_app.xml": {
+        "bytes": 126,
+        "sha256": "e1d79b6fddd51733942863f8cc057e651803ebeb6b2682e5db6caca993f11330"
+      },
+      "mavlab_safety.xml": {
+        "bytes": 399,
+        "sha256": "a16bc64b5f1441a854fde5015c7244f2961f396c27bbada43bd55b49c3691cd9"
+      }
+    },
+    "onboarding": {
+      "onboarding_complete": "true"
+    }
+  },
+  "after": {
+    "uid": "10209",
+    "preferences": {
+      "mavlab_app.xml": {
+        "bytes": 126,
+        "sha256": "e1d79b6fddd51733942863f8cc057e651803ebeb6b2682e5db6caca993f11330"
+      },
+      "mavlab_safety.xml": {
+        "bytes": 399,
+        "sha256": "a16bc64b5f1441a854fde5015c7244f2961f396c27bbada43bd55b49c3691cd9"
+      }
+    },
+    "onboarding": {
+      "onboarding_complete": "true"
+    }
+  },
+  "uidAndPreferenceBytesRetained": true,
+  "android": "google/sdk_gphone64_x86_64/emu64xa:15/AE3A.240806.043/12960925:userdebug/dev-keys",
+  "inspection": "Root-capable dedicated Android emulator; no physical phone access",
+  "installedApkSha256": "ab8c162832d904aa9a516f96efe22022f1ce871f7037743e62f3395c20e9c17e",
+  "installedApkMatchesPublishedDownload": true
+}

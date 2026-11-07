@@ -4,6 +4,8 @@ Store immutable, build-specific MAVLab validation records here. Do not overwrite
 
 ## Results
 
+- [v1.6.1 publication, downloaded signatures and signed-update data checks — 2026-11-07](v1.6.1-2026-11-07-publication/README.md)
+
 - [v1.6.1 prepublication build and signing checks — 2026-11-07](v1.6.1-2026-11-07-prepublication/README.md)
 
 - [Build-only release asset cleanup and contributor-sidebar follow-up — 2026-10-12](2026-10-12-release-asset-cleanup.md)
