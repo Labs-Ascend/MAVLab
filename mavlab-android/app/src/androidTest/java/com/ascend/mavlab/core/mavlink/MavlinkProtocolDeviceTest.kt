@@ -1,5 +1,7 @@
 package com.ascend.mavlab.core.mavlink
 
+import com.ascend.mavlab.simulation.engine.ControlAuthority
+import com.ascend.mavlab.simulation.engine.FlightMode
 import com.ascend.mavlab.simulation.engine.PhysicsSimulationEngine
 import com.ascend.mavlab.simulation.mission.MissionCommand
 import com.ascend.mavlab.simulation.mission.MissionItem
@@ -70,6 +72,95 @@ class MavlinkProtocolDeviceTest {
         assertEquals(255, ack.payload[8].toInt() and 0xff)
         assertEquals(190, ack.payload[9].toInt() and 0xff)
     }
+
+    @Test
+    fun setModeRejectsUnknownCustomModeWithoutEngineChange() = withServer { server, engine, peer ->
+        val before = engine.state.value
+        inject(server, MavlinkWire.frame(11, setModePayload(17u), 0, 255, 190), peer)
+        val ack = receive(peer, 77)
+        assertEquals(0, ackCommand(ack))
+        assertEquals(3, ack.payload[2].toInt()) // MAV_RESULT_UNSUPPORTED
+        assertEquals(before.mode, engine.state.value.mode)
+        assertEquals(before.controlAuthority, engine.state.value.controlAuthority)
+    }
+
+    @Test
+    fun setModeStillAcceptsImplementedCustomMode() = withServer { server, engine, peer ->
+        inject(server, MavlinkWire.frame(11, setModePayload(5u), 0, 255, 190), peer)
+        val ack = receiveType(peer, 77)
+        assertEquals(0, ackCommand(ack))
+        assertEquals(0, ack.payload[2].toInt()) // MAV_RESULT_ACCEPTED
+        assertEquals(FlightMode.LOITER, engine.state.value.mode)
+        assertEquals(ControlAuthority.GCS_DIRECT, engine.state.value.controlAuthority)
+    }
+
+    @Test
+    fun doSetModeRejectsUnknownCustomModeWithoutEngineChange() = withServer { server, engine, peer ->
+        val before = engine.state.value
+        inject(server, MavlinkWire.frame(76, doSetModeCommand(17f), 0, 255, 190), peer)
+        val ack = receive(peer, 77)
+        assertEquals(176, ackCommand(ack))
+        assertEquals(3, ack.payload[2].toInt()) // MAV_RESULT_UNSUPPORTED
+        assertEquals(before.mode, engine.state.value.mode)
+        assertEquals(before.controlAuthority, engine.state.value.controlAuthority)
+    }
+
+    @Test
+    fun doSetModeRejectsInvalidCustomModeValuesWithoutCoercion() = withServer { server, engine, peer ->
+        val before = engine.state.value
+        for (value in listOf(4.9f, Float.NaN, Float.POSITIVE_INFINITY, -4f, 4_294_967_296f)) {
+            inject(server, MavlinkWire.frame(76, doSetModeCommand(value), 0, 255, 190), peer)
+            val ack = receive(peer, 77)
+            assertEquals(176, ackCommand(ack))
+            assertEquals("value=$value", 2, ack.payload[2].toInt()) // MAV_RESULT_DENIED
+            assertEquals("value=$value", before.mode, engine.state.value.mode)
+            assertEquals("value=$value", before.controlAuthority, engine.state.value.controlAuthority)
+        }
+    }
+
+    @Test
+    fun doSetModeStillAcceptsImplementedCustomMode() = withServer { server, engine, peer ->
+        inject(server, MavlinkWire.frame(76, doSetModeCommand(4f), 0, 255, 190), peer)
+        val ack = receiveType(peer, 77)
+        assertEquals(176, ackCommand(ack))
+        assertEquals(0, ack.payload[2].toInt()) // MAV_RESULT_ACCEPTED
+        assertEquals(FlightMode.GUIDED, engine.state.value.mode)
+        assertEquals(ControlAuthority.GCS_DIRECT, engine.state.value.controlAuthority)
+    }
+
+    private fun ackCommand(ack: MavlinkPacket): Int {
+        val low = ack.payload[0].toInt() and 0xff
+        val high = (ack.payload[1].toInt() and 0xff) shl 8
+        return low or high
+    }
+
+    private fun receiveType(peer: DatagramSocket, id: Int): MavlinkPacket {
+        repeat(64) {
+            val packet = DatagramPacket(ByteArray(2048), 2048)
+            peer.receive(packet)
+            val parsed = requireNotNull(MavlinkParser.parse(packet.data, packet.length))
+            if (parsed.messageId == id) return parsed
+        }
+        throw AssertionError("no message id=$id")
+    }
+
+    private fun setModePayload(customMode: UInt): ByteArray =
+        ByteBuffer.allocate(6).order(ByteOrder.LITTLE_ENDIAN)
+            .putInt(customMode.toInt())
+            .put(1) // target_system
+            .put(0) // base_mode
+            .array()
+
+    private fun doSetModeCommand(customMode: Float): ByteArray =
+        ByteBuffer.allocate(33).order(ByteOrder.LITTLE_ENDIAN)
+            .putFloat(0f) // param1 base_mode
+            .putFloat(customMode) // param2 custom mode
+            .put(ByteArray(20)) // param3..param7
+            .putShort(176) // MAV_CMD_DO_SET_MODE
+            .put(1) // target_system
+            .put(1) // target_component
+            .put(0) // confirmation
+            .array()
 
     private fun withServer(block: (MavlinkUdpServer, PhysicsSimulationEngine, DatagramSocket) -> Unit) {
         val loopback = InetAddress.getByName("127.0.0.1")

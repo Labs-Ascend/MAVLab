@@ -61,6 +61,10 @@ Code includes mode changes, `COMMAND_LONG`, `COMMAND_INT`, parameters, mission u
 
 The canonical phone-sensor correction changes local takeoff to ALT_HOLD so local attitude steering remains effective. MAVLink takeoff still passes GCS_DIRECT authority to the engine and retains GUIDED position control; command ACKs and capability declarations are unchanged. Focused engine tests cover this separation.
 
+### Mode admission (working tree)
+
+`SET_MODE` (11) and `MAV_CMD_DO_SET_MODE` (176, via `COMMAND_LONG` or `COMMAND_INT`) admit only the implemented custom-mode ids 0 (STABILIZE), 2 (ALT_HOLD), 3 (AUTO), 4 (GUIDED), 5 (LOITER), 6 (RTL) and 9 (LAND). Unknown ids are rejected with `MAV_RESULT_UNSUPPORTED` and leave engine mode and control authority unchanged. In particular, 17 (BRAKE) is not implemented and is never aliased to LOITER or STABILIZE. `DO_SET_MODE` param2 values that cannot be an exact uint32 id (nonfinite, negative, fractional or out of range) are rejected with `MAV_RESULT_DENIED`, so e.g. `4.9` or `NaN` is not silently coerced into GUIDED or STABILIZE. Rejections keep the requesting endpoint as the ACK destination. Device-boundary coverage lives in `MavlinkProtocolDeviceTest`; the lookup unit test alone is not evidence of UDP behavior.
+
 ## Mission evidence
 
 Validate upload count/sequence, item decoding, ACK behavior, engine loading, mission start/progress, clear/set-current, reconnect/re-upload, and malformed/unsupported items.

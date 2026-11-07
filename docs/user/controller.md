@@ -42,3 +42,5 @@ A collapsed mission row appears only while receiving, loaded, active, completed 
 During GCS Mission control, the local input area is replaced by a visible paused state. **Take control & land** remains the supported way to leave autonomous flight. This is a landing takeover, not an implemented mission pause/resume operation. See [Mission operation](mission.md).
 
 While disarmed under GCS Mission authority, **Take local control** is a confirmed return to manual STABILIZE through the existing engine mode command. Clearing route data does not silently change control authority; the action remains available even after the mission row disappears.
+
+Unsupported custom flight-mode requests from a GCS are rejected with the current mode and authority retained. They do not silently switch the simulated vehicle to Stabilize.

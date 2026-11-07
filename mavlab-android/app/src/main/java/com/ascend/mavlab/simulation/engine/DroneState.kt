@@ -48,8 +48,13 @@ enum class FlightMode(val customMode: UInt, val displayName: String) {
     LAND(9u, "Land");
 
     companion object {
-        fun fromCustomMode(customMode: UInt): FlightMode {
-            return entries.firstOrNull { it.customMode == customMode } ?: STABILIZE
+        /**
+         * Maps an externally supplied Copter custom-mode id to an implemented [FlightMode].
+         * Returns null for ids MAVLab does not implement (for example BRAKE) instead of
+         * silently falling back to a different mode.
+         */
+        fun fromCustomModeOrNull(customMode: UInt): FlightMode? {
+            return entries.firstOrNull { it.customMode == customMode }
         }
     }
 }

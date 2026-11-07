@@ -329,7 +329,12 @@ class MavlinkUdpServer(
         if (packet.payload.size < 6) return
         if (!isTargetedToVehicle(packet, targetSystemOffset = 4, label = "SET_MODE")) return
         val customMode = packet.payload.leUInt32(0)
-        val mode = FlightMode.fromCustomMode(customMode)
+        val mode = FlightMode.fromCustomModeOrNull(customMode)
+        if (mode == null) {
+            simLoop.noteInbound("SET_MODE unsupported custom mode $customMode")
+            ack(0, MAV_RESULT_UNSUPPORTED, peer, "SET_MODE unsupported $customMode", packet)
+            return
+        }
         simLoop.setMode(mode, ControlAuthority.GCS_DIRECT)
         simLoop.noteInbound("SET_MODE ${mode.displayName}")
         sendImmediateTelemetry()
@@ -450,11 +455,17 @@ class MavlinkUdpServer(
                 )
             }
             MAV_CMD_DO_SET_MODE -> {
-                val customMode = invocation.param2.toLong().toUInt()
-                val mode = FlightMode.fromCustomMode(customMode)
-                simLoop.setMode(mode, ControlAuthority.GCS_DIRECT)
-                sendImmediateTelemetry()
-                ack(command, if (simLoop.state.value.mode == mode) MAV_RESULT_ACCEPTED else MAV_RESULT_DENIED, peer, "DO_SET_MODE ${mode.displayName}")
+                val customMode = invocation.param2.toCustomModeIdOrNull()
+                val mode = customMode?.let { FlightMode.fromCustomModeOrNull(it) }
+                if (customMode == null) {
+                    ack(command, MAV_RESULT_DENIED, peer, "DO_SET_MODE invalid custom mode ${invocation.param2}")
+                } else if (mode == null) {
+                    ack(command, MAV_RESULT_UNSUPPORTED, peer, "DO_SET_MODE unsupported custom mode $customMode")
+                } else {
+                    simLoop.setMode(mode, ControlAuthority.GCS_DIRECT)
+                    sendImmediateTelemetry()
+                    ack(command, if (simLoop.state.value.mode == mode) MAV_RESULT_ACCEPTED else MAV_RESULT_DENIED, peer, "DO_SET_MODE ${mode.displayName}")
+                }
             }
             207 -> {
                 // Selective type/floor control is not silently treated as enabling all boundaries.
@@ -1076,6 +1087,19 @@ class MavlinkUdpServer(
         return ByteBuffer.wrap(this, offset, 4)
             .order(ByteOrder.LITTLE_ENDIAN)
             .float
+    }
+
+    /**
+     * Converts a COMMAND_LONG/COMMAND_INT param float into the exact uint32 custom-mode id it
+     * represents, or null when it cannot be a valid id (nonfinite, negative, fractional or
+     * outside the uint32 range). Rejecting here prevents silent coercion of values such as
+     * 4.9 or NaN into an implemented mode.
+     */
+    private fun Float.toCustomModeIdOrNull(): UInt? {
+        if (!isFinite() || this < 0f) return null
+        val asLong = toLong()
+        if (asLong > UInt.MAX_VALUE.toLong() || asLong.toFloat() != this) return null
+        return asLong.toUInt()
     }
 
     private companion object {
