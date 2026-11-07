@@ -1,5 +1,6 @@
 package com.ascend.mavlab.simulation.engine
 
+import com.ascend.mavlab.simulation.coordinates.SimulationCoordinateFrame
 import com.ascend.mavlab.simulation.mission.MissionOrigin
 import com.ascend.mavlab.simulation.autopilot.Autopilot
 import com.ascend.mavlab.simulation.autopilot.MissionEngine
@@ -18,7 +19,6 @@ import com.ascend.mavlab.simulation.mission.MissionUploadStatus
 import com.ascend.mavlab.simulation.physics.Vector3
 import com.ascend.mavlab.simulation.safety.*
 import kotlin.math.PI
-import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sqrt
 import kotlinx.coroutines.CoroutineScope
@@ -50,6 +50,7 @@ class PhysicsSimulationEngine(
     val safetyPlans: StateFlow<SafetyPlans> = mutableSafetyPlans.asStateFlow()
     private var fenceGeometry = FenceGeometry.compile(emptyList())
     private var geographicOrigin = SimLocation.Nairobi
+    private var coordinateFrame = SimulationCoordinateFrame(geographicOrigin.latitudeDeg, geographicOrigin.longitudeDeg)
     private data class ReturnTarget(val north: Float, val east: Float, val altitude: Float, val label: String)
     private var returnTarget: ReturnTarget? = null
     private var returnLabel = "None"
@@ -120,9 +121,18 @@ class PhysicsSimulationEngine(
         mutableSafetyPlans.value = mutableSafetyPlans.value.copy(lastTransfer = message)
     }
 
+    @Synchronized
+    fun physicalPoseSnapshot(): com.ascend.mavlab.simulation.coordinates.PhysicalPoseSnapshot {
+        val current = mutableState.value
+        return com.ascend.mavlab.simulation.coordinates.PhysicalPoseSnapshot(
+            coordinateFrame, current.northMeters.toDouble(), current.eastMeters.toDouble(),
+            current.altitudeAglMeters.toDouble(), current.yawRadians.toDouble(), System.nanoTime(), geographicOrigin.altitudeMslMeters.toDouble(),
+        )
+    }
+
     private fun physicalPoint(state: DroneState, north: Float = state.northMeters, east: Float = state.eastMeters) = GeoPoint(
-        geographicOrigin.latitudeDeg + north / METERS_PER_LAT_DEG,
-        geographicOrigin.longitudeDeg + east / (METERS_PER_LAT_DEG * cos(Math.toRadians(geographicOrigin.latitudeDeg)).coerceAtLeast(0.2)),
+        coordinateFrame.latitude(north.toDouble()),
+        coordinateFrame.longitude(east.toDouble()),
     )
 
     private fun fenceBreach(state: DroneState, north: Float = state.northMeters, east: Float = state.eastMeters,
@@ -140,8 +150,8 @@ class PhysicsSimulationEngine(
         val plans = mutableSafetyPlans.value
         val c = plans.config
         fun target(item: SafetyItem, label: String): ReturnTarget? {
-            val north = ((item.latitude - geographicOrigin.latitudeDeg) * METERS_PER_LAT_DEG).toFloat()
-            val east = ((item.longitude - geographicOrigin.longitudeDeg) * METERS_PER_LAT_DEG * cos(Math.toRadians(geographicOrigin.latitudeDeg)).coerceAtLeast(0.2)).toFloat()
+            val north = coordinateFrame.north(item.latitude).toFloat()
+            val east = coordinateFrame.east(item.longitude).toFloat()
             val altitude = if (item.frame in listOf(0, 5)) item.altitude - geographicOrigin.altitudeMslMeters else homeAltitudeMeters + item.altitude
             if (altitude <= 0.25f || !altitude.isFinite() || kotlin.math.hypot(north, east) > 50_000f) return null
             return ReturnTarget(north, east, altitude, label)
@@ -281,12 +291,14 @@ class PhysicsSimulationEngine(
     @Synchronized
     fun setHomeLocation(location: SimLocation): Boolean {
         val safeLocation = location.sanitized()
+        if (!safeLocation.latitudeDeg.isFinite() || !safeLocation.longitudeDeg.isFinite() || !safeLocation.altitudeMslMeters.isFinite()) return false
         val current = mutableState.value
         if (current.armed) return false
         clearSafetyPlans(clearNavigation = true, disableFence = true)
         returnLabel = "None"
         returnTarget = null
         geographicOrigin = safeLocation
+        coordinateFrame = SimulationCoordinateFrame(safeLocation.latitudeDeg, safeLocation.longitudeDeg)
         homeNorthMeters = 0f
         homeEastMeters = 0f
         homeAltitudeMeters = 0f
@@ -330,9 +342,8 @@ class PhysicsSimulationEngine(
     @Synchronized fun setHomeToCoordinates(latitudeDeg: Double, longitudeDeg: Double): Boolean {
         if (!latitudeDeg.isFinite() || !longitudeDeg.isFinite()) return false
         if (latitudeDeg !in -90.0..90.0 || longitudeDeg !in -180.0..180.0) return false
-        homeNorthMeters = ((latitudeDeg - geographicOrigin.latitudeDeg) * METERS_PER_LAT_DEG).toFloat()
-        homeEastMeters = ((longitudeDeg - geographicOrigin.longitudeDeg) * METERS_PER_LAT_DEG *
-            cos(Math.toRadians(geographicOrigin.latitudeDeg)).coerceAtLeast(0.2)).toFloat()
+        homeNorthMeters = coordinateFrame.north(latitudeDeg).toFloat()
+        homeEastMeters = coordinateFrame.east(longitudeDeg).toFloat()
         homeAltitudeMeters = 0f
         return true
     }
@@ -492,10 +503,10 @@ class PhysicsSimulationEngine(
     ) {
         val current = mutableState.value
         if (fenceRecovering) return
-        val lat = if (latitudeDeg == 0.0 && longitudeDeg == 0.0) current.latitudeDeg else latitudeDeg
-        val lon = if (latitudeDeg == 0.0 && longitudeDeg == 0.0) current.longitudeDeg else longitudeDeg
-        guidedNorthMeters = current.northMeters + ((lat - current.latitudeDeg) * METERS_PER_LAT_DEG).toFloat()
-        guidedEastMeters = current.eastMeters + ((lon - current.longitudeDeg) * lonMetersPerDeg(current)).toFloat()
+        val lat = if (latitudeDeg == 0.0 && longitudeDeg == 0.0) coordinateFrame.latitude(current.northMeters.toDouble()) else latitudeDeg
+        val lon = if (latitudeDeg == 0.0 && longitudeDeg == 0.0) coordinateFrame.longitude(current.eastMeters.toDouble()) else longitudeDeg
+        guidedNorthMeters = coordinateFrame.north(lat).toFloat()
+        guidedEastMeters = coordinateFrame.east(lon).toFloat()
         guidedAltitudeMeters = altitudeAglMeters.coerceAtLeast(0f)
         autopilot.setTargetAltitude(guidedAltitudeMeters)
         autopilot.setMode(FlightMode.GUIDED, current)
@@ -544,12 +555,12 @@ class PhysicsSimulationEngine(
             val useHomeMarker = placeholderPosition && homeMarker != null && (rtlHome || takeoffHome)
             val lat = when {
                 useHomeMarker -> homeMarker.latitudeDeg
-                placeholderPosition -> current.latitudeDeg
+                placeholderPosition -> coordinateFrame.latitude(current.northMeters.toDouble())
                 else -> item.latitudeDeg
             }
             val lon = when {
                 useHomeMarker -> homeMarker.longitudeDeg
-                placeholderPosition -> current.longitudeDeg
+                placeholderPosition -> coordinateFrame.longitude(current.eastMeters.toDouble())
                 else -> item.longitudeDeg
             }
             val altitude = if (rtlHome && item.altitudeAglMeters <= 0f) {
@@ -562,8 +573,8 @@ class PhysicsSimulationEngine(
                 longitudeDeg = lon,
                 altitudeAglMeters = altitude,
                 altitudeIsMsl = false,
-                localNorthMeters = current.northMeters + ((lat - current.latitudeDeg) * METERS_PER_LAT_DEG).toFloat(),
-                localEastMeters = current.eastMeters + ((lon - current.longitudeDeg) * lonMetersPerDeg(current)).toFloat(),
+                localNorthMeters = coordinateFrame.north(lat).toFloat(),
+                localEastMeters = coordinateFrame.east(lon).toFloat(),
             )
         }
         missionEngine.load(sanitized, origin)
@@ -683,7 +694,12 @@ class PhysicsSimulationEngine(
         val dt = fixedDtSeconds ?: ((nowNs - lastTickNs) / 1_000_000_000f).coerceIn(0.001f, 0.05f)
         lastTickNs = nowNs
 
-        val current = enforceFence(applyFailsafes(mutableState.value))
+        val published = mutableState.value
+        val physical = published.copy(
+            latitudeDeg = coordinateFrame.latitude(published.northMeters.toDouble()),
+            longitudeDeg = coordinateFrame.longitude(published.eastMeters.toDouble()),
+        )
+        val current = enforceFence(applyFailsafes(physical))
         if (current.batteryRemainingPercent.toInt() <= 0 && autopilot.armed) {
             autopilot.setArmed(false, current)
         }
@@ -704,7 +720,7 @@ class PhysicsSimulationEngine(
             failures = failures,
         )
         val environment = EnvironmentModel(windNedMS = failureInjector.windVectorNed())
-        val physicsState = physics.step(current, failedMotorSpeeds, dt, environment)
+        val physicsState = physics.step(current, failedMotorSpeeds, dt, environment, coordinateFrame)
         val effectiveThrottle = if (overrideRpm != null) {
             val radS = overrideRpm * (2f * PI.toFloat()) / 60f
             (radS / params.motorMaxSpeedRadS).coerceIn(0f, 1f)
@@ -885,7 +901,7 @@ class PhysicsSimulationEngine(
         val headingOffset = if (failures.compassEnabled) failures.compassOffsetDeg else 0f
         return state.copy(
             latitudeDeg = if (failures.gpsEnabled) state.latitudeDeg + northNoise / METERS_PER_LAT_DEG else state.latitudeDeg,
-            longitudeDeg = if (failures.gpsEnabled) state.longitudeDeg + eastNoise / lonMetersPerDeg(state) else state.longitudeDeg,
+            longitudeDeg = if (failures.gpsEnabled) state.longitudeDeg + eastNoise / coordinateFrame.longitudeMetersPerDegree else state.longitudeDeg,
             gpsFixType = if (failures.gpsEnabled) 3u else 0u,
             gpsSatellites = if (failures.gpsEnabled) 12u else 0u,
             headingDegrees = (((state.headingDegrees + headingOffset).toInt() % 360 + 360) % 360).toShort(),
@@ -966,12 +982,12 @@ class PhysicsSimulationEngine(
 
     private fun localTargetFor(state: DroneState, item: MissionItem): Vector3 {
         val north = item.localNorthMeters ?: run {
-            val lat = if (item.latitudeDeg == 0.0 && item.longitudeDeg == 0.0) state.latitudeDeg else item.latitudeDeg
-            state.northMeters + ((lat - state.latitudeDeg) * METERS_PER_LAT_DEG).toFloat()
+            val lat = if (item.latitudeDeg == 0.0 && item.longitudeDeg == 0.0) coordinateFrame.latitude(state.northMeters.toDouble()) else item.latitudeDeg
+            coordinateFrame.north(lat).toFloat()
         }
         val east = item.localEastMeters ?: run {
-            val lon = if (item.latitudeDeg == 0.0 && item.longitudeDeg == 0.0) state.longitudeDeg else item.longitudeDeg
-            state.eastMeters + ((lon - state.longitudeDeg) * lonMetersPerDeg(state)).toFloat()
+            val lon = if (item.latitudeDeg == 0.0 && item.longitudeDeg == 0.0) coordinateFrame.longitude(state.eastMeters.toDouble()) else item.longitudeDeg
+            coordinateFrame.east(lon).toFloat()
         }
         return Vector3(x = north, y = east, z = item.altitudeAglMeters)
     }
@@ -1157,14 +1173,10 @@ class PhysicsSimulationEngine(
         return MissionItem(
             sequence = sequence,
             command = com.ascend.mavlab.simulation.mission.MissionCommand.WAYPOINT,
-            latitudeDeg = state.latitudeDeg + north / METERS_PER_LAT_DEG,
-            longitudeDeg = state.longitudeDeg + east / lonMetersPerDeg(state),
+            latitudeDeg = coordinateFrame.latitude((state.northMeters + north).toDouble()),
+            longitudeDeg = coordinateFrame.longitude((state.eastMeters + east).toDouble()),
             altitudeAglMeters = altitude,
         )
-    }
-
-    private fun lonMetersPerDeg(state: DroneState): Double {
-        return METERS_PER_LAT_DEG * max(0.2, cos(Math.toRadians(state.latitudeDeg)))
     }
 
     private fun randomSigned(scale: Float): Float {

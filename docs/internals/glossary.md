@@ -73,3 +73,5 @@ Last verified: 2026-08-31
 **Received mission** — non-empty mission items explicitly loaded from a successful GCS upload, with provenance retained by the engine and persistence. A received ACK does not establish execution.
 
 **Unverified saved mission** — retained legacy items with no source metadata; local AUTO start and spatial route display require a new GCS upload.
+
+**Simulation local grid** — `mavlab-local-grid-v1`, the fixed-origin flat north/east metre convention shared by physical/geographic conversion and virtual map packs. Moving return-home does not move this origin; GPS noise is reported separately.

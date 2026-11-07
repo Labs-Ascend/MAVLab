@@ -54,6 +54,22 @@ Every boundary states its frame and unit explicitly:
 
 Convert once near the boundary and test the conversion.
 
+Working-tree `mavlab-local-grid-v1` is the existing flat north/east metre convention:
+latitude = origin latitude + north / 111320; longitude = origin longitude + east /
+(111320 × max(0.2, cos(origin latitude))). The origin stays fixed until a disarmed
+simulation-location reset. Moving return-home does not move this grid. This is an
+approximation, not UTM or a true ECEF/ENU projection. Map packs use this exact grid,
+with a maximum 50 km extent and nonpolar origins; small training areas are preferred.
+Fence shapes retain their own geographic local-distance approximation.
+
+Physics integration, guided geographic targets, received mission targets and
+home/rally conversion now share the fixed grid. GPS failure noise applies only to
+reported latitude/longitude; it cannot accumulate into physical position or offset
+an uploaded geographic target. Physical north/east, altitude and yaw remain the
+capture truth. The camera must never derive pose from compass-offset heading or
+noisy GPS. `PhysicsModel.step` can also be used standalone without an engine frame;
+that test-oriented path retains its incremental geographic conversion.
+
 ## Fidelity language
 
 Documentation classifies behavior as:

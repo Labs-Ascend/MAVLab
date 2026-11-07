@@ -1,6 +1,7 @@
 package com.ascend.mavlab.simulation.physics
 
 import com.ascend.mavlab.simulation.engine.DroneState
+import com.ascend.mavlab.simulation.coordinates.SimulationCoordinateFrame
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.roundToInt
@@ -16,6 +17,7 @@ class PhysicsModel(
         motorSpeeds: FloatArray,
         dt: Float,
         environment: EnvironmentModel = EnvironmentModel(),
+        coordinateFrame: SimulationCoordinateFrame? = null,
     ): DroneState {
         if (dt <= 0f) return state
         require(motorSpeeds.size == 4) { "Quadcopter physics requires exactly 4 motor speeds." }
@@ -111,8 +113,8 @@ class PhysicsModel(
         val terrainMslMeters = state.altitudeMslMeters - state.altitudeAglMeters
 
         return state.copy(
-            latitudeDeg = state.latitudeDeg + latChange,
-            longitudeDeg = state.longitudeDeg + lonChange,
+            latitudeDeg = coordinateFrame?.latitude(newNorth.toDouble()) ?: (state.latitudeDeg + latChange),
+            longitudeDeg = coordinateFrame?.longitude(newEast.toDouble()) ?: (state.longitudeDeg + lonChange),
             northMeters = newNorth,
             eastMeters = newEast,
             northVelocityMS = if (onGround) 0f else newNorthVelocity,
