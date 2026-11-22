@@ -20,8 +20,10 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: "17"
+          java-version: "21"
           cache: gradle
+      - name: Install Android SDK packages
+        run: sdkmanager "platforms;android-37.0" "build-tools;36.0.0"
       - name: Verify release tag
         run: |
           python3 ../scripts/check-release-docs.py --publish --tag "${GITHUB_REF_NAME}"
@@ -35,18 +37,18 @@ jobs:
         run: ./gradlew lintDebug testDebugUnitTest assembleDebug assembleRelease bundleRelease
       - name: Verify release variant and signing guards
         run: |
-          "${ANDROID_HOME}/build-tools/35.0.0/aapt" dump badging app/build/outputs/apk/release/MAVlab.apk > "${RUNNER_TEMP}/mavlab-release-badging.txt"
+          "${ANDROID_HOME}/build-tools/36.0.0/aapt" dump badging app/build/outputs/apk/release/app-release-unsigned.apk > "${RUNNER_TEMP}/mavlab-release-badging.txt"
           if grep -q '^application-debuggable' "${RUNNER_TEMP}/mavlab-release-badging.txt"; then
             echo 'Refusing to publish a debuggable release APK' >&2
             exit 1
           fi
           python3 ../scripts/test_release_signing.py \
-            --apk app/build/outputs/apk/release/MAVlab.apk \
+            --apk app/build/outputs/apk/release/app-release-unsigned.apk \
             --aab app/build/outputs/bundle/release/app-release.aab
       - name: Prepare release assets
         run: |
           mkdir -p "${GITHUB_WORKSPACE}/release-artifacts"
-          cp app/build/outputs/apk/release/MAVlab.apk \
+          cp app/build/outputs/apk/release/app-release-unsigned.apk \
             "${GITHUB_WORKSPACE}/release-artifacts/MAVLab-${GITHUB_REF_NAME}.apk"
           cp app/build/outputs/bundle/release/app-release.aab \
             "${GITHUB_WORKSPACE}/release-artifacts/MAVLab-${GITHUB_REF_NAME}.aab"
@@ -61,9 +63,9 @@ jobs:
           MAVLAB_APK_KEY_PASSWORD: ${{ secrets.MAVLAB_APK_KEY_PASSWORD }}
           MAVLAB_APK_CERT_SHA256: ${{ vars.MAVLAB_APK_CERT_SHA256 }}
         run: |
-          export MAVLAB_APKSIGNER="${ANDROID_HOME}/build-tools/35.0.0/apksigner"
+          export MAVLAB_APKSIGNER="${ANDROID_HOME}/build-tools/36.0.0/apksigner"
           signing_stage=$(mktemp -d "${RUNNER_TEMP}/mavlab-apk-signed-XXXXXX")
-          bash ../scripts/sign-release-build.sh app/build/outputs/apk/release/MAVlab.apk \
+          bash ../scripts/sign-release-build.sh app/build/outputs/apk/release/app-release-unsigned.apk \
             "${signing_stage}/MAVLab-${GITHUB_REF_NAME}.apk"
           bash ../scripts/sign-release-build.sh app/build/outputs/bundle/release/app-release.aab \
             "${signing_stage}/MAVLab-${GITHUB_REF_NAME}.aab"

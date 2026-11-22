@@ -29,7 +29,7 @@ GRADLE_USER_HOME="$PWD/.gradle" ./gradlew lintDebug testDebugUnitTest assembleDe
 Install the debug APK:
 
 ```bash
-adb install -r app/build/outputs/apk/debug/MAVlab.apk
+adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
 
 ## Troubleshooting

@@ -21,7 +21,7 @@ stage=$(mktemp -d "${RUNNER_TEMP:-${TMPDIR:-/tmp}}/mavlab-release-signing-XXXXXX
 trap 'rm -rf "$stage"' EXIT
 printf '%s' "$MAVLAB_APK_KEYSTORE_B64" | base64 --decode > "$stage/key.p12"
 if [[ $kind == apk ]]; then
-  signer=${MAVLAB_APKSIGNER:-${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}/build-tools/35.0.0/apksigner}
+  signer=${MAVLAB_APKSIGNER:-${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}/build-tools/36.0.0/apksigner}
   [[ -x $signer ]] || { echo 'apksigner unavailable' >&2; exit 2; }
   "$signer" sign --ks "$stage/key.p12" --ks-pass env:MAVLAB_APK_STORE_PASSWORD \
     --ks-key-alias "$MAVLAB_APK_KEY_ALIAS" --key-pass env:MAVLAB_APK_KEY_PASSWORD \

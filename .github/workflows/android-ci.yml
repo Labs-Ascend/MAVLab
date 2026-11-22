@@ -21,8 +21,10 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: "17"
+          java-version: "21"
           cache: gradle
+      - name: Install Android SDK packages
+        run: sdkmanager "platforms;android-37.0" "build-tools;36.0.0"
       - name: Documentation and release metadata
         # Candidate notes are allowed in CI; publishing uses the stricter gate.
         run: python3 ../scripts/check-release-docs.py
@@ -40,4 +42,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: mavlab-debug-apk
-          path: mavlab-android/app/build/outputs/apk/debug/MAVlab.apk
+          path: mavlab-android/app/build/outputs/apk/debug/app-debug.apk

@@ -29,7 +29,7 @@ Current implementation includes:
 
 ## Build
 
-The project expects Android SDK 35 and Java 17.
+The project expects Android SDK 37 and Java 21.
 
 ```bash
 GRADLE_USER_HOME="$PWD/.gradle" ./gradlew lintDebug testDebugUnitTest assembleDebug
@@ -38,7 +38,7 @@ GRADLE_USER_HOME="$PWD/.gradle" ./gradlew lintDebug testDebugUnitTest assembleDe
 Install on a connected phone:
 
 ```bash
-adb install -r app/build/outputs/apk/debug/MAVlab.apk
+adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
 
 ## QGroundControl

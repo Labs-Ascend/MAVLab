@@ -1,12 +1,12 @@
 [versions]
-agp = "8.7.0"
+agp = "9.4.1"
 kotlin = "2.3.21"
 composeBom = "2025.05.00"
 activityCompose = "1.9.0"
 coreKtx = "1.13.1"
 lifecycle = "2.8.0"
 coroutines = "1.9.0"
-sceneview = "4.16.10"
+sceneview = "4.70.0"
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }

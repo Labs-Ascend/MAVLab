@@ -17,12 +17,12 @@ Last reviewed: 2026-11-07
 ```bash
 cd mavlab-android
 GRADLE_USER_HOME="$PWD/.gradle" ./gradlew lintDebug testDebugUnitTest assembleDebug assembleRelease bundleRelease --console=plain
-python3 ../scripts/test_release_signing.py --apk app/build/outputs/apk/release/MAVlab.apk --aab app/build/outputs/bundle/release/app-release.aab
+python3 ../scripts/test_release_signing.py --apk app/build/outputs/apk/release/app-release-unsigned.apk --aab app/build/outputs/bundle/release/app-release.aab
 ```
 
 Expected debug artifact:
 
-`mavlab-android/app/build/outputs/apk/debug/MAVlab.apk`
+`mavlab-android/app/build/outputs/apk/debug/app-debug.apk`
 
 Use repository release/AAB automation and the configured signing environment. Never commit signing secrets.
 

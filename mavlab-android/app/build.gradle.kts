@@ -1,12 +1,11 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
 
 android {
     namespace = "com.ascend.mavlab"
-    compileSdk = 35
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.ascend.mavlab"
@@ -23,22 +22,19 @@ android {
         compose = true
     }
 
-    kotlin {
-        jvmToolchain(17)
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     lint {
         disable += "NullSafeMutableLiveData"
     }
-
-    applicationVariants.all {
-        outputs.all {
-            val output = this as? com.android.build.gradle.api.ApkVariantOutput
-            output?.outputFileName = "MAVlab.apk"
-        }
-    }
 }
 
+kotlin {
+    jvmToolchain(21)
+}
 
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
@@ -54,7 +50,7 @@ dependencies {
     implementation(libs.coroutines.core)
     implementation(libs.sceneview)
 
-    testImplementation(kotlin("test"))
+    testImplementation(kotlin("test-junit", libs.versions.kotlin.get()))
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     androidTestImplementation("androidx.test:runner:1.6.2")

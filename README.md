@@ -70,7 +70,7 @@ Get the versioned APK and AAB from [GitHub Releases](https://github.com/Labs-Asc
 
 ### Build from source
 
-Requires Java 17 and Android SDK 35; minimum Android version is 8.0 (API 26).
+Requires Java 21 and Android SDK 37; minimum Android version is 8.0 (API 26).
 
 ```bash
 cd mavlab-android
