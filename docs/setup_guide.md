@@ -1,39 +1,22 @@
-# MAVLab Setup Guide
+# Install MAVLab
 
-This guide describes v1.6.0. Earlier v1.5.3 installations retain the previous layout; read the upgrade guide before changing installations because signing compatibility is not guaranteed.
+MAVLab v1.6.1 runs its flight simulation, onboard controls, telemetry, and 3D view on Android. Android 8.0 (API 26) is the minimum install version.
 
-MAVLab's core learning loop is designed to run from one Android-first app. You do not need ROS, Gazebo, ArduPilot SITL, PX4 SITL, Docker, Python bridges, cloud servers, or Linux networking knowledge to start learning drone simulation concepts.
+1. Download the versioned **APK** from [MAVLab releases](https://github.com/Labs-Ascend/MAVLab/releases/tag/v1.6.1).
+2. Open the APK on your phone. If Android asks, allow the app that opened the file to install it.
+3. Open MAVLab and complete or skip the introductory tour. Check the installed version under **Ops → About MAVLab**.
+4. Continue with [First flight on Android](user/first-flight.md), [Navigate MAVLab](user/navigation-and-display.md), or [Connect QGroundControl](user/connect-qgroundcontrol.md).
 
-## Install
+MAVLab v1.6.1 uses a permanent release certificate. Before replacing a differently signed install, export anything you need to retain and read the [upgrade guide](user/upgrading.md). Uninstalling erases the app's private data.
 
-1. Install MAVLab on an Android 8.0+ phone.
-2. Install QGroundControl if you want ground-station integration.
-3. Open MAVLab and complete onboarding.
-4. Use the guided surfaces to learn the basics: Cockpit, Control, SIM, and Ops.
+## Build from source
 
-The final **Start flying** button opens Cockpit; it does not arm or begin recording. In Control calibrate, Arm, Takeoff, Land and then Disarm. Recording is off by default; begin explicitly in Ops or opt into recording on arm while disarmed. See [upgrade guidance](user/upgrading.md).
-
-## QGroundControl
-
-For same-device use, open MAVLab and then switch to QGroundControl within one minute. QGC connects over `127.0.0.1:14550`. MAVLab continues telemetry while a validated GCS heartbeat is present or a flight is active. When backgrounded, it suspends phone-sensor input while retaining motor audio for QGC-controlled arming and flight; if it is idle and disconnected after the handoff window, it stops the runtime, audio, and power locks automatically. Split-screen is optional.
-
-For desktop QGC, put the Android phone and desktop on the same Wi-Fi network. MAVLab broadcasts to common LAN destinations and UDP port `14550`.
-
-## Build From Source
+The Android checkout expects Java 17 and Android SDK 35. See the [Android project README](../mavlab-android/README.md) for implementation scope.
 
 ```bash
 cd mavlab-android
 GRADLE_USER_HOME="$PWD/.gradle" ./gradlew lintDebug testDebugUnitTest assembleDebug
-```
-
-Install the debug APK:
-
-```bash
 adb install -r app/build/outputs/apk/debug/MAVlab.apk
 ```
 
-## Troubleshooting
-
-- If QGC does not connect, restart QGC and MAVLab, then confirm both apps are on the same network.
-- If the phone controller is unavailable, use manual fallback sliders in the Control tab.
-- If the 3D view is unavailable, return to Cockpit/Control and inspect Ops. Do not assume a visual failure has stopped the engine; check authority and land/disarm deliberately.
+Use the [release runbook](operations/release.md) to build and sign distribution artifacts. For installation or first-run problems, see [Known first-run issues](known_first_run_issues.md).

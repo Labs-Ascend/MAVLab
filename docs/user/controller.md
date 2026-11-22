@@ -6,7 +6,7 @@ Phone Sensors is the default local input mode. While MAVLab is visible, calibrat
 2. Arm the simulated vehicle. A fresh local sensor flight restores manual control and clears old motor-RPM overrides.
 3. Use Takeoff to climb to the selected height. Local takeoff uses altitude hold, so phone tilt keeps steering roll and pitch and phone rotation keeps commanding yaw.
 4. View SIM to observe the same vehicle attitude, position, and motor state shown in telemetry. Changing surfaces does not interrupt sensor control.
-5. Land to return to the ground, then Disarm to stop the motors.
+5. Use **Land** to return to the ground. Confirm **DISARMED** after touchdown and use **Disarm** if the vehicle is still armed.
 
 Arming and takeoff are separate actions. On the ground, accepted attitude input changes motor commands; physical ground contact constrains vehicle movement. At centered throttle, altitude hold maintains the target height. Raising or lowering throttle adjusts the height target.
 
@@ -18,7 +18,7 @@ The header keeps authority, flight mode, armed state, selected input, battery, G
 
 **Fence recovery** is automatic engine authority, not a GCS takeover. Motor/manual manipulation and mode changes pause while its latch is active; Land and Disarm remain available. Disable the fence in Ops and deliberately choose a manual mode to resume steering. RTL returns to the selected eligible rally/home point, lands and disarms. See [flight boundaries](flight-boundaries.md).
 
-The flight-action dock remains reachable below the controls. It offers Arm while disarmed, Takeoff with the chosen height while armed on the ground, Land during flight, and Disarm after touchdown. Disarm remains reachable during flight but requires confirmation because it immediately cuts motor thrust. Landing and disarming remain separate actions. Landscape places the dock beside the scrolling controls at ordinary text sizes; larger text or short viewports use the bottom action row so neither action is covered by navigation. Status fields wrap as whole items instead of squeezing the vehicle state into a narrow fixed column.
+The flight-action dock remains reachable below the controls. It offers Arm while disarmed, Takeoff with the chosen height while armed on the ground, and Land during flight. Land can auto-disarm on touchdown. Use Disarm if the vehicle is still armed after touchdown. In flight, Disarm requires confirmation because it immediately cuts motor thrust. Landscape places the dock beside the scrolling controls at ordinary text sizes; larger text or short viewports use the bottom action row so neither action is covered by navigation. Status fields wrap as whole items instead of squeezing the vehicle state into a narrow fixed column.
 
 Input-mode selection and neutral calibration are locked while armed. Disarm before changing Phone sensors, Custom input or Direct RPM. The phone display is a calibrated input preview; SIM remains a view of the engine's physical vehicle state. `INPUT ACCEPTED` denotes local manual intent, while `PREVIEW`, `INPUT PAUSED` and `INPUT UNAVAILABLE` explain other states. Stale or unavailable simulation state disables commands and provides Open Ops.
 

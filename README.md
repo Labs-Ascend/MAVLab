@@ -1,12 +1,18 @@
 # MAVLab by Ascend Labs
 
-A phone-first, offline-capable drone simulator and digital twin. Learn attitude, control, telemetry, missions and failure recovery on Android before taking on ROS, Gazebo, ArduPilot/PX4 SITL, Docker or a multi-process simulator stack.
-
-Physics, autopilot, visualization and the MAVLink endpoint run on the phone. QGroundControl is optional for the core learning loop; no aircraft, cloud service or external simulation server is required.
+MAVLab is an on-device quadcopter simulator for Android. Fly with phone tilt or on-screen controls and follow the simulated vehicle through live telemetry and a 3D digital twin. Connect QGroundControl to run supported missions, or fly offline and explore failures, recovery, and recorded flight data.
 
 **MAVLab v1.6.1** · Android 8.0+ · version code **24** · [Downloads](https://github.com/Labs-Ascend/MAVLab/releases) · [Release notes](docs/v1_6_1_release_notes.md).
 
 The release uses a new permanent signing identity. Export important data before migrating from older debug installations; see [upgrade guidance](docs/user/upgrading.md).
+
+## Start here
+
+- [Install MAVLab](docs/setup_guide.md)
+- [First flight on Android](docs/user/first-flight.md)
+- [Navigate MAVLab](docs/user/navigation-and-display.md)
+- [Connect QGroundControl](docs/user/connect-qgroundcontrol.md)
+- [Run a mission](docs/user/mission.md)
 
 ## Four connected views
 
@@ -45,7 +51,7 @@ https://github.com/user-attachments/assets/6ba838d5-6c53-495b-b535-c90d67b0a061
 - **Simpler Ops:** no camera setup card; prior map photos remain exportable under Recordings & review. Flight recording remains opt-in.
 - **Permanent signing:** non-debuggable release APK and signed AAB use the new published certificate. This is a deliberate migration from older debug identities.
 
-## Core learning features
+## Simulation features
 
 - **A focused interface:** Cockpit, Control, SIM and Ops; contextual missions; a nine-page onboarding tour ending with **Start flying**.
 - **Fluid navigation:** continuous guarded horizontal swipes, compact labelled tabs and optional full-screen display. Sliders, route gestures and the 3D camera retain their own input.
@@ -58,48 +64,20 @@ https://github.com/user-attachments/assets/6ba838d5-6c53-495b-b535-c90d67b0a061
 
 The simulator uses flat ground and straight-line return control. It does not implement terrain/obstacle routing, SmartRTL, MAVLink signing, full ArduPilot equivalence or real-aircraft safety qualification. Timed loiter and waypoint pause semantics remain limited. Implemented, partial, no-op and unsupported behavior is documented in the [MAVLink contract](docs/internals/mavlink-contract.md).
 
-## Start learning
+## Build from source
 
-**Migration:** v1.6.1 cannot update earlier debug or differently signed installations in place. Export recordings and earlier map photos, save QGC plans and preserve settings before deciding to migrate. Uninstalling erases private data; do not uninstall merely to bypass a signature error. [Upgrade guidance](docs/user/upgrading.md).
-
-### Signed app builds
-
-Get the versioned APK and AAB from [GitHub Releases](https://github.com/Labs-Ascend/MAVLab/releases). Install the APK directly. The signed AAB is a store-upload artifact, not directly installable or proof of Play approval. Only APK/AAB files are release attachments; videos use the README/gallery.
-
-[Permanent public certificate](docs/operations/mavlab-release-certificate.pem) · SHA-256 `46ff910b66597a7340d7b7737e598619368b8594bcdc2f05a91efb54d811eb70`.
-
-### Build from source
-
-Requires Java 17 and Android SDK 35; minimum Android version is 8.0 (API 26).
+Requires Java 17 and Android SDK 35.
 
 ```bash
 cd mavlab-android
 GRADLE_USER_HOME="$PWD/.gradle" ./gradlew testDebugUnitTest lintDebug assembleDebug assembleRelease bundleRelease --console=plain
 ```
 
-Local debug builds use the local debug certificate. Unsigned release builds are signed by the guarded [release procedure](docs/operations/release.md); never commit private signing material.
-
-### First local flight
-
-1. Complete or skip onboarding; **Start flying** opens Cockpit without arming.
-2. In Control, choose Phone Sensors and calibrate while grounded.
-3. **Arm → Takeoff**; observe the same simulated vehicle in Cockpit and SIM.
-4. **Land → Disarm**. Disarming cuts motor thrust; do not use it as normal airborne landing.
-5. For a saved session, begin recording in Ops before flight. Recording never starts merely because you opened the app or uploaded a mission.
-
-## Connect QGroundControl
-
-- **Same phone:** open MAVLab, then switch to QGC within the one-minute handoff window. Telemetry targets `127.0.0.1:14550`; split-screen is optional.
-- **Desktop over LAN:** use the same trusted Wi-Fi network/subnet. Client isolation and a firewall blocking UDP 14550 can prevent discovery.
-- **Identity:** MAVLab currently uses SYSID 1 / COMPID 1; QGC normally uses SYSID 255. Do not place multiple same-ID simulators or real aircraft on the test network.
-- **Continuity:** a validated GCS heartbeat, armed flight or active mission retains the background runtime. Phone input suspends in the background; motor audio follows retained simulation. Idle/disconnected runtime stops after the handoff policy expires.
-- **Uploads:** keep the simulated vehicle disarmed while diagnosing connection and plan transfers. After upgrading, save your plan and reconnect QGC to refresh capabilities. Upload navigation, fence and rally lists independently; uploading a fence does not enable it.
-
-GCS connection is not control authority or proof of successful command/mission delivery. See [setup](docs/setup_guide.md), [troubleshooting](docs/known_first_run_issues.md) and [mission operation](docs/user/mission.md).
+Use the [release runbook](docs/operations/release.md) for release signing and packaging. Download the signed APK from [GitHub Releases](https://github.com/Labs-Ascend/MAVLab/releases) for direct installation. The AAB is for store upload.
 
 ## Documentation and evidence
 
-- [Documentation home](docs/README.md), [user guides](docs/user/README.md) and [teacher guide](docs/teacher_guide.md).
+- [Documentation home](docs/README.md), [user guides](docs/user/README.md), and [first-run troubleshooting](docs/known_first_run_issues.md).
 - [Architecture](docs/internals/overview.md), [control authority](docs/internals/control-authority.md), [runtime lifecycle](docs/internals/runtime-lifecycle.md) and [MAVLink contract](docs/internals/mavlink-contract.md).
 - [Contributor guide](AGENTS.md), [Android implementation](mavlab-android/README.md), [release runbook](docs/operations/release.md) and [v1.6.0 readiness](docs/operations/v1.6.0-readiness.md).
 - [Validation records](docs/validation/results/README.md). Prior build/device passes are not automatically acceptance of the new versioned artifact.

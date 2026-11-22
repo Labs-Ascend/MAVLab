@@ -1,25 +1,20 @@
 # MAVLab Documentation
 
-MAVLab documentation is organized by reader intent rather than by the order in which features were built.
+Documentation for MAVLab, the on-device quadcopter simulator for Android. The user guides cover the signed v1.6.1 release.
 
-Status: Active index
-Owner: Ascend Labs
-Last reviewed: 2026-11-07 (v1.6.1)
+## Use the simulator
 
-## I want to use MAVLab
-
-User documents describe observable behavior without requiring source-code knowledge. The four-surface guides describe the current layout; v1.6.1 adds automatic simulated captures and removes the Ops camera setup card. Earlier v1.5.3 installations have the previous layout. Signing and qualification limitations remain explicit in versioned release notes.
-
-- [User documentation home](user/README.md)
-- [Setup and first run](setup_guide.md)
-- [Known first-run issues](known_first_run_issues.md)
-- [Installing or upgrading to v1.6.1](user/upgrading.md)
-- [Teacher guide](teacher_guide.md)
-- [v1.6.0 demonstration script](v1_6_demo_script.md)
+- [Install MAVLab](setup_guide.md) and review [upgrade guidance](user/upgrading.md) if you have an older installation.
+- [First flight on Android](user/first-flight.md)
+- [Navigate MAVLab](user/navigation-and-display.md)
+- [Connect QGroundControl](user/connect-qgroundcontrol.md)
+- [Run a mission](user/mission.md)
+- [User guide index](user/README.md) and [first-run troubleshooting](known_first_run_issues.md)
 
 ## I need exact technical behavior
 
 - [Internals home](internals/README.md)
+- [Product purpose](product_purpose.md)
 - [Architecture overview](internals/overview.md)
 - [Runtime lifecycle](internals/runtime-lifecycle.md)
 - [Simulation model](internals/simulation-model.md)
@@ -46,7 +41,7 @@ Existing files such as [architecture.md](architecture.md), [protocol_guardrails.
 - [v1.6.1 release notes](v1_6_1_release_notes.md)
 - [v1.6.0 release notes](v1_6_0_release_notes.md)
 - [v1.6.0 acceptance specification](validation/v1.6.0-acceptance.md)
-- [New media, captions and checksums](../assets/media/2026-10/README.md)
+- [October v1.6.0 demo media, captions and checksums](../assets/media/2026-10/README.md)
 - [Validation and evidence](validation/README.md)
 - [QGC acceptance specification](v1_5_qgc_acceptance.md)
 - [v1.5.3 release notes](v1_5_3_release_notes.md)
@@ -59,6 +54,7 @@ A test specification is not a test result. A result record must identify the com
 - [Technical paper source](paper/paper.md)
 - [Paper build notes](paper/README.md)
 - [Archive policy](archive/README.md)
+- [v1.6.0 demonstration script](v1_6_demo_script.md)
 
 The published paper describes an evaluated release snapshot. Later product changes should use a versioned revision or addendum rather than silently rewriting historical evidence.
 

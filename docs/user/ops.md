@@ -34,7 +34,7 @@ Recording has its own active indicator and elapsed time. Saved sessions offer **
 
 ## Runtime and setup
 
-**Display** contains the remembered **Full screen** preference. It hides Android system bars while retaining MAVLab's compact four-tab navigation. Standard display is the initial default. See [Navigation and display](navigation-and-display.md).
+**Display** contains the remembered **Full screen** preference. It hides Android system bars while retaining MAVLab's compact four-tab navigation. Standard display is the initial default. See [Navigate MAVLab](navigation-and-display.md#full-screen).
 
 **Runtime components** separates engine freshness, phone monitoring, audio and recording. Phone sensors remain globally eligible for foreground local sensor control regardless of selected tab. Mission authority and background sensor suspension remain distinct states.
 
@@ -42,6 +42,6 @@ Confirmed **Stop simulation** stops physics/networking and saves the recording. 
 
 **Advanced configuration** contains QGC setup and the simulated GPS origin. Changing origin requires confirmation and disarmed state, clears stored navigation/fence/rally data and disables fencing. **About MAVLab** contains the Ascend Labs identity, installed version and onboarding replay.
 
-## Virtual map camera (working tree)
+## Simulated survey captures
 
-Ops exposes the offline virtual camera, map-origin setup, a test photo and latest-session ZIP export. See [virtual camera](virtual-camera.md) for the supported local workflow and current integration limits. Camera activation does not enable automatic flight recording.
+MAVLab v1.6.1 generates simulated exposure feedback automatically during supported missions. Mission details report capture events. Previously saved map photos can be exported from **Recordings & review** while disarmed. See [Simulated captures](virtual-camera.md) for trigger behavior and export steps.

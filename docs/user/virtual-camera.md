@@ -1,8 +1,8 @@
 # Simulated captures (v1.6.1)
 
-MAVLab automatically simulates camera exposures for QGC mission training. There
-is no Virtual camera section in Ops and no camera setup step. Runtime Start enables
-simulated captures; they do not load a map, render pixels or create image files.
+MAVLab automatically simulates camera exposures during QGC missions with supported
+photo triggers. Runtime Start enables simulated captures. Each capture records an
+exposure event and sends QGC feedback without generating an image file.
 
 Upload a mission using supported photo-trigger commands and start it normally.
 Each accepted exposure uses the engine's physical position, camera orientation,

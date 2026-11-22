@@ -1,5 +1,7 @@
 # MAVLab Teacher Guide
 
+This archived guide records the earlier classroom framing. For current instructions see [First flight on Android](../user/first-flight.md), [Navigate MAVLab](../user/navigation-and-display.md), and [Connect QGroundControl](../user/connect-qgroundcontrol.md).
+
 MAVLab is designed for classroom drone systems lessons without physical aircraft and without making students begin with the hardest simulation stack. The teaching purpose is to let learners understand drone behaviour first, then later graduate into ROS, Gazebo, ArduPilot/PX4 SITL, Webots, JSBSim, hardware-in-the-loop, and real aircraft.
 
 ## Teaching Philosophy

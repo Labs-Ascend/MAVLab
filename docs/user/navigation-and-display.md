@@ -1,20 +1,38 @@
-# Navigation and display
+# Navigate MAVLab
 
-Applies to v1.6.0. Device/build-specific acceptance and remaining qualification are recorded separately.
+Use the bottom bar to move between **Cockpit**, **Control**, **SIM**, and **Ops** in MAVLab v1.6.1. Each screen shows or controls the same simulated vehicle. The four destinations remain visible in full-screen mode.
 
-MAVLab has four destinations: **Cockpit**, **Control**, **SIM**, and **Ops**. The compact bottom bar keeps all four names visible, including in full-screen mode. Tap a destination to open it. Tapping the selected destination leaves your current view intact.
+## Cockpit
 
-You can also swipe left or right across passive content. Cockpit and Ops accept swipes across informational cards, text and the space around them, including the middle and lower screen. Buttons, mission actions, charts, switches and fields keep their own input. Control accepts swipes on its operational header and phone-tilt preview; SIM accepts them on its top status strip and received-route title. A swipe moves one screen at a time. Cockpit and Ops are the ends of the sequence; navigation does not loop.
+Check who has control, the flight mode, and whether the vehicle is armed in the row at the top. The instruments show attitude, altitude above ground, speed, battery, and GPS. Open **Telemetry & details** for more readings or use **Open Control** to get to local flight actions. See the [Cockpit reference](cockpit.md).
 
-A short horizontal swipe or quick flick is enough; you do not need to drag across most of the display. Small diagonal drift is allowed, and another swipe can begin while the previous screen transition finishes. A very small twitch, slow movement that is too short, or a drag back to its starting point leaves the screen unchanged.
+<img src="images/v1.6.1/cockpit-airborne.webp" alt="Cockpit during a manual flight with the simulated vehicle armed at 10.1 metres" width="340">
 
-The current and next screen slide together with your finger and settle from that same position when you release it. An interrupted or cancelled swipe eases back. Swiping past Cockpit or Ops stops at the end, and a new swipe takes over immediately from a settling animation. Partially visible neighbouring screens are previews, not active controls. SIM's 3D renderer starts after you arrive so it does not cold-start during the swipe.
+## Control
 
-Each page's drawing stays inside its own bounds. SIM's grid and flight trail cannot draw a stray line over Control or Ops while SIM is prepared offscreen.
+Select an input mode while disarmed. With **Phone sensors**, calibrate neutral and check the attitude preview. The flight-action dock at the bottom changes with the vehicle state. Find mission actions here when a received plan is available. See the [Control reference](controller.md) or follow [First flight on Android](first-flight.md).
 
-Controls have priority. Dragging a slider, manipulating the 3D camera, panning a route, interacting with a mission action, or scrolling vertically does not change screens. Use the bottom buttons when a screen is mostly interactive. Screen-swiping is disabled during text entry and TalkBack touch exploration. Android system gestures remain available at the edges.
+<img src="images/v1.6.1/control-calibrated.webp" alt="Control with the selected Phone sensors input, attitude preview and a grounded action dock" width="340">
 
-On Cockpit and Ops, a horizontal drag over a button cancels its tap. Release and tap normally to activate the button.
+## SIM
+
+Check the 3D view and its flight-state readouts while the simulation is running. Drag in the 3D view to orbit and pinch to zoom. When a mission is loaded, tap **View received route** for the plan and the flown trail. See the [SIM reference](sim.md).
+
+<img src="images/v1.6.1/sim-airborne.webp" alt="SIM shows the airborne quadcopter in 3D with altitude, control authority and attitude readouts" width="340">
+
+## Ops
+
+Check the QGC connection at the top, review runtime and peer status, and scroll to find **Recordings & review**, **Display**, and **Advanced configuration**. After sending a plan from QGC, check **Mission upload** for the outcome. See the [Ops reference](ops.md).
+
+<img src="images/v1.6.1/ops-connected.webp" alt="Ops showing a validated ground station heartbeat, no active issues and recording stopped" width="340">
+
+## Tap or swipe
+
+Swipe left or right across passive content to move one screen at a time. In **Cockpit** and **Ops**, swipe over informational cards or the space around them. In **Control**, use the status header or phone-tilt preview. In **SIM**, use the top status strip or **Received route** title. **Cockpit** and **Ops** are the ends of the sequence.
+
+Sliders, switches, fields, mission actions, route gestures, and the 3D camera keep their own input. Use the bottom tabs when a screen is mostly interactive. Screen-swiping is disabled during text entry and TalkBack touch exploration. Android system gestures remain available at the edges.
+
+A short horizontal swipe or quick flick is enough. Drag back to the starting point to cancel the swipe. Partially visible screens during the transition are previews. On **Cockpit** and **Ops**, a horizontal drag over a button cancels its tap. Release and tap normally to activate it.
 
 ## Full screen
 

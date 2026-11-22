@@ -44,8 +44,8 @@ def check(root=ROOT, publish=False, tag=None):
     if not (root / f"fastlane/metadata/android/en-US/changelogs/{code}.txt").is_file():
         errors.append(f"Missing Android changelog for version code {code}")
     docs = {root / "README.md", root / "AGENTS.md", root / "mavlab-android/README.md",
-            root / "docs/README.md", root / "docs/setup_guide.md",
-            root / "docs/known_first_run_issues.md", root / "docs/teacher_guide.md",
+            root / "docs/README.md", root / "docs/setup_guide.md", root / "docs/product_purpose.md",
+            root / "docs/known_first_run_issues.md",
             root / "docs/mavlab_product_surface_definition.md", notes,
             root / "docs/validation/README.md", root / "docs/validation/results/README.md",
             root / "docs/validation/v1.6.0-acceptance.md", root / "docs/v1_6_demo_script.md"}

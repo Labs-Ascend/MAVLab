@@ -1,24 +1,20 @@
 # Known first-run issues (read this before posting)
 
-This guidance applies to v1.6.0 unless noted. If none matches, open a [First-run problem](https://github.com/Labs-Ascend/MAVLab/issues/new?template=first_run_problem.md) issue.
+This guidance applies to MAVLab v1.6.1.
 
 ## 1. QGroundControl doesn't discover the vehicle
 
-- **Same phone (on-device):** QGC listens on `127.0.0.1:14550`. Open MAVLab first, then switch to QGC within the one-minute handoff window. No split-screen is needed.
-- **System IDs:** MAVLab currently uses system ID `1` and component ID `1`; QGC normally uses GCS system ID `255`. Unique per-install vehicle IDs are not implemented. Use an isolated simulator network; do not connect same-ID simulators or real aircraft together.
-- **QGC version drift:** save your plan and reconnect after upgrading. MAVLab v1.6.0 emits unsigned MAVLink 2 for newer QGC; v1.5.3's older wire behavior can cause missing ACK/timeouts. Changing SYSID cannot fix that mismatch. Report the exact QGC build and MAVLab version.
+Start with [Connect QGroundControl](user/connect-qgroundcontrol.md#same-android-device). Open MAVLab, switch to QGC within one minute, and confirm UDP auto-connect is enabled. If QGC displays a protocol mismatch, save your plan, check both app versions, and reconnect. MAVLab v1.6.1 sends unsigned MAVLink 2.
 
 ## 2. Desktop QGC over Wi-Fi — no link
 
-- Phone and computer must be on the **same subnet**.
-- Many "guest" Wi-Fi networks and some routers use **client isolation / AP isolation**, which blocks device-to-device UDP. Use a trusted LAN or a phone hotspot.
-- A desktop **firewall** may block UDP 14550 — allow it inbound.
+Use the [desktop setup steps](user/connect-qgroundcontrol.md#desktop-over-wi-fi). Verify that the devices share a local network without client isolation and that the firewall allows inbound UDP `14550` from that network.
 
 ## 3. APK won't install
 
-The official v1.5.3 and this v1.6.0 debug APK have different signing certificates; an in-place update between them is not supported. Do not uninstall or clear data merely to bypass that error. See [backup and installation consequences](user/upgrading.md).
+MAVLab v1.6.1 uses a permanent signing certificate. If the existing install uses another certificate, Android rejects an in-place update. Export data first and check the [upgrade guide](user/upgrading.md) before choosing how to migrate.
 
-Android blocks sideloaded APKs by default. When prompted, allow installs from the app you opened the APK with (file manager / browser). This is normal.
+When Android prompts for permission, allow installs from the file manager or browser you used to open the [signed APK](setup_guide.md).
 
 ## 4. Backgrounded networking
 
@@ -30,7 +26,7 @@ Keep the simulated vehicle **disarmed** while diagnosing uploads. Open Ops → M
 
 ## 6. Fence/rally upload errors
 
-Install the updated candidate, save your QGC plan and reconnect to refresh capabilities. Navigation, fence and rally are separate lists. Upload safety plans while disarmed; invalid/unsupported coordinates, geometry or commands are rejected without replacing the accepted plan. Uploading a fence does not enable it. Review [flight boundaries](user/flight-boundaries.md); SmartRTL, terrain frames and obstacle routing are not supported.
+Save your QGC plan and reconnect to refresh capabilities. Navigation, fence and rally are separate lists. Upload safety plans while disarmed. Invalid or unsupported coordinates, geometry, and commands are rejected without replacing the accepted plan. Enable the uploaded fence separately in Ops. See [Flight boundaries and rally](user/flight-boundaries.md) for supported geometry and recovery behavior.
 
 ## Still stuck?
 

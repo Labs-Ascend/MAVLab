@@ -1,6 +1,6 @@
 # MAVLab Contributor and Agent Guide
 
-MAVLab is a phone-first, offline-capable drone simulation and digital-twin application from Ascend Labs. It gives learners a friendly first layer for understanding drone systems before they must operate ROS, Gazebo, ArduPilot/PX4 SITL, Docker, MAVProxy, and multi-process simulator infrastructure.
+MAVLab is a phone-first, offline-capable quadcopter simulator from Ascend Labs. Android runs the flight model, controls, telemetry, and 3D digital twin. QGroundControl extends the simulator with supported MAVLink and mission workflows.
 
 This file records the engineering defaults that make changes to MAVLab coherent. It is not a substitute for understanding the task. When a rule conflicts with a real constraint, name the conflict and get a deliberate decision rather than silently working around it.
 
@@ -12,7 +12,7 @@ MAVLab should reduce setup complexity without lying about drone concepts. Simpli
 
 ### 2. Phone-first and offline-capable
 
-The core learning loop must run on the Android device. QGroundControl may connect locally or across a LAN, but Docker, cloud services, Python bridges, ROS, Gazebo, or SITL must not become prerequisites for the core product.
+The core flight simulation must run on the Android device. QGroundControl may connect locally or across a LAN, but Docker, cloud services, Python bridges, ROS, Gazebo, or SITL must not become prerequisites for the core product.
 
 ### 3. Protocol truth over cosmetic success
 

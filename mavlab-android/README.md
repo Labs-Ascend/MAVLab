@@ -1,11 +1,10 @@
 # MAVLab Android
 
-MAVLab by Ascend Labs is a phone-based drone digital twin and training platform
-for Android.
+MAVLab by Ascend Labs is an Android quadcopter simulator with live telemetry, local flight controls, and an engine-driven 3D view.
 
 ## Current Scope
 
-MAVLab v1.6.0 (version code 19) has four product surfaces:
+MAVLab v1.6.1 (version code 24) has four product surfaces:
 
 - Cockpit: live operations, telemetry, safety state, and MAVLink status
 - Control: calibrated phone/manual input, deliberate flight actions and contextual mission controls
@@ -23,7 +22,6 @@ Current implementation includes:
 - Contextual received missions, spatial route view and engine-owned fence/rally recovery
 - Optional full-screen display and guarded continuous swipe navigation
 - Ops-controlled, off-by-default recording, review and export
-- Reusable lesson code remains internal; it is not a visible Lessons destination
 - First-launch onboarding
 - CI and release metadata scaffolding
 
@@ -49,4 +47,4 @@ MAVLab broadcasts MAVLink telemetry over UDP and tracks validated ground-control
 
 GitHub Actions workflows live in the repository root under `.github/workflows/`. Play Store draft metadata lives under `fastlane/metadata/android/en-US/`.
 
-Run `bundleRelease` in addition to the debug gate when preparing a release. The APK is debug-signed; the current AAB is unsigned and requires production signing for Play. [Release notes](../docs/v1_6_0_release_notes.md), [release readiness](../docs/operations/v1.6.0-readiness.md) and [release runbook](../docs/operations/release.md) distinguish host checks, device/QGC acceptance and actual publication.
+Run `bundleRelease` in addition to the debug gate when preparing a release. The v1.6.1 public APK and AAB use the permanent release certificate. The [release notes](../docs/v1_6_1_release_notes.md) and [release runbook](../docs/operations/release.md) define publication and signing.

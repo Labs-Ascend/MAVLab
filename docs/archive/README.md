@@ -10,4 +10,6 @@ Archiving rules:
 - repair inbound links during any move;
 - migrate in bounded changes after active implementation work is checkpointed.
 
+- [Teacher Guide](teacher-guide.md) records the earlier classroom workflows.
+
 Future candidates include old phase plans, superseded product-surface baselines, historical GCS/digital-twin guidelines, and duplicate documents under `mavlab-android/docs/`.

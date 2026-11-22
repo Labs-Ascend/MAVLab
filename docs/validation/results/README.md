@@ -4,6 +4,8 @@ Store immutable, build-specific MAVLab validation records here. Do not overwrite
 
 ## Results
 
+- [v1.6.1 operator guide captures, local flight, and QGC connectivity — 2026-11-22](v1.6.1-2026-11-22-operator-guides.md)
+
 - [v1.6.1 publication, downloaded signatures and signed-update data checks — 2026-11-07](v1.6.1-2026-11-07-publication/README.md)
 
 - [v1.6.1 prepublication build and signing checks — 2026-11-07](v1.6.1-2026-11-07-prepublication/README.md)

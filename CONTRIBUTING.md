@@ -4,7 +4,7 @@ Thanks for your interest in MAVLab — a phone-first drone digital-twin simulato
 
 ## Orientation
 
-MAVLab is deliberately a *first learning layer* for drone systems — **not** a SITL replacement. The architecture and the engineering bets behind it are documented in the technical paper:
+MAVLab runs the quadcopter simulation on Android and exposes supported MAVLink workflows to QGroundControl. The technical paper documents the original design and evaluated release.
 
 - **Contributor and agent guide:** `AGENTS.md`
 - **Documentation home:** `docs/README.md`
@@ -31,7 +31,7 @@ See `docs/setup_guide.md` for the full environment setup. Prebuilt APKs live on 
 
 ## Code of conduct
 
-Be kind. This is an education tool used by beginners; assume good faith and explain the "why," not just the "what."
+Be kind. People come to MAVLab with different levels of simulation experience. Assume good faith and explain the reason behind a decision.
 
 ## License
 
