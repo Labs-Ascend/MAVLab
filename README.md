@@ -46,7 +46,7 @@ https://github.com/user-attachments/assets/6ba838d5-6c53-495b-b535-c90d67b0a061
 ## What v1.6.1 adds
 
 - **Bounded survey missions:** up to 1,000 navigation items, preserved mission parameters and physical engine distance triggers.
-- **Automatic simulated captures:** QGC receives virtual exposure events without map loading or image-file writes. No Dandora map is needed; choose the simulated launch location before uploading a mission elsewhere.
+- **Automatic simulated captures:** QGC receives virtual exposure events without map loading or image-file writes. Choose the simulated launch location before uploading the mission.
 - **Real hold/resume:** BRAKE pauses movement, progression and capture scheduling; AUTO resumes and LAND/disarm remains a reverse path.
 - **Simpler Ops:** no camera setup card; prior map photos remain exportable under Recordings & review. Flight recording remains opt-in.
 - **Permanent signing:** non-debuggable release APK and signed AAB use the new published certificate. This is a deliberate migration from older debug identities.

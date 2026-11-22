@@ -12,10 +12,9 @@ Mission details distinguish simulated captures from saved JPEGs and failures.
 
 ## Flight setup
 
-No Dandora map, matching map origin or image-storage reserve is required. Choose
-the simulated launch location in **Ops → Advanced configuration** before uploading
-a mission in another area. Changing that location still clears navigation and
-safety plans. An enabled capture session restarts at the new location.
+Choose the simulated launch location in **Ops → Advanced configuration** before
+uploading a mission. Changing the location clears navigation and safety plans
+and restarts an enabled capture session.
 
 This removes camera-map restrictions, not unsupported mission commands or the
 simulator's local-coordinate assumptions. Navigation uploads remain bounded to

@@ -13,8 +13,8 @@ permanent release-signing identity. Core simulation remains on-device and offlin
 - Distance-trigger command 206 executes from actual engine travel and supports its
   immediate-exposure flag, including an immediate exposure when distance is zero.
 - Simulated captures are automatic. They send camera feedback with pose, timestamp
-  and index without map loading, image rendering or image-file writes. No Dandora
-  map is required. These virtual exposures do not produce downloadable photos.
+  and index without map loading, image rendering or image-file writes. These virtual
+  exposures do not produce downloadable photos.
 - Admission is bounded to one exposure per 250 ms and 100,000 requests per session;
   recent feedback/history are bounded. No persistent event ledger is added.
 - BRAKE (17) physically holds the simulated vehicle and pauses mission progression.
