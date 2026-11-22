@@ -4,6 +4,8 @@ Store immutable, build-specific MAVLab validation records here. Do not overwrite
 
 ## Results
 
+- [SceneView 4.70.0 renderer lifecycle trace on Android 12 — 2026-11-22](2026-11-22-sceneview-4.70.0-phone-trace.md)
+
 - [v1.6.1 publication, downloaded signatures and signed-update data checks — 2026-11-07](v1.6.1-2026-11-07-publication/README.md)
 
 - [v1.6.1 prepublication build and signing checks — 2026-11-07](v1.6.1-2026-11-07-prepublication/README.md)
