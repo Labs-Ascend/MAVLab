@@ -1,0 +1,226 @@
+API 26 rapid run
+11-23 09:08:12.915  5560  5560 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:08:12.916  5560  5637 I Filament: FEngine resolved backend: OpenGL
+11-23 09:10:29.233  5560  5560 I Sceneview: Renderer destroyed after its backend drained (2215 ms, #3799)
+11-23 09:10:29.279  5560  5560 I Sceneview: Engine destroyed after its backend drained (2251 ms, #3799)
+11-23 09:10:30.489  5560  5560 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:10:30.490  5560  5719 I Filament: FEngine resolved backend: OpenGL
+11-23 09:10:34.334  5560  5560 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:10:34.343  5560  5744 I Filament: FEngine resolved backend: OpenGL
+11-23 09:10:37.049  5560  5560 I Sceneview: Renderer destroyed after its backend drained (3551 ms, #3799)
+11-23 09:10:37.274  5560  5560 I Sceneview: Engine destroyed after its backend drained (3773 ms, #3799)
+11-23 09:10:37.748  5560  5560 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:10:37.760  5560  5769 I Filament: FEngine resolved backend: OpenGL
+11-23 09:10:39.404  5560  5560 I Sceneview: Renderer destroyed after its backend drained (2373 ms, #3799)
+11-23 09:10:39.447  5560  5560 I Sceneview: Engine destroyed after its backend drained (2415 ms, #3799)
+11-23 09:10:42.722  5560  5560 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:10:42.726  5560  5796 I Filament: FEngine resolved backend: OpenGL
+11-23 09:10:43.181  5560  5560 I Sceneview: Renderer destroyed after its backend drained (1705 ms, #3799)
+11-23 09:10:43.362  5560  5560 I Sceneview: Engine destroyed after its backend drained (1884 ms, #3799)
+11-23 09:10:45.755  5560  5560 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:10:45.756  5560  5820 I Filament: FEngine resolved backend: OpenGL
+11-23 09:10:48.937  5560  5560 I Sceneview: Renderer destroyed after its backend drained (3783 ms, #3799)
+11-23 09:10:49.194  5560  5560 I Sceneview: Engine destroyed after its backend drained (4038 ms, #3799)
+11-23 09:10:49.415  5560  5560 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:10:49.430  5560  5848 I Filament: FEngine resolved backend: OpenGL
+11-23 09:10:52.573  5560  5560 I Sceneview: Renderer destroyed after its backend drained (3680 ms, #3799)
+11-23 09:10:52.650  5560  5560 I Sceneview: Engine destroyed after its backend drained (3751 ms, #3799)
+11-23 09:10:54.843  5560  5560 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:10:54.844  5560  5873 I Filament: FEngine resolved backend: OpenGL
+11-23 09:10:57.759  5560  5560 I Sceneview: Renderer destroyed after its backend drained (3524 ms, #3799)
+11-23 09:10:57.827  5560  5560 I Sceneview: Engine destroyed after its backend drained (3590 ms, #3799)
+11-23 09:10:59.758  5560  5560 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:10:59.771  5560  5900 I Filament: FEngine resolved backend: OpenGL
+11-23 09:11:03.901  5560  5560 I Sceneview: Renderer destroyed after its backend drained (4983 ms, #3799)
+11-23 09:11:05.001  5560  5560 W Sceneview: Backend teardown still pending after 5 s; backing off polls (#4969)
+11-23 09:11:05.639  5560  5560 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:11:05.642  5560  5926 I Filament: FEngine resolved backend: OpenGL
+11-23 09:11:06.228  5560  5560 I Sceneview: Engine destroyed after its backend drained (7284 ms, #3799)
+11-23 09:11:08.376  5560  5560 I Sceneview: Renderer destroyed after its backend drained (3438 ms, #3799)
+11-23 09:11:08.549  5560  5560 I Sceneview: Engine destroyed after its backend drained (3606 ms, #3799)
+11-23 09:11:10.610  5560  5560 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:11:10.613  5560  5953 I Filament: FEngine resolved backend: OpenGL
+11-23 09:11:12.513  5560  5560 I Sceneview: Renderer destroyed after its backend drained (2565 ms, #3799)
+11-23 09:11:12.565  5560  5560 I Sceneview: Engine destroyed after its backend drained (2613 ms, #3799)
+11-23 09:11:14.755  5560  5560 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:11:14.760  5560  5979 I Filament: FEngine resolved backend: OpenGL
+11-23 09:11:18.795  5560  5560 I Sceneview: Renderer destroyed after its backend drained (4658 ms, #3799)
+11-23 09:11:18.951  5560  5560 I Sceneview: Engine destroyed after its backend drained (4811 ms, #3799)
+11-23 09:11:19.337  5560  5560 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:11:19.339  5560  6005 I Filament: FEngine resolved backend: OpenGL
+11-23 09:11:21.702  5560  5560 I Sceneview: Renderer destroyed after its backend drained (2946 ms, #3799)
+11-23 09:11:21.804  5560  5560 I Sceneview: Engine destroyed after its backend drained (3044 ms, #3799)
+11-23 09:11:23.541  5560  5560 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:11:23.542  5560  6030 I Filament: FEngine resolved backend: OpenGL
+11-23 09:11:27.651  5560  5560 I Sceneview: Renderer destroyed after its backend drained (4681 ms, #3799)
+11-23 09:11:27.884  5560  5560 I Sceneview: Engine destroyed after its backend drained (4912 ms, #3799)
+11-23 09:11:28.099  5560  5560 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:11:28.100  5560  6055 I Filament: FEngine resolved backend: OpenGL
+11-23 09:11:29.721  5560  5560 I Sceneview: Renderer destroyed after its backend drained (2116 ms, #3799)
+11-23 09:11:29.866  5560  5560 I Sceneview: Engine destroyed after its backend drained (2262 ms, #3799)
+11-23 09:11:31.997  5560  5560 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:11:32.003  5560  6082 I Filament: FEngine resolved backend: OpenGL
+11-23 09:11:35.747  5560  5560 I Sceneview: Renderer destroyed after its backend drained (4282 ms, #3799)
+11-23 09:11:35.937  5560  5560 I Sceneview: Engine destroyed after its backend drained (4471 ms, #3799)
+11-23 09:11:36.541  5560  5560 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:11:36.542  5560  6107 I Filament: FEngine resolved backend: OpenGL
+11-23 09:11:39.444  5560  5560 I Sceneview: Renderer destroyed after its backend drained (3727 ms, #3799)
+11-23 09:11:39.487  5560  5560 I Sceneview: Engine destroyed after its backend drained (3767 ms, #3799)
+11-23 09:11:40.074  5560  5560 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:11:40.077  5560  6132 I Filament: FEngine resolved backend: OpenGL
+11-23 09:11:43.483  5560  5560 I Sceneview: Renderer destroyed after its backend drained (4050 ms, #3799)
+11-23 09:11:44.595  5560  5560 W Sceneview: Backend teardown still pending after 5 s; backing off polls (#4969)
+11-23 09:11:44.639  5560  5560 I Sceneview: Engine destroyed after its backend drained (5203 ms, #3799)
+11-23 09:11:45.514  5560  5560 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:11:45.520  5560  6157 I Filament: FEngine resolved backend: OpenGL
+11-23 09:11:49.468  5560  5560 I Sceneview: Renderer destroyed after its backend drained (4891 ms, #3799)
+11-23 09:11:49.549  5560  5560 I Sceneview: Engine destroyed after its backend drained (4971 ms, #3799)
+11-23 09:11:50.230  5560  5560 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:11:50.231  5560  6183 I Filament: FEngine resolved backend: OpenGL
+11-23 09:11:54.409  5560  5560 I Sceneview: Renderer destroyed after its backend drained (4956 ms, #3799)
+11-23 09:11:54.456  5560  5560 I Sceneview: Engine destroyed after its backend drained (5003 ms, #3799)
+11-23 09:11:55.161  5560  5560 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:11:55.168  5560  6208 I Filament: FEngine resolved backend: OpenGL
+11-23 09:11:58.888  5560  5560 I Sceneview: Renderer destroyed after its backend drained (4830 ms, #3799)
+11-23 09:11:58.936  5560  5560 I Sceneview: Engine destroyed after its backend drained (4860 ms, #3799)
+11-23 09:12:00.836  5560  5560 I Sceneview: Renderer destroyed after its backend drained (1965 ms, #3799)
+11-23 09:12:00.878  5560  5560 I Sceneview: Engine destroyed after its backend drained (2005 ms, #3799)
+
+API 27 rapid run
+11-23 09:08:14.086  3687  3687 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:08:14.105  3687  3764 I Filament: FEngine resolved backend: OpenGL
+11-23 09:08:28.790  3687  3687 I Sceneview: Renderer destroyed after its backend drained (443 ms, #3799)
+11-23 09:08:28.836  3687  3687 I Sceneview: Engine destroyed after its backend drained (483 ms, #3799)
+11-23 09:08:30.048  3687  3687 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:08:30.076  3687  3804 I Filament: FEngine resolved backend: OpenGL
+11-23 09:08:33.912  3687  3687 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:08:33.918  3687  3829 I Filament: FEngine resolved backend: OpenGL
+11-23 09:08:35.803  3687  3687 I Sceneview: Renderer destroyed after its backend drained (2961 ms, #3799)
+11-23 09:08:35.928  3687  3687 I Sceneview: Engine destroyed after its backend drained (3084 ms, #3799)
+11-23 09:08:37.921  3687  3687 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:08:37.927  3687  3852 I Filament: FEngine resolved backend: OpenGL
+11-23 09:08:38.758  3687  3687 I Sceneview: Renderer destroyed after its backend drained (1561 ms, #3799)
+11-23 09:08:38.869  3687  3687 I Sceneview: Engine destroyed after its backend drained (1651 ms, #3799)
+11-23 09:08:42.069  3687  3687 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:08:42.070  3687  3877 I Filament: FEngine resolved backend: OpenGL
+11-23 09:08:44.840  3687  3687 I Sceneview: Renderer destroyed after its backend drained (3638 ms, #3799)
+11-23 09:08:45.080  3687  3687 I Sceneview: Engine destroyed after its backend drained (3876 ms, #3799)
+11-23 09:08:45.315  3687  3687 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:08:45.319  3687  3902 I Filament: FEngine resolved backend: OpenGL
+11-23 09:08:48.316  3687  3687 I Sceneview: Renderer destroyed after its backend drained (3495 ms, #3799)
+11-23 09:08:48.560  3687  3687 I Sceneview: Engine destroyed after its backend drained (3738 ms, #3799)
+11-23 09:08:48.876  3687  3687 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:08:48.887  3687  3927 I Filament: FEngine resolved backend: OpenGL
+11-23 09:08:51.009  3687  3687 I Sceneview: Renderer destroyed after its backend drained (2706 ms, #3799)
+11-23 09:08:51.167  3687  3687 I Sceneview: Engine destroyed after its backend drained (2862 ms, #3799)
+11-23 09:08:53.220  3687  3687 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:08:53.220  3687  3952 I Filament: FEngine resolved backend: OpenGL
+11-23 09:08:54.736  3687  3687 I Sceneview: Renderer destroyed after its backend drained (2232 ms, #3799)
+11-23 09:08:55.819  3687  3687 I Sceneview: Engine destroyed after its backend drained (3313 ms, #3799)
+11-23 09:08:56.509  3687  3687 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:08:56.510  3687  3977 I Filament: FEngine resolved backend: OpenGL
+11-23 09:08:59.024  3687  3687 I Sceneview: Renderer destroyed after its backend drained (3271 ms, #3799)
+11-23 09:08:59.235  3687  3687 I Sceneview: Engine destroyed after its backend drained (3479 ms, #3799)
+11-23 09:08:59.507  3687  3687 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:08:59.509  3687  4002 I Filament: FEngine resolved backend: OpenGL
+11-23 09:09:01.510  3687  3687 I Sceneview: Renderer destroyed after its backend drained (2529 ms, #3799)
+11-23 09:09:01.615  3687  3687 I Sceneview: Engine destroyed after its backend drained (2632 ms, #3799)
+11-23 09:09:04.173  3687  3687 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:09:04.179  3687  4028 I Filament: FEngine resolved backend: OpenGL
+11-23 09:09:04.732  3687  3687 I Sceneview: Renderer destroyed after its backend drained (1701 ms, #3799)
+11-23 09:09:04.855  3687  3687 I Sceneview: Engine destroyed after its backend drained (1823 ms, #3799)
+11-23 09:09:04.997  3687  3687 I Sceneview: Renderer destroyed after its backend drained (18 ms, #3799)
+11-23 09:09:05.043  3687  3687 I Sceneview: Engine destroyed after its backend drained (62 ms, #3799)
+11-23 09:09:05.897  3687  3687 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:09:05.898  3687  4052 I Filament: FEngine resolved backend: OpenGL
+11-23 09:09:09.344  3687  3687 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:09:09.348  3687  4077 I Filament: FEngine resolved backend: OpenGL
+11-23 09:09:11.185  3687  3687 I Sceneview: Renderer destroyed after its backend drained (2360 ms, #3799)
+11-23 09:09:12.268  3687  3687 I Sceneview: Engine destroyed after its backend drained (3441 ms, #3799)
+11-23 09:09:12.905  3687  3687 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:09:12.908  3687  4102 I Filament: FEngine resolved backend: OpenGL
+11-23 09:09:15.689  3687  3687 I Sceneview: Renderer destroyed after its backend drained (3474 ms, #3799)
+11-23 09:09:15.842  3687  3687 I Sceneview: Engine destroyed after its backend drained (3621 ms, #3799)
+11-23 09:09:16.179  3687  3687 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:09:16.181  3687  4128 I Filament: FEngine resolved backend: OpenGL
+11-23 09:09:20.060  3687  3687 I Sceneview: Renderer destroyed after its backend drained (4409 ms, #3799)
+11-23 09:09:20.286  3687  3687 I Sceneview: Engine destroyed after its backend drained (4613 ms, #3799)
+11-23 09:09:20.628  3687  3687 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:09:20.628  3687  4153 I Filament: FEngine resolved backend: OpenGL
+11-23 09:09:22.034  3687  3687 I Sceneview: Renderer destroyed after its backend drained (2013 ms, #3799)
+11-23 09:09:22.104  3687  3687 I Sceneview: Engine destroyed after its backend drained (2077 ms, #3799)
+11-23 09:09:25.040  3687  3687 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:09:25.046  3687  4178 I Filament: FEngine resolved backend: OpenGL
+11-23 09:09:25.928  3687  3687 I Sceneview: Renderer destroyed after its backend drained (1476 ms, #3799)
+11-23 09:09:26.020  3687  3687 I Sceneview: Engine destroyed after its backend drained (1566 ms, #3799)
+11-23 09:09:28.110  3687  3687 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:09:28.112  3687  4203 I Filament: FEngine resolved backend: OpenGL
+11-23 09:09:29.966  3687  3687 I Sceneview: Renderer destroyed after its backend drained (2376 ms, #3799)
+11-23 09:09:31.140  3687  3687 I Sceneview: Engine destroyed after its backend drained (3548 ms, #3799)
+11-23 09:09:31.598  3687  3687 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:09:31.598  3687  4228 I Filament: FEngine resolved backend: OpenGL
+11-23 09:09:34.006  3687  3687 I Sceneview: Renderer destroyed after its backend drained (2963 ms, #3799)
+11-23 09:09:34.149  3687  3687 I Sceneview: Engine destroyed after its backend drained (3106 ms, #3799)
+11-23 09:09:34.542  3687  3687 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:09:34.543  3687  4253 I Filament: FEngine resolved backend: OpenGL
+11-23 09:09:37.379  3687  3687 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:09:37.380  3687  4277 I Filament: FEngine resolved backend: OpenGL
+11-23 09:09:38.496  3687  3687 I Sceneview: Renderer destroyed after its backend drained (4519 ms, #3799)
+11-23 09:09:38.674  3687  3687 I Sceneview: Engine destroyed after its backend drained (4695 ms, #3799)
+11-23 09:09:41.080  3687  3687 I Sceneview: Renderer destroyed after its backend drained (4263 ms, #3799)
+11-23 09:09:41.126  3687  3687 I Sceneview: Engine destroyed after its backend drained (4309 ms, #3799)
+11-23 09:09:41.809  3687  3687 I Sceneview: Renderer destroyed after its backend drained (749 ms, #3799)
+11-23 09:09:41.856  3687  3687 I Sceneview: Engine destroyed after its backend drained (790 ms, #3799)
+
+API 26 rotation
+11-23 09:13:50.168  5560  5560 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:13:50.168  5560  6615 I Filament: FEngine resolved backend: OpenGL
+11-23 09:13:51.174  5560  5560 I Sceneview: Renderer destroyed after its backend drained (524 ms, #3799)
+11-23 09:13:51.273  5560  5560 I Sceneview: Engine destroyed after its backend drained (624 ms, #3799)
+11-23 09:14:02.162  5560  5560 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:14:02.165  5560  6689 I Filament: FEngine resolved backend: OpenGL
+11-23 09:15:16.583  5560  5560 I Sceneview: Renderer destroyed after its backend drained (48 ms, #3799)
+11-23 09:15:16.678  5560  5560 I Sceneview: Engine destroyed after its backend drained (139 ms, #3799)
+
+API 27 rotation
+11-23 09:12:25.638  3687  3687 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:12:25.639  3687  4604 I Filament: FEngine resolved backend: OpenGL
+11-23 09:12:26.844  3687  3687 I Sceneview: Engine destroyed after its backend drained (349 ms, #3799)
+
+API 35 lifecycle
+11-23 09:31:06.210  1595  1595 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:31:06.213  1595  3822 I Filament: FEngine resolved backend: OpenGL
+11-23 09:31:19.257  1595  1595 I Sceneview: Renderer destroyed after its backend drained (98 ms, #3799)
+11-23 09:31:19.365  1595  1595 I Sceneview: Engine destroyed after its backend drained (172 ms, #3799)
+11-23 09:31:22.218  1595  1595 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:31:22.219  1595  3858 I Filament: FEngine resolved backend: OpenGL
+11-23 09:31:34.915  1595  1595 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:31:34.921  1595  3933 I Filament: FEngine resolved backend: OpenGL
+11-23 09:31:37.280  1595  1595 W Sceneview: Backend teardown still pending after 5 s; backing off polls (#4969)
+11-23 09:31:44.158  1595  1595 I Sceneview: Renderer destroyed after its backend drained (13021 ms, #3799)
+11-23 09:31:47.714  1595  1595 I Sceneview: Engine destroyed after its backend drained (16557 ms, #3799)
+11-23 09:31:55.487  1595  1595 I Sceneview: Renderer destroyed after its backend drained (3129 ms, #3799)
+11-23 09:31:55.844  1595  1595 I Sceneview: Engine destroyed after its backend drained (3466 ms, #3799)
+11-23 09:31:56.179  1595  1595 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:31:56.181  1595  4042 I Filament: FEngine resolved backend: OpenGL
+11-23 09:32:02.898  1595  1595 I Sceneview: Renderer destroyed after its backend drained (2512 ms, #3799)
+11-23 09:32:02.955  1595  1595 I Sceneview: Engine destroyed after its backend drained (2529 ms, #3799)
+11-23 09:32:09.258  1595  1595 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:32:09.260  1595  4080 I Filament: FEngine resolved backend: OpenGL
+11-23 09:32:17.124  1595  1595 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:32:17.129  1595  4120 I Filament: FEngine resolved backend: OpenGL
+11-23 09:32:24.925  1595  1595 W Sceneview: Backend teardown still pending after 5 s; backing off polls (#4969)
+11-23 09:32:24.936  1595  1595 I Sceneview: Renderer destroyed after its backend drained (10184 ms, #3799)
+11-23 09:32:25.141  1595  1595 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:32:25.143  1595  4152 I Filament: FEngine resolved backend: OpenGL
+11-23 09:32:27.495  1595  1595 I Sceneview: Engine destroyed after its backend drained (12732 ms, #3799)
+11-23 09:32:27.620  1595  1595 W Sceneview: Backend teardown still pending after 5 s; backing off polls (#4969)
+11-23 09:32:28.647  1595  1595 I Sceneview: Renderer destroyed after its backend drained (6232 ms, #3799)
+11-23 09:32:31.191  1595  1595 I Sceneview: Engine destroyed after its backend drained (8743 ms, #3799)
+11-23 09:32:36.919  1595  1595 I Filament: FEngine (64 bits) created at [redacted] (threading is enabled)
+11-23 09:32:36.922  1595  4184 I Filament: FEngine resolved backend: OpenGL
+11-23 09:32:38.087  1595  1595 W Sceneview: Backend teardown still pending after 5 s; backing off polls (#4969)
+11-23 09:32:39.166  1595  1595 I Sceneview: Renderer destroyed after its backend drained (6147 ms, #3799)
+11-23 09:32:41.858  1595  1595 I Sceneview: Engine destroyed after its backend drained (7636 ms, #3799)
+11-23 09:35:24.438  1595  1595 I Sceneview: Renderer destroyed after its backend drained (64 ms, #3799)
+11-23 09:35:24.574  1595  1595 I Sceneview: Engine destroyed after its backend drained (180 ms, #3799)
