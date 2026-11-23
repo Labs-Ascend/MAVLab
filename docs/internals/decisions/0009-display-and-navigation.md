@@ -18,6 +18,8 @@ The stationary, clipped input container drives a Compose HorizontalPager with it
 
 Each page wrapper also clips to its own layout bounds. Viewport clipping alone cannot contain an offscreen SIM Canvas drawing at negative coordinates: the first grid line can escape into the right side of Control. Per-page clipping contains grid/trail overflow without removing the SIM overlay or changing gesture ownership, animation, preview preparation or lifecycle policy.
 
+Activity recreation initializes the pager position directly from the saved tab or onboarding step. The pager's in-flight offset stays in memory for the current composition. Bring-into-view requests can scroll within a page, and the page boundary keeps those requests from moving the shared pager.
+
 Unlike the superseded single-screen nudge, continuous paging composes incoming and outgoing UI shells together. One adjacent shell on either side is prepared ahead of the gesture: the first physical-phone timing sample with zero beyond-viewport pages showed cold-composition stalls. Stable page keys and SaveableStateHolder preserve view state. Inactive preview lifecycles are capped at CREATED, stopping lifecycle-aware collection and disabling their Back handlers. Preview touch actions and semantics are blocked. A preview cannot consume a contextual mission/route request. SIM starts its expensive Filament renderer only after arriving, retains that one renderer during departure, and releases it when fully outside the viewport; prepared previews do not start additional scenes. Destination changes produce no runtime commands. Back closes mission/route detail before normal exit handling.
 
 ## Runtime and contract review

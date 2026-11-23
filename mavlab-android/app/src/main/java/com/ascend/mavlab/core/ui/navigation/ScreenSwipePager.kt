@@ -9,8 +9,12 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.LayoutCoordinates
+import androidx.compose.ui.node.ModifierNodeElement
+import androidx.compose.ui.relocation.BringIntoViewModifierNode
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -62,9 +66,21 @@ fun ScreenSwipePager(
             // Canvas coordinates (SIM grid/trail) can extend outside their own
             // layout. Clip each page, not just the overall viewport, so prepared
             // neighbours cannot draw a stray line over the selected surface.
-            Box(Modifier.fillMaxSize().clipToBounds().then(protection)) { content(page, active, settled) }
+            Box(Modifier.fillMaxSize().clipToBounds().then(KeepRelocationInsidePage).then(protection)) { content(page, active, settled) }
         }
     }
+}
+
+// Page-local scrollables handle relocation before it reaches this navigation boundary.
+private object KeepRelocationInsidePage : ModifierNodeElement<PageRelocationBoundary>() {
+    override fun create() = PageRelocationBoundary()
+    override fun update(node: PageRelocationBoundary) = Unit
+    override fun equals(other: Any?) = this === other
+    override fun hashCode() = javaClass.hashCode()
+}
+
+private class PageRelocationBoundary : Modifier.Node(), BringIntoViewModifierNode {
+    override suspend fun bringIntoView(childCoordinates: LayoutCoordinates, boundsProvider: () -> Rect?) = Unit
 }
 
 private class PreviewLifecycleOwner : LifecycleOwner {

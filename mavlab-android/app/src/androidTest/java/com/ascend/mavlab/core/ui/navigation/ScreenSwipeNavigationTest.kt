@@ -7,24 +7,34 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipe
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import kotlinx.coroutines.launch
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -40,6 +50,83 @@ class ScreenSwipeNavigationTest {
     private var buttonTaps = 0
     private lateinit var motion: ScreenSwipeMotion
     private val pageLifecycles = mutableMapOf<Int, Lifecycle>()
+
+    @Test fun restorationUsesCommittedPageBeforeFirstLayout() {
+        val restoration = StateRestorationTester(compose)
+        lateinit var selectOps: () -> Unit
+        var initialPagerPage = -1
+        restoration.setContent {
+            var committedPage by rememberSaveable { mutableIntStateOf(0) }
+            val restoredMotion = rememberScreenSwipeMotion(committedPage)
+            val firstPage = remember(restoredMotion) { restoredMotion.pager.currentPage }
+            SideEffect {
+                motion = restoredMotion
+                initialPagerPage = firstPage
+                selectOps = {
+                    committedPage = 3
+                    restoredMotion.select(committedPage)
+                }
+            }
+            ScreenSwipePager(restoredMotion, Modifier.size(300.dp, 200.dp)) { index, _, _ ->
+                Text("Page $index")
+            }
+        }
+
+        compose.runOnIdle { selectOps() }
+        compose.runOnIdle {
+            assertEquals(3, motion.selectedPage)
+            assertEquals(3, motion.pager.currentPage)
+            // Simulate saving while a previous page is still in the viewport.
+            motion.pager.requestScrollToPage(1, pageOffsetFraction = .25f)
+        }
+        compose.runOnIdle { assertEquals(1, motion.pager.currentPage) }
+
+        restoration.emulateSavedInstanceStateRestore()
+
+        compose.runOnIdle {
+            assertEquals(3, motion.selectedPage)
+            assertEquals(3, initialPagerPage)
+            assertEquals(0f, motion.pager.currentPageOffsetFraction, .0001f)
+        }
+    }
+
+    @Test fun bringIntoViewScrollsWithinPageWithoutChangingTabs() {
+        val preview = BringIntoViewRequester()
+        val belowFold = BringIntoViewRequester()
+        lateinit var reveal: (BringIntoViewRequester) -> Unit
+        compose.setContent {
+            motion = rememberScreenSwipeMotion()
+            val scroll = rememberScrollState()
+            val scope = rememberCoroutineScope()
+            SideEffect {
+                reveal = { requester -> scope.launch { requester.bringIntoView() } }
+                scrollOffset = { scroll.value }
+            }
+            ScreenSwipePager(motion, Modifier.size(300.dp, 200.dp)) { page, _, _ ->
+                if (page == 0) {
+                    Column(Modifier.verticalScroll(scroll)) {
+                        Spacer(Modifier.height(400.dp))
+                        Text("Below the fold", Modifier.bringIntoViewRequester(belowFold))
+                    }
+                } else {
+                    Text("Preview", Modifier.bringIntoViewRequester(preview))
+                }
+            }
+        }
+
+        compose.runOnIdle { reveal(preview) }
+        compose.runOnIdle {
+            assertEquals(0, motion.selectedPage)
+            assertEquals(0, motion.pager.currentPage)
+            assertEquals(0f, motion.pager.currentPageOffsetFraction, .0001f)
+        }
+
+        compose.runOnIdle { reveal(belowFold) }
+        compose.runOnIdle {
+            assertTrue("The active page must still scroll to its child", scrollOffset() > 0)
+            assertEquals(0, motion.pager.currentPage)
+        }
+    }
 
     private fun content() {
         compose.setContent {

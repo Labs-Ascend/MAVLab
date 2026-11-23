@@ -3,9 +3,7 @@ package com.ascend.mavlab.core.ui.navigation
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -89,8 +87,7 @@ class ScreenSwipeMotion internal constructor(
 @Composable
 fun rememberScreenSwipeMotion(initialPage: Int = 0, pageCount: Int = 4): ScreenSwipeMotion {
     val scope = rememberCoroutineScope()
-    val pager = rememberPagerState(initialPage = initialPage, pageCount = { pageCount })
-    // Restore the committed destination, not a saved half-drag after recreation.
-    LaunchedEffect(pager) { pager.scrollToPage(initialPage) }
+    // The caller restores the committed destination. The viewport offset is transient.
+    val pager = remember(pageCount) { PagerState(currentPage = initialPage, pageCount = { pageCount }) }
     return remember(scope, pager) { ScreenSwipeMotion(pager, scope, initialPage) }
 }
