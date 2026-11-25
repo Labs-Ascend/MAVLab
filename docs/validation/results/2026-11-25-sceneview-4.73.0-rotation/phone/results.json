@@ -1,0 +1,92 @@
+[
+  {
+    "run": 1,
+    "pid": "2548",
+    "first_visible_seconds": 15.82,
+    "engine_starts": 2,
+    "fatal_exception": false,
+    "out_of_memory": false,
+    "at_45_seconds": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        45.77
+      ],
+      "model_visible": true,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "last_sample": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        45.77
+      ],
+      "model_visible": true,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "same_process": true,
+    "isolated_mavlink": true
+  },
+  {
+    "run": 2,
+    "pid": "3694",
+    "first_visible_seconds": 15.83,
+    "engine_starts": 2,
+    "fatal_exception": false,
+    "out_of_memory": false,
+    "at_45_seconds": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        45.79
+      ],
+      "model_visible": true,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "last_sample": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        45.79
+      ],
+      "model_visible": true,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "same_process": true,
+    "isolated_mavlink": true
+  },
+  {
+    "run": 3,
+    "pid": "4187",
+    "first_visible_seconds": 15.87,
+    "engine_starts": 2,
+    "fatal_exception": false,
+    "out_of_memory": false,
+    "at_45_seconds": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        45.89
+      ],
+      "model_visible": true,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "last_sample": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        45.89
+      ],
+      "model_visible": true,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "same_process": true,
+    "isolated_mavlink": true
+  }
+]

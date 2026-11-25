@@ -1,0 +1,32 @@
+MAVLab 1.6.1 debug, SceneView 4.73.0, original drone.glb
+Galaxy S10e SM-G970U, Android 12 API 31, configured heap growth limit 256 MiB
+
+Rotation 1
+11-25 21:44:34.793  2548  2548 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-25 21:44:34.795  2548  2947 I Filament: FEngine resolved backend: OpenGL
+11-25 21:44:34.797  2548  2947 I Filament: [Qualcomm], [Adreno (TM) 640], [OpenGL ES 3.2 V@0502.0 (GIT@3dad7f8ed7, I593c16c433, 1633080534) (Date:10/01/21)], [OpenGL ES GLSL ES 3.20]
+11-25 21:44:37.295  2548  2548 D Sceneview: Engine destroyed
+11-25 21:44:37.295  2548  2548 I Sceneview: Engine destroyed after its backend drained (441 ms, #3799)
+11-25 21:44:37.354  2548  2548 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-25 21:44:37.354  2548  3080 I Filament: FEngine resolved backend: OpenGL
+11-25 21:44:37.356  2548  3080 I Filament: [Qualcomm], [Adreno (TM) 640], [OpenGL ES 3.2 V@0502.0 (GIT@3dad7f8ed7, I593c16c433, 1633080534) (Date:10/01/21)], [OpenGL ES GLSL ES 3.20]
+
+Rotation 2
+11-25 21:45:37.492  3694  3694 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-25 21:45:37.493  3694  3895 I Filament: FEngine resolved backend: OpenGL
+11-25 21:45:37.495  3694  3895 I Filament: [Qualcomm], [Adreno (TM) 640], [OpenGL ES 3.2 V@0502.0 (GIT@3dad7f8ed7, I593c16c433, 1633080534) (Date:10/01/21)], [OpenGL ES GLSL ES 3.20]
+11-25 21:45:39.349  3694  3694 D Sceneview: Engine destroyed
+11-25 21:45:39.349  3694  3694 I Sceneview: Engine destroyed after its backend drained (464 ms, #3799)
+11-25 21:45:39.405  3694  3694 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-25 21:45:39.406  3694  3937 I Filament: FEngine resolved backend: OpenGL
+11-25 21:45:39.407  3694  3937 I Filament: [Qualcomm], [Adreno (TM) 640], [OpenGL ES 3.2 V@0502.0 (GIT@3dad7f8ed7, I593c16c433, 1633080534) (Date:10/01/21)], [OpenGL ES GLSL ES 3.20]
+
+Rotation 3
+11-25 21:46:38.181  4187  4187 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-25 21:46:38.182  4187  4444 I Filament: FEngine resolved backend: OpenGL
+11-25 21:46:38.186  4187  4444 I Filament: [Qualcomm], [Adreno (TM) 640], [OpenGL ES 3.2 V@0502.0 (GIT@3dad7f8ed7, I593c16c433, 1633080534) (Date:10/01/21)], [OpenGL ES GLSL ES 3.20]
+11-25 21:46:40.007  4187  4187 D Sceneview: Engine destroyed
+11-25 21:46:40.007  4187  4187 I Sceneview: Engine destroyed after its backend drained (436 ms, #3799)
+11-25 21:46:40.048  4187  4187 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-25 21:46:40.048  4187  4541 I Filament: FEngine resolved backend: OpenGL
+11-25 21:46:40.050  4187  4541 I Filament: [Qualcomm], [Adreno (TM) 640], [OpenGL ES 3.2 V@0502.0 (GIT@3dad7f8ed7, I593c16c433, 1633080534) (Date:10/01/21)], [OpenGL ES GLSL ES 3.20]

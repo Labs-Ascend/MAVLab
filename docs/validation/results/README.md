@@ -4,6 +4,8 @@ Store immutable, build-specific MAVLab validation records here. Do not overwrite
 
 ## Results
 
+- [SceneView 4.73.0 rotation retest on Android 8.0 and Android 12 — 2026-11-25](2026-11-25-sceneview-4.73.0-rotation/README.md)
+
 - [SceneView 4.72.0 rotation during SIM loading on Android 8.0 — 2026-11-24](2026-11-24-sceneview-4.72.0-rotation/README.md)
 
 - [v1.6.1 operator guide captures, local flight, and QGC connectivity — 2026-11-22](v1.6.1-2026-11-22-operator-guides.md)

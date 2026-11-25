@@ -1,0 +1,89 @@
+[
+  {
+    "run": 1,
+    "pid": "7332",
+    "first_visible_seconds": null,
+    "engine_starts": 2,
+    "fatal_exception": true,
+    "out_of_memory": true,
+    "at_45_seconds": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        46.5
+      ],
+      "model_visible": false,
+      "landscape": false,
+      "sim_screen": false
+    },
+    "last_sample": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        46.5
+      ],
+      "model_visible": false,
+      "landscape": false,
+      "sim_screen": false
+    },
+    "same_process": true
+  },
+  {
+    "run": 2,
+    "pid": "7596",
+    "first_visible_seconds": null,
+    "engine_starts": 2,
+    "fatal_exception": true,
+    "out_of_memory": true,
+    "at_45_seconds": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        46.39
+      ],
+      "model_visible": false,
+      "landscape": false,
+      "sim_screen": false
+    },
+    "last_sample": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        46.39
+      ],
+      "model_visible": false,
+      "landscape": false,
+      "sim_screen": false
+    },
+    "same_process": true
+  },
+  {
+    "run": 3,
+    "pid": "7810",
+    "first_visible_seconds": null,
+    "engine_starts": 2,
+    "fatal_exception": true,
+    "out_of_memory": true,
+    "at_45_seconds": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        46.62
+      ],
+      "model_visible": false,
+      "landscape": false,
+      "sim_screen": false
+    },
+    "last_sample": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        46.62
+      ],
+      "model_visible": false,
+      "landscape": false,
+      "sim_screen": false
+    },
+    "same_process": true
+  }
+]

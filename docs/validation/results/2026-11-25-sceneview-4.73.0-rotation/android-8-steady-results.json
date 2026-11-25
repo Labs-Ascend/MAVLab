@@ -1,0 +1,31 @@
+[
+  {
+    "run": 1,
+    "pid": "8041",
+    "first_visible_seconds": 72.81,
+    "engine_starts": 1,
+    "fatal_exception": false,
+    "out_of_memory": false,
+    "at_45_seconds": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        53.74
+      ],
+      "model_visible": false,
+      "landscape": false,
+      "sim_screen": true
+    },
+    "last_sample": {
+      "sample_seconds": 60,
+      "capture_window_seconds": [
+        60.0,
+        72.81
+      ],
+      "model_visible": true,
+      "landscape": false,
+      "sim_screen": true
+    },
+    "same_process": true
+  }
+]

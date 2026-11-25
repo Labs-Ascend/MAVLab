@@ -1,0 +1,86 @@
+MAVLab 1.6.1 debug, SceneView 4.73.0, unmodified drone.glb
+Android 8.0 API 26 x86_64 emulator, OpenGL ES 3.0, verified 16 MiB Java heap
+Cold process each trial. Rotated before the first model appeared in each rotation run.
+
+Rotation 1
+11-25 21:29:03.263  7332  7332 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-25 21:29:03.282  7332  7465 I Filament: FEngine resolved backend: OpenGL
+11-25 21:29:03.354  7332  7465 I Filament: [Google (Intel)], [Android Emulator OpenGL ES Translator (Mesa Intel(R) UHD Graphics 620 (WHL GT2))], [OpenGL ES 3.0 (4.6 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.5)], [OpenGL ES GLSL ES 3.00]
+11-25 21:29:15.720  7332  7332 W Sceneview: Backend teardown still pending after 5 s; backing off polls, each confirmed by a wait of 4 ms per wake-up (#4969)
+11-25 21:29:15.787  7332  7332 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-25 21:29:15.809  7332  7490 I Filament: FEngine resolved backend: OpenGL
+11-25 21:29:15.931  7332  7490 I Filament: [Google (Intel)], [Android Emulator OpenGL ES Translator (Mesa Intel(R) UHD Graphics 620 (WHL GT2))], [OpenGL ES 3.0 (4.6 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.5)], [OpenGL ES GLSL ES 3.00]
+11-25 21:29:19.035  7332  7332 D Sceneview: Engine destroyed
+11-25 21:29:19.036  7332  7332 I Sceneview: Engine destroyed after its backend drained (8839 ms, #3799)
+11-25 21:29:23.862  7332  7332 E AndroidRuntime: FATAL EXCEPTION: main
+11-25 21:29:23.862  7332  7332 E AndroidRuntime: Process: com.ascend.mavlab, PID: 7332
+11-25 21:29:23.862  7332  7332 E AndroidRuntime: java.lang.OutOfMemoryError: Failed to allocate a 5794592 byte allocation with 3652496 free bytes and 3MB until OOM, max allowed footprint 16777216, growth limit 16777216
+11-25 21:29:23.862  7332  7332 E AndroidRuntime: 	at io.github.sceneview.utils.FileKt.readFully(File.kt:187)
+11-25 21:29:23.862  7332  7332 E AndroidRuntime: 	at io.github.sceneview.utils.FileKt.readFully$default(File.kt:181)
+11-25 21:29:23.862  7332  7332 E AndroidRuntime: 	at io.github.sceneview.utils.FileLoader.readFileBuffer$sceneview_release(File.kt:111)
+11-25 21:29:23.862  7332  7332 E AndroidRuntime: 	at io.github.sceneview.utils.FileLoader$loadFileBuffer$3.invokeSuspend(File.kt:67)
+11-25 21:29:23.862  7332  7332 E AndroidRuntime: 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+11-25 21:29:23.862  7332  7332 E AndroidRuntime: 	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+11-25 21:29:23.862  7332  7332 E AndroidRuntime: 	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:124)
+11-25 21:29:23.862  7332  7332 E AndroidRuntime: 	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+11-25 21:29:23.862  7332  7332 E AndroidRuntime: 	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+11-25 21:29:23.862  7332  7332 E AndroidRuntime: 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:798)
+11-25 21:29:23.862  7332  7332 E AndroidRuntime: 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+11-25 21:29:23.862  7332  7332 E AndroidRuntime: 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+
+Rotation 2
+11-25 21:30:16.154  7596  7596 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-25 21:30:16.157  7596  7706 I Filament: FEngine resolved backend: OpenGL
+11-25 21:30:16.232  7596  7706 I Filament: [Google (Intel)], [Android Emulator OpenGL ES Translator (Mesa Intel(R) UHD Graphics 620 (WHL GT2))], [OpenGL ES 3.0 (4.6 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.5)], [OpenGL ES GLSL ES 3.00]
+11-25 21:30:27.860  7596  7596 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-25 21:30:27.878  7596  7724 I Filament: FEngine resolved backend: OpenGL
+11-25 21:30:27.907  7596  7724 I Filament: [Google (Intel)], [Android Emulator OpenGL ES Translator (Mesa Intel(R) UHD Graphics 620 (WHL GT2))], [OpenGL ES 3.0 (4.6 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.5)], [OpenGL ES GLSL ES 3.00]
+11-25 21:30:28.692  7596  7596 W Sceneview: Backend teardown still pending after 5 s; backing off polls, each confirmed by a wait of 4 ms per wake-up (#4969)
+11-25 21:30:28.719  7596  7596 D Sceneview: Engine destroyed
+11-25 21:30:28.720  7596  7596 I Sceneview: Engine destroyed after its backend drained (5548 ms, #3799)
+11-25 21:30:32.823  7596  7596 E AndroidRuntime: FATAL EXCEPTION: main
+11-25 21:30:32.823  7596  7596 E AndroidRuntime: Process: com.ascend.mavlab, PID: 7596
+11-25 21:30:32.823  7596  7596 E AndroidRuntime: java.lang.OutOfMemoryError: Failed to allocate a 5794592 byte allocation with 4314728 free bytes and 4MB until OOM, max allowed footprint 16777216, growth limit 16777216
+11-25 21:30:32.823  7596  7596 E AndroidRuntime: 	at io.github.sceneview.utils.FileKt.readFully(File.kt:187)
+11-25 21:30:32.823  7596  7596 E AndroidRuntime: 	at io.github.sceneview.utils.FileKt.readFully$default(File.kt:181)
+11-25 21:30:32.823  7596  7596 E AndroidRuntime: 	at io.github.sceneview.utils.FileLoader.readFileBuffer$sceneview_release(File.kt:111)
+11-25 21:30:32.823  7596  7596 E AndroidRuntime: 	at io.github.sceneview.utils.FileLoader$loadFileBuffer$3.invokeSuspend(File.kt:67)
+11-25 21:30:32.823  7596  7596 E AndroidRuntime: 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+11-25 21:30:32.823  7596  7596 E AndroidRuntime: 	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+11-25 21:30:32.823  7596  7596 E AndroidRuntime: 	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:124)
+11-25 21:30:32.823  7596  7596 E AndroidRuntime: 	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+11-25 21:30:32.823  7596  7596 E AndroidRuntime: 	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+11-25 21:30:32.823  7596  7596 E AndroidRuntime: 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:798)
+11-25 21:30:32.823  7596  7596 E AndroidRuntime: 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+11-25 21:30:32.823  7596  7596 E AndroidRuntime: 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+
+Rotation 3
+11-25 21:31:27.459  7810  7810 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-25 21:31:27.466  7810  7922 I Filament: FEngine resolved backend: OpenGL
+11-25 21:31:27.507  7810  7922 I Filament: [Google (Intel)], [Android Emulator OpenGL ES Translator (Mesa Intel(R) UHD Graphics 620 (WHL GT2))], [OpenGL ES 3.0 (4.6 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.5)], [OpenGL ES GLSL ES 3.00]
+11-25 21:31:38.577  7810  7810 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-25 21:31:38.595  7810  7941 I Filament: FEngine resolved backend: OpenGL
+11-25 21:31:38.665  7810  7941 I Filament: [Google (Intel)], [Android Emulator OpenGL ES Translator (Mesa Intel(R) UHD Graphics 620 (WHL GT2))], [OpenGL ES 3.0 (4.6 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.5)], [OpenGL ES GLSL ES 3.00]
+11-25 21:31:40.939  7810  7810 W Sceneview: Backend teardown still pending after 5 s; backing off polls, each confirmed by a wait of 4 ms per wake-up (#4969)
+11-25 21:31:40.965  7810  7810 D Sceneview: Engine destroyed
+11-25 21:31:40.966  7810  7810 I Sceneview: Engine destroyed after its backend drained (6715 ms, #3799)
+11-25 21:31:45.213  7810  7810 E AndroidRuntime: FATAL EXCEPTION: main
+11-25 21:31:45.213  7810  7810 E AndroidRuntime: Process: com.ascend.mavlab, PID: 7810
+11-25 21:31:45.213  7810  7810 E AndroidRuntime: java.lang.OutOfMemoryError: Failed to allocate a 5794592 byte allocation with 5038896 free bytes and 4MB until OOM, max allowed footprint 16777216, growth limit 16777216
+11-25 21:31:45.213  7810  7810 E AndroidRuntime: 	at io.github.sceneview.utils.FileKt.readFully(File.kt:187)
+11-25 21:31:45.213  7810  7810 E AndroidRuntime: 	at io.github.sceneview.utils.FileKt.readFully$default(File.kt:181)
+11-25 21:31:45.213  7810  7810 E AndroidRuntime: 	at io.github.sceneview.utils.FileLoader.readFileBuffer$sceneview_release(File.kt:111)
+11-25 21:31:45.213  7810  7810 E AndroidRuntime: 	at io.github.sceneview.utils.FileLoader$loadFileBuffer$3.invokeSuspend(File.kt:67)
+11-25 21:31:45.213  7810  7810 E AndroidRuntime: 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+11-25 21:31:45.213  7810  7810 E AndroidRuntime: 	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+11-25 21:31:45.213  7810  7810 E AndroidRuntime: 	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:124)
+11-25 21:31:45.213  7810  7810 E AndroidRuntime: 	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+11-25 21:31:45.213  7810  7810 E AndroidRuntime: 	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+11-25 21:31:45.213  7810  7810 E AndroidRuntime: 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:798)
+11-25 21:31:45.213  7810  7810 E AndroidRuntime: 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+11-25 21:31:45.213  7810  7810 E AndroidRuntime: 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+
+No-rotation control
+11-25 21:32:41.060  8041  8041 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-25 21:32:41.063  8041  8157 I Filament: FEngine resolved backend: OpenGL
+11-25 21:32:41.100  8041  8157 I Filament: [Google (Intel)], [Android Emulator OpenGL ES Translator (Mesa Intel(R) UHD Graphics 620 (WHL GT2))], [OpenGL ES 3.0 (4.6 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.5)], [OpenGL ES GLSL ES 3.00]
