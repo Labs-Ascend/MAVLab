@@ -4,7 +4,7 @@ MAVLab by Ascend Labs is an Android quadcopter simulator with live telemetry, lo
 
 ## Current Scope
 
-MAVLab v1.6.2 candidate (version code 25) has four product surfaces:
+MAVLab v1.6.2 (version code 25) has four product surfaces:
 
 - Cockpit: live operations, telemetry, safety state, and MAVLink status
 - Control: calibrated phone/manual input, deliberate flight actions and contextual mission controls

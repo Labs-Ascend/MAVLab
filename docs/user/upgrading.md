@@ -1,6 +1,6 @@
 # Installing or upgrading to v1.6.2
 
-The v1.6.2 candidate uses the permanent release-signing identity introduced in v1.6.1. Its APK is non-debuggable and
+v1.6.2 uses the permanent release-signing identity introduced in v1.6.1. Its APK is non-debuggable and
 its APK/AAB share certificate SHA-256:
 
 `46ff910b66597a7340d7b7737e598619368b8594bcdc2f05a91efb54d811eb70`

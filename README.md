@@ -2,9 +2,9 @@
 
 MAVLab is an on-device quadcopter simulator for Android. Fly with phone tilt or on-screen controls and follow the simulated vehicle through live telemetry and a 3D digital twin. Connect QGroundControl to run supported missions, or fly offline and explore failures, recovery, and recorded flight data.
 
-**MAVLab v1.6.2 release candidate** · Android 8.0+ · version code **25** · [Downloads](https://github.com/Labs-Ascend/MAVLab/releases) · [Release notes](docs/v1_6_2_release_notes.md).
+**MAVLab v1.6.2** · Android 8.0+ · version code **25** · [Downloads](https://github.com/Labs-Ascend/MAVLab/releases) · [Release notes](docs/v1_6_2_release_notes.md).
 
-The candidate uses the permanent signing identity introduced in v1.6.1. Export important data before migrating from older debug installations; see [upgrade guidance](docs/user/upgrading.md).
+The release uses the permanent signing identity introduced in v1.6.1. Export important data before migrating from older debug installations; see [upgrade guidance](docs/user/upgrading.md).
 
 ## Start here
 

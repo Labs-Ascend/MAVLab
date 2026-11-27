@@ -1,6 +1,6 @@
 # MAVLab v1.6.2 Release Notes
 
-Status: Release candidate
+Status: Release
 Android version code: 25.
 
 MAVLab v1.6.2 improves SIM rendering and application startup. Android 8.0
@@ -38,8 +38,10 @@ Three earlier SceneView 4.76.0 trials on a Galaxy S10e running Android 12 render
 the model. Those runs preceded the service startup fix and used a separate QA app.
 [Earlier phone evidence](validation/results/2026-11-27-sceneview-4.76.0/phone/README.md).
 
-Additional signed-candidate phone testing was omitted at the maintainer's request.
-The phone's installed v1.6.1 certificate matches the permanent release identity.
+Additional runtime phone testing was omitted at the maintainer's request.
+The signed v1.6.2 APK was installed over v1.6.1 without uninstalling the main app.
+The app UID and original install time were retained and the installed APK digest
+matched the signed candidate. The separate QA/test packages were removed.
 Existing debug and emulator results are retained at their original scope.
 Physical Android 8 GPU drivers remain untested. Model loading was slow at 16 MiB
 and the five-second backend teardown warning occurred before teardown completed.
