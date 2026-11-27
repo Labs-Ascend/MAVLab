@@ -1,0 +1,7 @@
+{
+  "global/wifi_on": "0",
+  "global/mobile_data": "1",
+  "global/stay_on_while_plugged_in": "7",
+  "system/user_rotation": "0",
+  "system/accelerometer_rotation": "0"
+}

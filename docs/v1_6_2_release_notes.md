@@ -44,3 +44,5 @@ Existing debug and emulator results are retained at their original scope.
 Physical Android 8 GPU drivers remain untested. Model loading was slow at 16 MiB
 and the five-second backend teardown warning occurred before teardown completed.
 Signing does not establish Play Console acceptance.
+
+[Signed release preparation](validation/results/v1.6.2-2026-11-27-preparation/README.md).

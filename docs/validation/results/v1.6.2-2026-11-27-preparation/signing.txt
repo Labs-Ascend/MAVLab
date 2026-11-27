@@ -1,0 +1,3 @@
+apk signature verified against the approved certificate.
+aab signature verified against the approved certificate.
+Candidate APK and AAB signed with the permanent release identity.
