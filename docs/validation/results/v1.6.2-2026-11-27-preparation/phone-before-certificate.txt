@@ -1,0 +1,4 @@
+Signer #1 certificate DN: CN=MAVLab Release, O=Ascend Labs
+Signer #1 certificate SHA-256 digest: 46ff910b66597a7340d7b7737e598619368b8594bcdc2f05a91efb54d811eb70
+Signer #1 certificate SHA-1 digest: 9b89524ca0245bf794eb822f30f82d722540350c
+Signer #1 certificate MD5 digest: 045a44db539fa237f0f035aba6e59971
