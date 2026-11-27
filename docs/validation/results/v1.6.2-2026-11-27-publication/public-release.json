@@ -1,0 +1,22 @@
+{
+  "id": 460837255,
+  "tag_name": "v1.6.2",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2026-11-27T16:54:44Z",
+  "html_url": "https://github.com/Labs-Ascend/MAVLab/releases/tag/v1.6.2",
+  "assets": [
+    {
+      "name": "MAVLab-v1.6.2.aab",
+      "size": 35717573,
+      "digest": "sha256:7bde1e682006eb44033db782f07705b907fe5b82deb8eed81ca50d18e2a2f110",
+      "browser_download_url": "https://github.com/Labs-Ascend/MAVLab/releases/download/v1.6.2/MAVLab-v1.6.2.aab"
+    },
+    {
+      "name": "MAVLab-v1.6.2.apk",
+      "size": 52316494,
+      "digest": "sha256:18053e9e8c1521f06af4cef0e30ef8dbdaceacd8ff39424cd9cd6cddf1e38810",
+      "browser_download_url": "https://github.com/Labs-Ascend/MAVLab/releases/download/v1.6.2/MAVLab-v1.6.2.apk"
+    }
+  ]
+}

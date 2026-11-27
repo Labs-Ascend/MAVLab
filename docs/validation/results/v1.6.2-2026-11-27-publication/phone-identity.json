@@ -1,0 +1,12 @@
+{
+  "model": "SM-G970U",
+  "android": "12",
+  "versionName": "1.6.2",
+  "versionCode": 25,
+  "uid": "11033",
+  "firstInstallTime": "2026-11-08 00:02:08",
+  "installed_sha256": "18053e9e8c1521f06af4cef0e30ef8dbdaceacd8ff39424cd9cd6cddf1e38810",
+  "mavlab_packages": [
+    "package:com.ascend.mavlab"
+  ]
+}

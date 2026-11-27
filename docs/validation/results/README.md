@@ -42,3 +42,5 @@ Store immutable, build-specific MAVLab validation records here. Do not overwrite
 - [Onboarding CTA and graph refinement, final focused phone tests — 2026-10-11](2026-10-11-onboarding-chart-refinement/README.md)
 - [Final UI/UX verification, functional passes and remaining findings — 2026-10-11](2026-10-11-final-uiux-verification/README.md)
 - [Final findings fixed, Control large text and audio shutdown — 2026-10-11](2026-10-11-final-findings-fixes/README.md)
+
+- [v1.6.2 publication, signed downloads and installed phone identity — 2026-11-27](v1.6.2-2026-11-27-publication/README.md)

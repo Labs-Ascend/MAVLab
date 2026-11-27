@@ -1,0 +1,23 @@
+Signer #1:
+
+Certificate #1:
+Owner: CN=MAVLab Release, O=Ascend Labs
+Issuer: CN=MAVLab Release, O=Ascend Labs
+Serial number: 4d4c807d3884206b
+Valid from: Sat Nov 07 20:24:51 EAT 2026 until: Mon Oct 30 20:24:51 EAT 2056
+Certificate fingerprints:
+	 SHA1: 9B:89:52:4C:A0:24:5B:F7:94:EB:82:2F:30:F8:2D:72:25:40:35:0C
+	 SHA256: 46:FF:91:0B:66:59:7A:73:40:D7:B7:73:7E:59:86:19:36:8B:85:94:BC:DC:2F:05:A9:1E:FB:54:D8:11:EB:70
+Signature algorithm name: SHA256withRSA
+Subject Public Key Algorithm: 3072-bit RSA key
+Version: 3
+
+Extensions:
+
+#1: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: 42 A8 2D D7 44 2B 3E 63   0E 72 E2 F6 51 31 09 08  B.-.D+>c.r..Q1..
+0010: E6 B3 77 07                                        ..w.
+]
+]
