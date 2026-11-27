@@ -24,7 +24,9 @@ jobs:
           java-version: "21"
           cache: gradle
       - name: Install Android SDK packages
-        run: sdkmanager "platforms;android-37" "build-tools;36.0.0"
+        uses: android-actions/setup-android@v4
+        with:
+          packages: 'platform-tools platforms;android-37 build-tools;36.0.0'
       - name: Documentation and release metadata
         # Candidate notes are allowed in CI; publishing uses the stricter gate.
         run: python3 ../scripts/check-release-docs.py
