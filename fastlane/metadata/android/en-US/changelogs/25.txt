@@ -1,0 +1,1 @@
+SceneView 4.76.0 improves recovery from low-memory model loads. SIM navigation stays aligned after rotation. Visible app startup avoids the foreground-service promotion timeout. Android 8.0+ remains supported.

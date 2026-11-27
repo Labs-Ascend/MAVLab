@@ -97,9 +97,9 @@ GRADLE_USER_HOME="$PWD/.gradle" ./gradlew testDebugUnitTest --console=plain
 GRADLE_USER_HOME="$PWD/.gradle" ./gradlew lintDebug assembleDebug --console=plain
 ```
 
-The debug artifact is renamed by the build and should be expected at:
+The debug artifact should be expected at:
 
-`mavlab-android/app/build/outputs/apk/debug/MAVlab.apk`
+`mavlab-android/app/build/outputs/apk/debug/app-debug.apk`
 
 Do not convert a manual checklist into a permanent `PASS` claim without recording the app version, commit, device, Android version, QGC version, tester, date, and evidence.
 

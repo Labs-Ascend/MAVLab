@@ -2,9 +2,9 @@
 
 MAVLab is an on-device quadcopter simulator for Android. Fly with phone tilt or on-screen controls and follow the simulated vehicle through live telemetry and a 3D digital twin. Connect QGroundControl to run supported missions, or fly offline and explore failures, recovery, and recorded flight data.
 
-**MAVLab v1.6.1** · Android 8.0+ · version code **24** · [Downloads](https://github.com/Labs-Ascend/MAVLab/releases) · [Release notes](docs/v1_6_1_release_notes.md).
+**MAVLab v1.6.2 release candidate** · Android 8.0+ · version code **25** · [Downloads](https://github.com/Labs-Ascend/MAVLab/releases) · [Release notes](docs/v1_6_2_release_notes.md).
 
-The release uses a new permanent signing identity. Export important data before migrating from older debug installations; see [upgrade guidance](docs/user/upgrading.md).
+The candidate uses the permanent signing identity introduced in v1.6.1. Export important data before migrating from older debug installations; see [upgrade guidance](docs/user/upgrading.md).
 
 ## Start here
 
@@ -42,6 +42,12 @@ https://github.com/user-attachments/assets/6ba838d5-6c53-495b-b535-c90d67b0a061
 118 seconds · 1080p, 30 fps · compressed issue-upload copy: H.264 MP4, 6.75 MB. The recording ends during RTL before touchdown and does not establish all-command compatibility.
 
 [Media provenance](assets/media/2026-10/README.md) · [Issue-upload copies](assets/media/issue-upload/README.md).
+
+## What v1.6.2 changes
+
+- SceneView 4.76.0 recovers from low-memory model loads during rotation.
+- SIM selection and its pager stay aligned after activity recreation.
+- Visible UI starts the simulation service without a foreground-promotion timeout during initial layout.
 
 ## What v1.6.1 adds
 
@@ -81,7 +87,7 @@ Use the [release runbook](docs/operations/release.md) for release signing and pa
 - [Architecture](docs/internals/overview.md), [control authority](docs/internals/control-authority.md), [runtime lifecycle](docs/internals/runtime-lifecycle.md) and [MAVLink contract](docs/internals/mavlink-contract.md).
 - [Contributor guide](AGENTS.md), [Android implementation](mavlab-android/README.md), [release runbook](docs/operations/release.md) and [v1.6.0 readiness](docs/operations/v1.6.0-readiness.md).
 - [Validation records](docs/validation/results/README.md). Prior build/device passes are not automatically acceptance of the new versioned artifact.
-- Release notes: [v1.6.1](docs/v1_6_1_release_notes.md), [v1.6.0](docs/v1_6_0_release_notes.md), [v1.5.3](docs/v1_5_3_release_notes.md), [v1.5.2](docs/v1_5_2_release_notes.md), [v1.5.1](docs/v1_5_1_release_notes.md) and [v1.5](docs/v1_5_release_notes.md).
+- Release notes: [v1.6.2](docs/v1_6_2_release_notes.md), [v1.6.1](docs/v1_6_1_release_notes.md), [v1.6.0](docs/v1_6_0_release_notes.md), [v1.5.3](docs/v1_5_3_release_notes.md), [v1.5.2](docs/v1_5_2_release_notes.md), [v1.5.1](docs/v1_5_1_release_notes.md) and [v1.5](docs/v1_5_release_notes.md).
 
 ## Technical paper
 

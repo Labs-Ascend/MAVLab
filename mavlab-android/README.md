@@ -4,7 +4,7 @@ MAVLab by Ascend Labs is an Android quadcopter simulator with live telemetry, lo
 
 ## Current Scope
 
-MAVLab v1.6.1 (version code 24) has four product surfaces:
+MAVLab v1.6.2 candidate (version code 25) has four product surfaces:
 
 - Cockpit: live operations, telemetry, safety state, and MAVLink status
 - Control: calibrated phone/manual input, deliberate flight actions and contextual mission controls
@@ -47,4 +47,4 @@ MAVLab broadcasts MAVLink telemetry over UDP and tracks validated ground-control
 
 GitHub Actions workflows live in the repository root under `.github/workflows/`. Play Store draft metadata lives under `fastlane/metadata/android/en-US/`.
 
-Run `bundleRelease` in addition to the debug gate when preparing a release. The v1.6.1 public APK and AAB use the permanent release certificate. The [release notes](../docs/v1_6_1_release_notes.md) and [release runbook](../docs/operations/release.md) define publication and signing.
+Run `bundleRelease` in addition to the debug gate when preparing a release. Release APK and AAB builds use the permanent certificate introduced in v1.6.1. The [release notes](../docs/v1_6_2_release_notes.md) and [release runbook](../docs/operations/release.md) define publication and signing.
