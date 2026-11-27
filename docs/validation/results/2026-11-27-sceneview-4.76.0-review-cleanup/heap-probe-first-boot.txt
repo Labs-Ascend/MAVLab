@@ -1,0 +1,4 @@
+--------- beginning of main
+--------- beginning of system
+--------- beginning of crash
+11-27 12:36:29.920  3561  3561 I MAVLabHeapProbe: maxMemoryBytes=16777216 memoryClassMiB=16

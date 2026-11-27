@@ -1,0 +1,84 @@
+diff --git a/mavlab-android/app/build.gradle.kts b/mavlab-android/app/build.gradle.kts
+index 9ae1f96..3d1b256 100644
+--- a/mavlab-android/app/build.gradle.kts
++++ b/mavlab-android/app/build.gradle.kts
+@@ -8,7 +8,7 @@ android {
+     compileSdk = 37
+ 
+     defaultConfig {
+-        applicationId = "com.ascend.mavlab"
++        applicationId = "com.ascend.mavlab.sceneview476qa"
+         minSdk = 26
+         targetSdk = 35
+         versionCode = 24
+diff --git a/mavlab-android/app/src/main/AndroidManifest.xml b/mavlab-android/app/src/main/AndroidManifest.xml
+index c619ab1..373427a 100644
+--- a/mavlab-android/app/src/main/AndroidManifest.xml
++++ b/mavlab-android/app/src/main/AndroidManifest.xml
+@@ -13,7 +13,7 @@
+         android:name=".MavLabApp"
+         android:allowBackup="true"
+         android:icon="@mipmap/mavlab_launcher"
+-        android:label="@string/app_name"
++        android:label="MAVLab SceneView 4.76 QA"
+         android:roundIcon="@mipmap/mavlab_launcher_round"
+         android:supportsRtl="true"
+         android:theme="@style/Theme.MAVLab">
+@@ -36,7 +36,7 @@
+ 
+         <provider
+             android:name="androidx.core.content.FileProvider"
+-            android:authorities="com.ascend.mavlab.fileprovider"
++            android:authorities="com.ascend.mavlab.sceneview476qa.fileprovider"
+             android:exported="false"
+             android:grantUriPermissions="true">
+             <meta-data
+diff --git a/mavlab-android/app/src/main/java/com/ascend/mavlab/core/common/AppRuntime.kt b/mavlab-android/app/src/main/java/com/ascend/mavlab/core/common/AppRuntime.kt
+index 1022499..ce260cb 100644
+--- a/mavlab-android/app/src/main/java/com/ascend/mavlab/core/common/AppRuntime.kt
++++ b/mavlab-android/app/src/main/java/com/ascend/mavlab/core/common/AppRuntime.kt
+@@ -163,7 +163,7 @@ object AppRuntime {
+                 mutableSystemId.value = id
+                 mavlinkServer = MavlinkUdpServer(
+                     simLoop = simLoop,
+-                    config = MavlinkSocketConfig(systemId = id),
++                    config = MavlinkSocketConfig(localBindPort = 0, systemId = id),
+                     camera = virtualCamera,
+                     onMissionLoaded = { items ->
+                         MissionPersistence.save(appContext, items, MissionOrigin.GCS_UPLOAD)
+@@ -338,7 +338,7 @@ object AppRuntime {
+         if (files.isEmpty()) return
+ 
+         val uris = ArrayList<android.net.Uri>()
+-        val authority = "com.ascend.mavlab.fileprovider"
++        val authority = "com.ascend.mavlab.sceneview476qa.fileprovider"
+         for (file in files) {
+             try {
+                 val uri = androidx.core.content.FileProvider.getUriForFile(context, authority, file)
+diff --git a/mavlab-android/app/src/main/java/com/ascend/mavlab/core/mavlink/MavlinkUdpServer.kt b/mavlab-android/app/src/main/java/com/ascend/mavlab/core/mavlink/MavlinkUdpServer.kt
+index 2823ad9..c0f2040 100644
+--- a/mavlab-android/app/src/main/java/com/ascend/mavlab/core/mavlink/MavlinkUdpServer.kt
++++ b/mavlab-android/app/src/main/java/com/ascend/mavlab/core/mavlink/MavlinkUdpServer.kt
+@@ -151,7 +151,7 @@ class MavlinkUdpServer(
+ 
+     private fun ipv4Socket(port: Int): DatagramSocket {
+         val channel = DatagramChannel.open(StandardProtocolFamily.INET)
+-        channel.bind(InetSocketAddress(InetAddress.getByName("0.0.0.0"), port))
++        channel.bind(InetSocketAddress(InetAddress.getByName("127.0.0.1"), port))
+         return channel.socket()
+     }
+ 
+@@ -1061,12 +1061,7 @@ class MavlinkUdpServer(
+     }
+ 
+     private fun destinations(context: Context): List<UdpDestination> {
+-        return buildList {
+-            add(UdpDestination(config.sameDeviceHost, config.sameDeviceQgcPort))
+-            addAll(config.lanDestinations)
+-            addAll(networkBroadcasts())
+-            add(UdpDestination("255.255.255.255", 14550))
+-        }.distinct()
++        return emptyList()
+     }
+ 
+     private fun networkBroadcasts(): List<UdpDestination> {

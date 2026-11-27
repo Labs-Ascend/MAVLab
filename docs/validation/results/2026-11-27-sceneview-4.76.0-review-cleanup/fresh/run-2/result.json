@@ -1,0 +1,31 @@
+{
+  "run": 2,
+  "pid": "5156",
+  "first_visible_seconds": 82.73,
+  "engine_starts": 2,
+  "fatal_exception": false,
+  "out_of_memory": true,
+  "load_retries": 0,
+  "load_failed_after_retry": false,
+  "at_45_seconds": {
+    "sample_seconds": 45,
+    "capture_window_seconds": [
+      45.0,
+      54.63
+    ],
+    "model_visible": false,
+    "landscape": true,
+    "sim_screen": true
+  },
+  "last_sample": {
+    "sample_seconds": 75,
+    "capture_window_seconds": [
+      75.0,
+      82.73
+    ],
+    "model_visible": true,
+    "landscape": true,
+    "sim_screen": true
+  },
+  "same_process": true
+}

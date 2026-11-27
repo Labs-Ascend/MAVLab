@@ -1,0 +1,1 @@
+11-27 12:14:57.501  2547  2569 I am_anr  : [0,5561,com.ascend.mavlab,686341702,Context.startForegroundService() did not then call Service.startForeground()]

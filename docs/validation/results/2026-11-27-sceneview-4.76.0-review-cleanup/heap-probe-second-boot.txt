@@ -1,0 +1,3 @@
+--------- beginning of main
+--------- beginning of system
+11-27 12:46:43.097  3767  3767 I MAVLabHeapProbe: maxMemoryBytes=16777216 memoryClassMiB=16

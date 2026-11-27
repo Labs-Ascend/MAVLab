@@ -1,0 +1,52 @@
+io.github.sceneview:sceneview:4.76.0
+  Variant releaseVariantReleaseRuntimePublication:
+    | Attribute Name                                  | Provided     | Requested    |
+    |-------------------------------------------------|--------------|--------------|
+    | org.gradle.dependency.bundling                  | external     |              |
+    | org.gradle.libraryelements                      | aar          |              |
+    | org.gradle.status                               | release      |              |
+    | org.gradle.category                             | library      | library      |
+    | org.gradle.usage                                | java-runtime | java-runtime |
+    | com.android.build.api.attributes.AgpVersionAttr |              | 9.4.1        |
+    | com.android.build.api.attributes.BuildTypeAttr  |              | debug        |
+    | org.gradle.jvm.environment                      |              | android      |
+    | org.jetbrains.kotlin.platform.type              |              | androidJvm   |
+
+io.github.sceneview:sceneview:4.76.0
+\--- debugRuntimeClasspath
+
+io.github.sceneview:sceneview-core:4.76.0
+  Variant androidRuntimeElements-published:
+    | Attribute Name                                  | Provided     | Requested    |
+    |-------------------------------------------------|--------------|--------------|
+    | org.gradle.libraryelements                      | jar          |              |
+    | org.gradle.status                               | release      |              |
+    | org.gradle.category                             | library      | library      |
+    | org.gradle.jvm.environment                      | standard-jvm | android      |
+    | org.gradle.usage                                | java-runtime | java-runtime |
+    | org.jetbrains.kotlin.platform.type              | jvm          | androidJvm   |
+    | com.android.build.api.attributes.AgpVersionAttr |              | 9.4.1        |
+    | com.android.build.api.attributes.BuildTypeAttr  |              | debug        |
+
+io.github.sceneview:sceneview-core:4.76.0
+\--- io.github.sceneview:sceneview:4.76.0
+     \--- debugRuntimeClasspath
+
+io.github.sceneview:sceneview-core-android:4.76.0
+  Variant androidRuntimeElements-published:
+    | Attribute Name                                  | Provided     | Requested    |
+    |-------------------------------------------------|--------------|--------------|
+    | org.gradle.libraryelements                      | jar          |              |
+    | org.gradle.status                               | release      |              |
+    | org.gradle.category                             | library      | library      |
+    | org.gradle.jvm.environment                      | standard-jvm | android      |
+    | org.gradle.usage                                | java-runtime | java-runtime |
+    | org.jetbrains.kotlin.platform.type              | jvm          | androidJvm   |
+    | com.android.build.api.attributes.AgpVersionAttr |              | 9.4.1        |
+    | com.android.build.api.attributes.BuildTypeAttr  |              | debug        |
+
+io.github.sceneview:sceneview-core-android:4.76.0
+\--- io.github.sceneview:sceneview-core:4.76.0
+     \--- io.github.sceneview:sceneview:4.76.0
+          \--- debugRuntimeClasspath
+

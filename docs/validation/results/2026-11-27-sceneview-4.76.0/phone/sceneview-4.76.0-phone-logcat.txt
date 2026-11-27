@@ -1,0 +1,102 @@
+MAVLab 1.6.1 debug / SceneView 4.76.0, 2026-11-27
+Samsung Galaxy S10e (SM-G970U), Android 12 API 31, Adreno 640 / OpenGL ES 3.2, 256 MiB heap limit
+Three portrait-to-landscape rotations during the first load of the original drone.glb
+
+Trial 1
+11-27 12:27:05.898  6220  6220 I MavlinkUdpServer: MAVLink started sys=1 comp=1 local=33697 destinations=
+11-27 12:27:16.143  6220  6220 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-27 12:27:16.145  6220  6574 I Filament: FEngine resolved backend: OpenGL
+11-27 12:27:16.148  6220  6574 I Filament: [Qualcomm], [Adreno (TM) 640], [OpenGL ES 3.2 V@0502.0 (GIT@3dad7f8ed7, I593c16c433, 1633080534) (Date:10/01/21)], [OpenGL ES GLSL ES 3.20]
+11-27 12:27:16.148  6220  6574 I Filament: Feature level: 2
+11-27 12:27:16.148  6220  6574 I Filament: Active workarounds: 
+11-27 12:27:16.148  6220  6574 I Filament: dont_use_timer_query
+11-27 12:27:16.148  6220  6574 I Filament: disable_blit_into_texture_array
+11-27 12:27:16.148  6220  6574 I Filament: split_easu
+11-27 12:27:16.148  6220  6574 I Filament: invalidate_end_only_if_invalidate_start
+11-27 12:27:16.148  6220  6574 I Filament: allow_read_only_ancillary_feedback_loop
+11-27 12:27:16.148  6220  6574 I Filament: enable_initialize_non_used_uniform_array
+11-27 12:27:16.148  6220  6574 I Filament: disable_es2_srgb_ext
+11-27 12:27:16.151  6220  6220 I Filament: Backend feature level: 2
+11-27 12:27:16.151  6220  6220 I Filament: FEngine feature level: 1
+11-27 12:27:18.784  6220  6220 D Sceneview: Engine destroyed
+11-27 12:27:18.784  6220  6220 I Sceneview: Engine destroyed after its backend drained (548 ms, #3799)
+11-27 12:27:18.840  6220  6220 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-27 12:27:18.840  6220  6617 I Filament: FEngine resolved backend: OpenGL
+11-27 12:27:18.842  6220  6617 I Filament: [Qualcomm], [Adreno (TM) 640], [OpenGL ES 3.2 V@0502.0 (GIT@3dad7f8ed7, I593c16c433, 1633080534) (Date:10/01/21)], [OpenGL ES GLSL ES 3.20]
+11-27 12:27:18.842  6220  6617 I Filament: Feature level: 2
+11-27 12:27:18.842  6220  6617 I Filament: Active workarounds: 
+11-27 12:27:18.842  6220  6617 I Filament: dont_use_timer_query
+11-27 12:27:18.842  6220  6617 I Filament: disable_blit_into_texture_array
+11-27 12:27:18.842  6220  6617 I Filament: split_easu
+11-27 12:27:18.842  6220  6617 I Filament: invalidate_end_only_if_invalidate_start
+11-27 12:27:18.842  6220  6617 I Filament: allow_read_only_ancillary_feedback_loop
+11-27 12:27:18.842  6220  6617 I Filament: enable_initialize_non_used_uniform_array
+11-27 12:27:18.842  6220  6617 I Filament: disable_es2_srgb_ext
+11-27 12:27:18.844  6220  6220 I Filament: Backend feature level: 2
+11-27 12:27:18.844  6220  6220 I Filament: FEngine feature level: 1
+
+Trial 2
+11-27 12:28:09.104  6789  6789 I MavlinkUdpServer: MAVLink started sys=1 comp=1 local=55466 destinations=
+11-27 12:28:18.509  6789  6789 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-27 12:28:18.509  6789  7053 I Filament: FEngine resolved backend: OpenGL
+11-27 12:28:18.512  6789  7053 I Filament: [Qualcomm], [Adreno (TM) 640], [OpenGL ES 3.2 V@0502.0 (GIT@3dad7f8ed7, I593c16c433, 1633080534) (Date:10/01/21)], [OpenGL ES GLSL ES 3.20]
+11-27 12:28:18.512  6789  7053 I Filament: Feature level: 2
+11-27 12:28:18.512  6789  7053 I Filament: Active workarounds: 
+11-27 12:28:18.512  6789  7053 I Filament: dont_use_timer_query
+11-27 12:28:18.512  6789  7053 I Filament: disable_blit_into_texture_array
+11-27 12:28:18.512  6789  7053 I Filament: split_easu
+11-27 12:28:18.512  6789  7053 I Filament: invalidate_end_only_if_invalidate_start
+11-27 12:28:18.512  6789  7053 I Filament: allow_read_only_ancillary_feedback_loop
+11-27 12:28:18.512  6789  7053 I Filament: enable_initialize_non_used_uniform_array
+11-27 12:28:18.512  6789  7053 I Filament: disable_es2_srgb_ext
+11-27 12:28:18.514  6789  6789 I Filament: Backend feature level: 2
+11-27 12:28:18.515  6789  6789 I Filament: FEngine feature level: 1
+11-27 12:28:21.529  6789  6789 D Sceneview: Engine destroyed
+11-27 12:28:21.529  6789  6789 I Sceneview: Engine destroyed after its backend drained (540 ms, #3799)
+11-27 12:28:21.578  6789  6789 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-27 12:28:21.578  6789  7096 I Filament: FEngine resolved backend: OpenGL
+11-27 12:28:21.580  6789  7096 I Filament: [Qualcomm], [Adreno (TM) 640], [OpenGL ES 3.2 V@0502.0 (GIT@3dad7f8ed7, I593c16c433, 1633080534) (Date:10/01/21)], [OpenGL ES GLSL ES 3.20]
+11-27 12:28:21.580  6789  7096 I Filament: Feature level: 2
+11-27 12:28:21.580  6789  7096 I Filament: Active workarounds: 
+11-27 12:28:21.580  6789  7096 I Filament: dont_use_timer_query
+11-27 12:28:21.580  6789  7096 I Filament: disable_blit_into_texture_array
+11-27 12:28:21.580  6789  7096 I Filament: split_easu
+11-27 12:28:21.580  6789  7096 I Filament: invalidate_end_only_if_invalidate_start
+11-27 12:28:21.580  6789  7096 I Filament: allow_read_only_ancillary_feedback_loop
+11-27 12:28:21.580  6789  7096 I Filament: enable_initialize_non_used_uniform_array
+11-27 12:28:21.580  6789  7096 I Filament: disable_es2_srgb_ext
+11-27 12:28:21.583  6789  6789 I Filament: Backend feature level: 2
+11-27 12:28:21.583  6789  6789 I Filament: FEngine feature level: 1
+
+Trial 3
+11-27 12:30:34.366  8492  8492 I MavlinkUdpServer: MAVLink started sys=1 comp=1 local=37015 destinations=
+11-27 12:30:43.509  8492  8492 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-27 12:30:43.510  8492  8849 I Filament: FEngine resolved backend: OpenGL
+11-27 12:30:43.512  8492  8849 I Filament: [Qualcomm], [Adreno (TM) 640], [OpenGL ES 3.2 V@0502.0 (GIT@3dad7f8ed7, I593c16c433, 1633080534) (Date:10/01/21)], [OpenGL ES GLSL ES 3.20]
+11-27 12:30:43.512  8492  8849 I Filament: Feature level: 2
+11-27 12:30:43.512  8492  8849 I Filament: Active workarounds: 
+11-27 12:30:43.512  8492  8849 I Filament: dont_use_timer_query
+11-27 12:30:43.512  8492  8849 I Filament: disable_blit_into_texture_array
+11-27 12:30:43.512  8492  8849 I Filament: split_easu
+11-27 12:30:43.512  8492  8849 I Filament: invalidate_end_only_if_invalidate_start
+11-27 12:30:43.512  8492  8849 I Filament: allow_read_only_ancillary_feedback_loop
+11-27 12:30:43.512  8492  8849 I Filament: enable_initialize_non_used_uniform_array
+11-27 12:30:43.512  8492  8849 I Filament: disable_es2_srgb_ext
+11-27 12:30:43.515  8492  8492 I Filament: Backend feature level: 2
+11-27 12:30:43.515  8492  8492 I Filament: FEngine feature level: 1
+11-27 12:30:46.008  8492  8492 D Sceneview: Engine destroyed
+11-27 12:30:46.008  8492  8492 I Sceneview: Engine destroyed after its backend drained (617 ms, #3799)
+11-27 12:30:46.067  8492  8492 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-27 12:30:46.067  8492  8888 I Filament: FEngine resolved backend: OpenGL
+11-27 12:30:46.069  8492  8888 I Filament: [Qualcomm], [Adreno (TM) 640], [OpenGL ES 3.2 V@0502.0 (GIT@3dad7f8ed7, I593c16c433, 1633080534) (Date:10/01/21)], [OpenGL ES GLSL ES 3.20]
+11-27 12:30:46.069  8492  8888 I Filament: Feature level: 2
+11-27 12:30:46.069  8492  8888 I Filament: Active workarounds: 
+11-27 12:30:46.069  8492  8888 I Filament: dont_use_timer_query
+11-27 12:30:46.069  8492  8888 I Filament: disable_blit_into_texture_array
+11-27 12:30:46.069  8492  8888 I Filament: split_easu
+11-27 12:30:46.069  8492  8888 I Filament: invalidate_end_only_if_invalidate_start
+11-27 12:30:46.069  8492  8888 I Filament: allow_read_only_ancillary_feedback_loop
+11-27 12:30:46.069  8492  8888 I Filament: enable_initialize_non_used_uniform_array
+11-27 12:30:46.069  8492  8888 I Filament: disable_es2_srgb_ext
+11-27 12:30:46.071  8492  8492 I Filament: Backend feature level: 2
+11-27 12:30:46.071  8492  8492 I Filament: FEngine feature level: 1

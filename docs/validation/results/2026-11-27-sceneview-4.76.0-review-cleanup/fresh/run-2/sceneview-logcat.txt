@@ -1,0 +1,26 @@
+11-27 12:48:21.629  5156  5156 I Filament: FEngine (64 bits) created at 0x780f8e9a1000 (threading is enabled)
+11-27 12:48:21.642  5156  5277 I Filament: FEngine resolved backend: OpenGL
+11-27 12:48:21.680  5156  5277 I Filament: [Google (Intel)], [Android Emulator OpenGL ES Translator (Mesa Intel(R) UHD Graphics 620 (WHL GT2))], [OpenGL ES 3.0 (4.6 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.5)], [OpenGL ES GLSL ES 3.00]
+11-27 12:48:21.705  5156  5277 I Filament: Feature level: 1
+11-27 12:48:21.705  5156  5277 I Filament: Active workarounds: 
+11-27 12:48:21.705  5156  5277 I Filament: vao_doesnt_store_element_array_buffer_binding
+11-27 12:48:21.706  5156  5277 I Filament: disable_invalidate_framebuffer
+11-27 12:48:21.706  5156  5277 I Filament: disable_es2_srgb_ext
+11-27 12:48:21.713  5156  5156 I Filament: Backend feature level: 1
+11-27 12:48:21.713  5156  5156 I Filament: FEngine feature level: 1
+11-27 12:48:32.215  5156  5156 I Filament: FEngine (64 bits) created at 0x780f8e9bd000 (threading is enabled)
+11-27 12:48:32.220  5156  5301 I Filament: FEngine resolved backend: OpenGL
+11-27 12:48:32.275  5156  5301 I Filament: [Google (Intel)], [Android Emulator OpenGL ES Translator (Mesa Intel(R) UHD Graphics 620 (WHL GT2))], [OpenGL ES 3.0 (4.6 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.5)], [OpenGL ES GLSL ES 3.00]
+11-27 12:48:32.294  5156  5301 I Filament: Feature level: 1
+11-27 12:48:32.294  5156  5301 I Filament: Active workarounds: 
+11-27 12:48:32.296  5156  5301 I Filament: vao_doesnt_store_element_array_buffer_binding
+11-27 12:48:32.296  5156  5301 I Filament: disable_invalidate_framebuffer
+11-27 12:48:32.296  5156  5301 I Filament: disable_es2_srgb_ext
+11-27 12:48:32.326  5156  5156 I Filament: Backend feature level: 1
+11-27 12:48:32.326  5156  5156 I Filament: FEngine feature level: 1
+11-27 12:48:33.166  5156  5156 W Sceneview: Backend teardown still pending after 5 s; backing off polls, each confirmed by a wait of 4 ms per wake-up (#4969)
+11-27 12:48:35.913  5156  5156 D Sceneview: Engine destroyed
+11-27 12:48:35.913  5156  5156 I Sceneview: Engine destroyed after its backend drained (7857 ms, #3799)
+11-27 12:49:31.113  5156  5163 I zygote64: JIT allocated 126KB for stack maps of void io.github.sceneview.SceneKt.SceneView(androidx.compose.ui.Modifier, io.github.sceneview.SurfaceType, com.google.android.filament.Engine, io.github.sceneview.loaders.ModelLoader, io.github.sceneview.loaders.MaterialLoader, io.github.sceneview.loaders.EnvironmentLoader, com.google.android.filament.View, boolean, io.github.sceneview.FrameRatePolicy, io.github.sceneview.RenderInvalidator, io.github.sceneview.RenderQuality, boolean, boolean, float, io.github.sceneview.FitMode, io.github.sceneview.model.AnimationEnvelope, androidx.compose.foundation.layout.PaddingValues, boolean, com.google.android.filament.Renderer, com.google.android.filament.Scene, io.github.sceneview.environment.Environment, io.github.sceneview.node.LightNode, io.github.sceneview.node.LightNode, io.github.sceneview.node.CameraNode, io.github.sceneview.collision.CollisionSystem, io.github.sceneview.gesture.CameraGestureDetector$CameraManipulator, io.github.sceneview.node.ViewNode$WindowManager, io.gith
+11-27 12:49:31.213  5156  5163 I zygote64: JIT allocated 64KB for compiled code of void io.github.sceneview.SceneKt.SceneView(androidx.compose.ui.Modifier, io.github.sceneview.SurfaceType, com.google.android.filament.Engine, io.github.sceneview.loaders.ModelLoader, io.github.sceneview.loaders.MaterialLoader, io.github.sceneview.loaders.EnvironmentLoader, com.google.android.filament.View, boolean, io.github.sceneview.FrameRatePolicy, io.github.sceneview.RenderInvalidator, io.github.sceneview.RenderQuality, boolean, boolean, float, io.github.sceneview.FitMode, io.github.sceneview.model.AnimationEnvelope, androidx.compose.foundation.layout.PaddingValues, boolean, com.google.android.filament.Renderer, com.google.android.filament.Scene, io.github.sceneview.environment.Environment, io.github.sceneview.node.LightNode, io.github.sceneview.node.LightNode, io.github.sceneview.node.CameraNode, io.github.sceneview.collision.CollisionSystem, io.github.sceneview.gesture.CameraGestureDetector$CameraManipulator, io.github.sceneview.node.ViewNode$WindowManager, io.gi
+11-27 12:49:31.214  5156  5163 I zygote64: Compiler allocated 25MB to compile void io.github.sceneview.SceneKt.SceneView(androidx.compose.ui.Modifier, io.github.sceneview.SurfaceType, com.google.android.filament.Engine, io.github.sceneview.loaders.ModelLoader, io.github.sceneview.loaders.MaterialLoader, io.github.sceneview.loaders.EnvironmentLoader, com.google.android.filament.View, boolean, io.github.sceneview.FrameRatePolicy, io.github.sceneview.RenderInvalidator, io.github.sceneview.RenderQuality, boolean, boolean, float, io.github.sceneview.FitMode, io.github.sceneview.model.AnimationEnvelope, androidx.compose.foundation.layout.PaddingValues, boolean, com.google.android.filament.Renderer, com.google.android.filament.Scene, io.github.sceneview.environment.Environment, io.github.sceneview.node.LightNode, io.github.sceneview.node.LightNode, io.github.sceneview.node.CameraNode, io.github.sceneview.collision.CollisionSystem, io.github.sceneview.gesture.CameraGestureDetector$CameraManipulator, io.github.sceneview.node.ViewNode$WindowManager, io.github.

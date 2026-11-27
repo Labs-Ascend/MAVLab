@@ -1,0 +1,101 @@
+[
+  {
+    "run": 2,
+    "pid": "6164",
+    "first_visible_seconds": 66.64,
+    "engine_starts": 2,
+    "fatal_exception": false,
+    "out_of_memory": true,
+    "load_retries": 1,
+    "load_failed_after_retry": false,
+    "at_45_seconds": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        52.74
+      ],
+      "model_visible": false,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "last_sample": {
+      "sample_seconds": 60,
+      "capture_window_seconds": [
+        60.0,
+        66.64
+      ],
+      "model_visible": true,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "same_process": true,
+    "evidence_dir": "rotation/run-2",
+    "trial": 1
+  },
+  {
+    "run": 3,
+    "pid": "6398",
+    "first_visible_seconds": 67.57,
+    "engine_starts": 2,
+    "fatal_exception": false,
+    "out_of_memory": true,
+    "load_retries": 1,
+    "load_failed_after_retry": false,
+    "at_45_seconds": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        52.5
+      ],
+      "model_visible": false,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "last_sample": {
+      "sample_seconds": 60,
+      "capture_window_seconds": [
+        60.0,
+        67.57
+      ],
+      "model_visible": true,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "same_process": true,
+    "evidence_dir": "rotation/run-3",
+    "trial": 2
+  },
+  {
+    "run": 1,
+    "pid": "6624",
+    "first_visible_seconds": 67.53,
+    "engine_starts": 2,
+    "fatal_exception": false,
+    "out_of_memory": true,
+    "load_retries": 1,
+    "load_failed_after_retry": false,
+    "at_45_seconds": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        51.83
+      ],
+      "model_visible": false,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "last_sample": {
+      "sample_seconds": 60,
+      "capture_window_seconds": [
+        60.0,
+        67.53
+      ],
+      "model_visible": true,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "same_process": true,
+    "evidence_dir": "rotation-repeat/run-1",
+    "trial": 3
+  }
+]

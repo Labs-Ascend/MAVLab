@@ -1,0 +1,101 @@
+[
+  {
+    "run": 1,
+    "pid": "6813",
+    "first_visible_seconds": 102.88,
+    "engine_starts": 2,
+    "fatal_exception": false,
+    "out_of_memory": true,
+    "load_retries": 1,
+    "load_failed_after_retry": false,
+    "at_45_seconds": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        54.28
+      ],
+      "model_visible": false,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "last_sample": {
+      "sample_seconds": 90,
+      "capture_window_seconds": [
+        91.65,
+        102.88
+      ],
+      "model_visible": true,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "same_process": true,
+    "trial": 1,
+    "evidence_dir": "retry/run-1"
+  },
+  {
+    "run": 2,
+    "pid": "5156",
+    "first_visible_seconds": 82.73,
+    "engine_starts": 2,
+    "fatal_exception": false,
+    "out_of_memory": true,
+    "load_retries": 0,
+    "load_failed_after_retry": false,
+    "at_45_seconds": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        54.63
+      ],
+      "model_visible": false,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "last_sample": {
+      "sample_seconds": 75,
+      "capture_window_seconds": [
+        75.0,
+        82.73
+      ],
+      "model_visible": true,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "same_process": true,
+    "trial": 2,
+    "evidence_dir": "fresh/run-2"
+  },
+  {
+    "run": 1,
+    "pid": "5447",
+    "first_visible_seconds": 67.26,
+    "engine_starts": 2,
+    "fatal_exception": false,
+    "out_of_memory": true,
+    "load_retries": 1,
+    "load_failed_after_retry": false,
+    "at_45_seconds": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        52.83
+      ],
+      "model_visible": false,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "last_sample": {
+      "sample_seconds": 60,
+      "capture_window_seconds": [
+        60.0,
+        67.26
+      ],
+      "model_visible": true,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "same_process": true,
+    "trial": 3,
+    "evidence_dir": "cleaned/run-1"
+  }
+]

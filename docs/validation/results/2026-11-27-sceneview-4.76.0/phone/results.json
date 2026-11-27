@@ -1,0 +1,96 @@
+[
+  {
+    "run": 1,
+    "pid": "6220",
+    "first_visible_seconds": 16.03,
+    "engine_starts": 2,
+    "fatal_exception": false,
+    "out_of_memory": false,
+    "load_retries": 0,
+    "at_45_seconds": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        45.97
+      ],
+      "model_visible": true,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "last_sample": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        45.97
+      ],
+      "model_visible": true,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "same_process": true,
+    "isolated_mavlink": true
+  },
+  {
+    "run": 2,
+    "pid": "6789",
+    "first_visible_seconds": 15.94,
+    "engine_starts": 2,
+    "fatal_exception": false,
+    "out_of_memory": false,
+    "load_retries": 0,
+    "at_45_seconds": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        45.99
+      ],
+      "model_visible": true,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "last_sample": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        45.99
+      ],
+      "model_visible": true,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "same_process": true,
+    "isolated_mavlink": true
+  },
+  {
+    "run": 3,
+    "pid": "8492",
+    "first_visible_seconds": 16.0,
+    "engine_starts": 2,
+    "fatal_exception": false,
+    "out_of_memory": false,
+    "load_retries": 0,
+    "at_45_seconds": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        46.04
+      ],
+      "model_visible": true,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "last_sample": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        46.04
+      ],
+      "model_visible": true,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "same_process": true,
+    "isolated_mavlink": true,
+    "evidence_dir": "repeat/run-1"
+  }
+]

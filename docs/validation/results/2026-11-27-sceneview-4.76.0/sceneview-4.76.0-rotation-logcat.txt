@@ -1,0 +1,81 @@
+MAVLab 1.6.1 debug / SceneView 4.76.0, 2026-11-27
+Android 8.0 API 26 x86_64 emulator, host OpenGL ES 3.0, verified 16 MiB Java heap
+Original models/drone.glb, portrait-to-landscape during the first model load
+
+Trial 1 (rotation/run-2)
+11-27 12:16:03.764  6164  6164 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-27 12:16:03.770  6164  6294 I Filament: FEngine resolved backend: OpenGL
+11-27 12:16:03.857  6164  6294 I Filament: [Google (Intel)], [Android Emulator OpenGL ES Translator (Mesa Intel(R) UHD Graphics 620 (WHL GT2))], [OpenGL ES 3.0 (4.6 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.5)], [OpenGL ES GLSL ES 3.00]
+11-27 12:16:03.874  6164  6294 I Filament: Feature level: 1
+11-27 12:16:03.874  6164  6294 I Filament: Active workarounds: 
+11-27 12:16:03.874  6164  6294 I Filament: vao_doesnt_store_element_array_buffer_binding
+11-27 12:16:03.875  6164  6294 I Filament: disable_invalidate_framebuffer
+11-27 12:16:03.875  6164  6294 I Filament: disable_es2_srgb_ext
+11-27 12:16:03.885  6164  6164 I Filament: Backend feature level: 1
+11-27 12:16:03.885  6164  6164 I Filament: FEngine feature level: 1
+11-27 12:16:14.152  6164  6164 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-27 12:16:14.157  6164  6321 I Filament: FEngine resolved backend: OpenGL
+11-27 12:16:14.186  6164  6321 I Filament: [Google (Intel)], [Android Emulator OpenGL ES Translator (Mesa Intel(R) UHD Graphics 620 (WHL GT2))], [OpenGL ES 3.0 (4.6 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.5)], [OpenGL ES GLSL ES 3.00]
+11-27 12:16:14.214  6164  6321 I Filament: Feature level: 1
+11-27 12:16:14.214  6164  6321 I Filament: Active workarounds: 
+11-27 12:16:14.215  6164  6321 I Filament: vao_doesnt_store_element_array_buffer_binding
+11-27 12:16:14.216  6164  6321 I Filament: disable_invalidate_framebuffer
+11-27 12:16:14.216  6164  6321 I Filament: disable_es2_srgb_ext
+11-27 12:16:14.233  6164  6164 I Filament: Backend feature level: 1
+11-27 12:16:14.233  6164  6164 I Filament: FEngine feature level: 1
+11-27 12:16:14.829  6164  6164 W Sceneview: Backend teardown still pending after 5 s; backing off polls, each confirmed by a wait of 4 ms per wake-up (#4969)
+11-27 12:16:15.932  6164  6164 D Sceneview: Engine destroyed
+11-27 12:16:15.932  6164  6164 I Sceneview: Engine destroyed after its backend drained (6162 ms, #3799)
+11-27 12:16:18.316  6164  6164 W ModelLoader: Not enough Java heap to read models/drone.glb (Failed to allocate a 5794592 byte allocation with 4142920 free bytes and 3MB until OOM, max allowed footprint 16777216, growth limit 16777216); waiting for 1 abandoned load(s), then trying again
+
+Trial 2 (rotation/run-3)
+11-27 12:17:37.078  6398  6398 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-27 12:17:37.084  6398  6513 I Filament: FEngine resolved backend: OpenGL
+11-27 12:17:37.132  6398  6513 I Filament: [Google (Intel)], [Android Emulator OpenGL ES Translator (Mesa Intel(R) UHD Graphics 620 (WHL GT2))], [OpenGL ES 3.0 (4.6 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.5)], [OpenGL ES GLSL ES 3.00]
+11-27 12:17:37.145  6398  6513 I Filament: Feature level: 1
+11-27 12:17:37.145  6398  6513 I Filament: Active workarounds: 
+11-27 12:17:37.145  6398  6513 I Filament: vao_doesnt_store_element_array_buffer_binding
+11-27 12:17:37.145  6398  6513 I Filament: disable_invalidate_framebuffer
+11-27 12:17:37.146  6398  6513 I Filament: disable_es2_srgb_ext
+11-27 12:17:37.163  6398  6398 I Filament: Backend feature level: 1
+11-27 12:17:37.163  6398  6398 I Filament: FEngine feature level: 1
+11-27 12:17:45.657  6398  6398 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-27 12:17:45.667  6398  6533 I Filament: FEngine resolved backend: OpenGL
+11-27 12:17:45.720  6398  6533 I Filament: [Google (Intel)], [Android Emulator OpenGL ES Translator (Mesa Intel(R) UHD Graphics 620 (WHL GT2))], [OpenGL ES 3.0 (4.6 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.5)], [OpenGL ES GLSL ES 3.00]
+11-27 12:17:45.734  6398  6533 I Filament: Feature level: 1
+11-27 12:17:45.740  6398  6533 I Filament: Active workarounds: 
+11-27 12:17:45.740  6398  6533 I Filament: vao_doesnt_store_element_array_buffer_binding
+11-27 12:17:45.740  6398  6533 I Filament: disable_invalidate_framebuffer
+11-27 12:17:45.740  6398  6533 I Filament: disable_es2_srgb_ext
+11-27 12:17:45.764  6398  6398 I Filament: Backend feature level: 1
+11-27 12:17:45.765  6398  6398 I Filament: FEngine feature level: 1
+11-27 12:17:46.744  6398  6398 W Sceneview: Backend teardown still pending after 5 s; backing off polls, each confirmed by a wait of 4 ms per wake-up (#4969)
+11-27 12:17:49.813  6398  6398 D Sceneview: Engine destroyed
+11-27 12:17:49.813  6398  6398 I Sceneview: Engine destroyed after its backend drained (8404 ms, #3799)
+11-27 12:17:51.274  6398  6398 W ModelLoader: Not enough Java heap to read models/drone.glb (Failed to allocate a 5794592 byte allocation with 4256760 free bytes and 4MB until OOM, max allowed footprint 16777216, growth limit 16777216); waiting for 1 abandoned load(s), then trying again
+
+Trial 3 (rotation-repeat/run-1)
+11-27 12:19:45.393  6624  6624 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-27 12:19:45.401  6624  6731 I Filament: FEngine resolved backend: OpenGL
+11-27 12:19:45.467  6624  6731 I Filament: [Google (Intel)], [Android Emulator OpenGL ES Translator (Mesa Intel(R) UHD Graphics 620 (WHL GT2))], [OpenGL ES 3.0 (4.6 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.5)], [OpenGL ES GLSL ES 3.00]
+11-27 12:19:45.508  6624  6731 I Filament: Feature level: 1
+11-27 12:19:45.508  6624  6731 I Filament: Active workarounds: 
+11-27 12:19:45.508  6624  6731 I Filament: vao_doesnt_store_element_array_buffer_binding
+11-27 12:19:45.509  6624  6731 I Filament: disable_invalidate_framebuffer
+11-27 12:19:45.509  6624  6731 I Filament: disable_es2_srgb_ext
+11-27 12:19:45.525  6624  6624 I Filament: Backend feature level: 1
+11-27 12:19:45.525  6624  6624 I Filament: FEngine feature level: 1
+11-27 12:19:53.904  6624  6624 I Filament: FEngine (64 bits) created at <engine-address> (threading is enabled)
+11-27 12:19:53.905  6624  6750 I Filament: FEngine resolved backend: OpenGL
+11-27 12:19:54.014  6624  6750 I Filament: [Google (Intel)], [Android Emulator OpenGL ES Translator (Mesa Intel(R) UHD Graphics 620 (WHL GT2))], [OpenGL ES 3.0 (4.6 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.5)], [OpenGL ES GLSL ES 3.00]
+11-27 12:19:54.076  6624  6750 I Filament: Feature level: 1
+11-27 12:19:54.076  6624  6750 I Filament: Active workarounds: 
+11-27 12:19:54.076  6624  6750 I Filament: vao_doesnt_store_element_array_buffer_binding
+11-27 12:19:54.076  6624  6750 I Filament: disable_invalidate_framebuffer
+11-27 12:19:54.076  6624  6750 I Filament: disable_es2_srgb_ext
+11-27 12:19:54.104  6624  6624 I Filament: Backend feature level: 1
+11-27 12:19:54.105  6624  6624 I Filament: FEngine feature level: 1
+11-27 12:19:55.129  6624  6624 W Sceneview: Backend teardown still pending after 5 s; backing off polls, each confirmed by a wait of 4 ms per wake-up (#4969)
+11-27 12:19:57.926  6624  6624 D Sceneview: Engine destroyed
+11-27 12:19:57.926  6624  6624 I Sceneview: Engine destroyed after its backend drained (7974 ms, #3799)
+11-27 12:20:00.296  6624  6624 W ModelLoader: Not enough Java heap to read models/drone.glb (Failed to allocate a 5794592 byte allocation with 3693320 free bytes and 3MB until OOM, max allowed footprint 16777216, growth limit 16777216); waiting for 0 abandoned load(s), then trying again
