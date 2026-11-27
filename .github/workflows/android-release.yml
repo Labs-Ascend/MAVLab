@@ -25,7 +25,7 @@ jobs:
       - name: Install Android SDK packages
         uses: android-actions/setup-android@v4
         with:
-          packages: 'platform-tools platforms;android-37 build-tools;36.0.0'
+          packages: 'platform-tools platforms;android-37.0 build-tools;36.0.0'
       - name: Verify release tag
         run: |
           python3 ../scripts/check-release-docs.py --publish --tag "${GITHUB_REF_NAME}"
