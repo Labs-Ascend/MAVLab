@@ -102,3 +102,14 @@ Accepted fence/rally/configuration snapshots restore after the persisted simulat
 ## Virtual map camera review (working tree)
 
 AppRuntime owns the camera independently of Compose. Capture IO has a bounded request queue and decoded tile cache. Camera enablement adds no service-retention condition; Stop and origin reset invalidate capture generations and asynchronously release map resources. Process recreation retains completed files and starts with the camera off. Automatic flight recording remains opt-in, and foreground phone-sensor eligibility is unchanged. See [ADR-0014](decisions/0014-offline-map-camera.md).
+
+
+## Service startup from visible UI
+
+MainActivity.onStart and Ops Start/Restart use SimulationService.startFromVisibleUi.
+It starts the service with Context.startService while the activity is visible.
+This avoids starting the foreground-promotion deadline while initial Compose
+layout is occupying the main thread. SimulationService.onCreate creates the
+notification channel and calls startForeground before acquiring locks and
+starting AppRuntime. Rotation and return to the activity deliver APP_VISIBLE to
+the existing service. The helper is restricted to visible UI callers.

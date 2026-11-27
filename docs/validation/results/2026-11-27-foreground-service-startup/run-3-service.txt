@@ -1,0 +1,13 @@
+ACTIVITY MANAGER SERVICES (dumpsys activity services)
+  User 0 active services:
+  * ServiceRecord{a9177f2 u0 com.ascend.mavlab/.service.SimulationService}
+    intent={act=com.ascend.mavlab.action.APP_VISIBLE cmp=com.ascend.mavlab/.service.SimulationService}
+    packageName=com.ascend.mavlab
+    processName=com.ascend.mavlab
+    baseDir=/data/app/com.ascend.mavlab-d07xyDwOPiJ5ylIFQZCqEw==/base.apk
+    dataDir=/data/user/0/com.ascend.mavlab
+    app=ProcessRecord{366bd7c 5575:com.ascend.mavlab/u0a77}
+    isForeground=true foregroundId=1001 foregroundNoti=Notification(channel=mavlab_simulation pri=0 contentView=null vibrate=null sound=null defaults=0x0 flags=0x62 color=0x00000000 actions=1 vis=PRIVATE)
+    createTime=-1m27s84ms startingBgTimeout=--
+    lastActivity=-1m9s419ms restartTime=-1m27s83ms createdFromFg=true
+    startRequested=true delayedStop=false stopIfKilled=true callStart=true lastStartId=2

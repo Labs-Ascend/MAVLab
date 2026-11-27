@@ -38,7 +38,7 @@ Recording has its own active indicator and elapsed time. Saved sessions offer **
 
 **Runtime components** separates engine freshness, phone monitoring, audio and recording. Phone sensors remain globally eligible for foreground local sensor control regardless of selected tab. Mission authority and background sensor suspension remain distinct states.
 
-Confirmed **Stop simulation** stops physics/networking and saves the recording. It freezes vehicle state; it does not land or disarm. **Start simulation** resumes the same process state. Background handoff behavior remains unchanged.
+Opening MAVLab starts its simulation service and ongoing notification. Confirmed **Stop simulation** stops physics/networking and saves the recording. It freezes vehicle state; it does not land or disarm. **Start simulation** resumes the same process state. Background handoff behavior remains unchanged.
 
 **Advanced configuration** contains QGC setup and the simulated GPS origin. Changing origin requires confirmation and disarmed state, clears stored navigation/fence/rally data and disables fencing. **About MAVLab** contains the Ascend Labs identity, installed version and onboarding replay.
 

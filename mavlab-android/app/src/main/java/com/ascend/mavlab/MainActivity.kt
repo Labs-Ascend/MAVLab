@@ -7,7 +7,6 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -75,10 +74,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onStart() {
         super.onStart()
-        ContextCompat.startForegroundService(
-            this,
-            SimulationService.appVisibleIntent(this),
-        )
+        SimulationService.startFromVisibleUi(this)
     }
 
     override fun onStop() {

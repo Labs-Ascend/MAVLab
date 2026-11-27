@@ -1,0 +1,98 @@
+[
+  {
+    "run": 1,
+    "pid": "5060",
+    "first_visible_seconds": 71.68,
+    "engine_starts": 2,
+    "fatal_exception": false,
+    "out_of_memory": true,
+    "load_retries": 0,
+    "load_failed_after_retry": false,
+    "at_45_seconds": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        53.86
+      ],
+      "model_visible": false,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "last_sample": {
+      "sample_seconds": 60,
+      "capture_window_seconds": [
+        60.0,
+        71.68
+      ],
+      "model_visible": true,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "same_process": true,
+    "foreground_service": true
+  },
+  {
+    "run": 2,
+    "pid": "5325",
+    "first_visible_seconds": 71.09,
+    "engine_starts": 2,
+    "fatal_exception": false,
+    "out_of_memory": true,
+    "load_retries": 1,
+    "load_failed_after_retry": false,
+    "at_45_seconds": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        50.69
+      ],
+      "model_visible": false,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "last_sample": {
+      "sample_seconds": 60,
+      "capture_window_seconds": [
+        60.0,
+        71.09
+      ],
+      "model_visible": true,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "same_process": true,
+    "foreground_service": true
+  },
+  {
+    "run": 3,
+    "pid": "5575",
+    "first_visible_seconds": 68.19,
+    "engine_starts": 2,
+    "fatal_exception": false,
+    "out_of_memory": true,
+    "load_retries": 1,
+    "load_failed_after_retry": false,
+    "at_45_seconds": {
+      "sample_seconds": 45,
+      "capture_window_seconds": [
+        45.0,
+        52.38
+      ],
+      "model_visible": false,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "last_sample": {
+      "sample_seconds": 60,
+      "capture_window_seconds": [
+        60.0,
+        68.19
+      ],
+      "model_visible": true,
+      "landscape": true,
+      "sim_screen": true
+    },
+    "same_process": true,
+    "foreground_service": true
+  }
+]

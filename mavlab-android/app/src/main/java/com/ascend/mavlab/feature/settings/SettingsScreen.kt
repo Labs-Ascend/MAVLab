@@ -17,7 +17,6 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ascend.mavlab.core.common.AppRuntime
 import com.ascend.mavlab.core.ui.navigation.screenSwipeArea
@@ -77,7 +76,7 @@ fun SettingsScreen(
             }
             OpsRecovery.QGC_SETUP -> { setupExpanded = true; reveal = "setup" }
             OpsRecovery.REUPLOAD -> { missionExpanded = true; reveal = "mission" }
-            OpsRecovery.RESTART -> ContextCompat.startForegroundService(context, SimulationService.appVisibleIntent(context))
+            OpsRecovery.RESTART -> SimulationService.startFromVisibleUi(context)
         }
     }
 
@@ -256,7 +255,7 @@ private fun RuntimeSection(operations: OperationsState, onConfirm: (OpsConfirmat
         if (operations.runtime == RuntimeLifecycleState.RUNNING) {
             OutlinedButton(modifier = Modifier.screenSwipeExcluded(cancelClickOnHorizontalDrag = true), onClick = { onConfirm(OpsConfirmation("Stop simulation?", "Stops physics, MAVLink, sensors and audio, and saves the active recording. Vehicle state freezes; this does not land or disarm it. Starting again resumes the same process state.") { context.startService(SimulationService.stopIntent(context)) }) }) { Text("Stop simulation") }
         } else if (operations.runtime == RuntimeLifecycleState.STOPPED || operations.runtime == RuntimeLifecycleState.ERROR) {
-            Button(modifier = Modifier.screenSwipeExcluded(cancelClickOnHorizontalDrag = true), onClick = { ContextCompat.startForegroundService(context, SimulationService.appVisibleIntent(context)) }) { Text("Start simulation") }
+            Button(modifier = Modifier.screenSwipeExcluded(cancelClickOnHorizontalDrag = true), onClick = { SimulationService.startFromVisibleUi(context) }) { Text("Start simulation") }
         }
     }
 }

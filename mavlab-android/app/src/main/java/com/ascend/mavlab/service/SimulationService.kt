@@ -222,6 +222,12 @@ class SimulationService : Service() {
     }
 
     companion object {
+        // Visible UI may start a service normally, avoiding the foreground-start
+        // deadline while initial Compose layout occupies the main thread.
+        fun startFromVisibleUi(context: Context) {
+            context.startService(appVisibleIntent(context))
+        }
+
         fun appVisibleIntent(context: Context): Intent =
             Intent(context, SimulationService::class.java).setAction(ACTION_APP_VISIBLE)
 
